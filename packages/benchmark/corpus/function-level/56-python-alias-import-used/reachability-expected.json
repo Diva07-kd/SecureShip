@@ -1,0 +1,10 @@
+{
+  "id": "56-python-alias-import-used",
+  "package": "requests",
+  "ecosystem": "pip",
+  "ruleId": "CVE-2023-32681",
+  "expectedVerdict": "REACHABLE_CALL_PATH",
+  "expectedKind": "SYMBOL_CALL_PATH",
+  "expectedConfidence": "HIGH",
+  "groundTruthUsed": true
+}

@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_FALSE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "Static command invocation with hardcoded arguments rev-parse and HEAD without user control.",
+  "citations": [
+    {
+      "startLine": 3,
+      "endLine": 3,
+      "quote": "return execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf-8' });"
+    }
+  ]
+}

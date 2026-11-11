@@ -1,0 +1,12 @@
+{
+  "id": "case11-sast-python-pickle",
+  "description": "True positive Python pickle deserialization vulnerability",
+  "category": "SAST",
+  "expectedFindings": [
+    {
+      "file": "app.py",
+      "ruleId": "rules.secureship-sast.secureship-py-pickle-load",
+      "label": "TRUE_POSITIVE"
+    }
+  ]
+}

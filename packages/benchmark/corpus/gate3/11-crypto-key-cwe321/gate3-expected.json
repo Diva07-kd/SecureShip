@@ -1,0 +1,17 @@
+{
+  "id": "11-crypto-key-cwe321",
+  "category": "SAST",
+  "ruleId": "rules.creds.cryptokey",
+  "severity": "HIGH",
+  "cweIds": [
+    "CWE-321"
+  ],
+  "groundTruth": "LIKELY_TRUE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "replay-only",
+  "description": "Hardcoded cryptographic key (CWE-321 Credential class)",
+  "file": "cipher.js",
+  "startLine": 3,
+  "endLine": 3
+}

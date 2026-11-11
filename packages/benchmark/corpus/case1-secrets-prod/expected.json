@@ -1,0 +1,13 @@
+{
+  "id": "case1-secrets-prod",
+  "description": "True positive AWS key in production source file",
+  "category": "SECRET",
+  "expectedFindings": [
+    {
+      "file": "src/aws-client.ts",
+      "ruleId": "generic-api-key",
+      "aliases": ["aws-access-key-id", "aws-access-token"],
+      "label": "TRUE_POSITIVE"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+{"name":"app-11","main":"index.js","scripts":{"clean":"rimraf dist"},"dependencies":{"rimraf":"^5.0.0"}}

@@ -1,0 +1,38 @@
+================================================================================
+SECURESHIP VERIFICATION LOG: T0 — Baseline Probe & Monorepo Build
+================================================================================
+Timestamp: 2026-10-27T04:26:17Z
+Environment: Windows 11 Enterprise (win32-x64), Node.js v24.19.0, pnpm 12.14.0
+Git Revision: 06582136e6ba4be9f6ca198d89e7db73650222fe
+
+Command: git status
+Exit Code: 0
+Output:
+On branch phase-c-offline
+Your branch is up to date with 'origin/phase-c-offline'.
+nothing to commit, working tree clean
+
+Command: pnpm build
+Exit Code: 0
+Output:
+$ turbo run build
+• Packages in scope: @secureship/contracts, @secureship/policy-evaluator, @secureship/scanner-adapters, @secureship/context-slicer, @secureship/reachability, @secureship/ai, @secureship/patch-engine, @secureship/sandbox, @secureship/core-engine, @secureship/cli, @secureship/benchmark
+• Tasks: 11 successful, 11 total
+• Time: 12.38s
+
+Command: pnpm typecheck
+Exit Code: 0
+Output:
+$ tsc --noEmit -p tsconfig.json
+
+Command: pnpm lint
+Exit Code: 0
+Output:
+$ eslint .
+
+Command: pnpm format:check
+Exit Code: 0
+Output:
+$ prettier --check .
+Checking formatting...
+All matched files use Prettier code style!

@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_FALSE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "React JSX curly-brace interpolation automatically HTML-escapes string values preventing XSS.",
+  "citations": [
+    {
+      "startLine": 2,
+      "endLine": 2,
+      "quote": "return <div>Hello, {name}!</div>;"
+    }
+  ]
+}

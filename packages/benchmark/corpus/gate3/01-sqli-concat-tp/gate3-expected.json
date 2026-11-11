@@ -1,0 +1,17 @@
+{
+  "id": "01-sqli-concat-tp",
+  "category": "SAST",
+  "ruleId": "rules.sqli.concat",
+  "severity": "HIGH",
+  "cweIds": [
+    "CWE-89"
+  ],
+  "groundTruth": "LIKELY_TRUE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "real",
+  "description": "Unsanitized string concatenation into SQL query",
+  "file": "db.js",
+  "startLine": 2,
+  "endLine": 2
+}

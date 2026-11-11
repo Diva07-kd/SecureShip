@@ -1,0 +1,17 @@
+{
+  "id": "15-ssrf-allowlist-fp",
+  "category": "SAST",
+  "ruleId": "rules.ssrf.fetch",
+  "severity": "MEDIUM",
+  "cweIds": [
+    "CWE-918"
+  ],
+  "groundTruth": "LIKELY_FALSE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "replay-only",
+  "description": "Strict hostname allowlist prevents SSRF",
+  "file": "webhook.js",
+  "startLine": 4,
+  "endLine": 4
+}

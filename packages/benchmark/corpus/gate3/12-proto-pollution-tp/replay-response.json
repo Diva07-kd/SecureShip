@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_TRUE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "Unvalidated property copy allows __proto__ or constructor manipulation polluting Object prototype.",
+  "citations": [
+    {
+      "startLine": 3,
+      "endLine": 3,
+      "quote": "target[key] = source[key];"
+    }
+  ]
+}

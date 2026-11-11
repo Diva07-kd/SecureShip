@@ -1,0 +1,22 @@
+# Copyright (c) 2026 SecureShip Authors
+# SPDX-License-Identifier: Apache-2.0
+rules:
+  - id: secureship-py-sql-format
+    patterns:
+      - pattern-either:
+          - pattern: $CURSOR.execute($QUERY % ...)
+          - pattern: $CURSOR.execute($QUERY.format(...))
+          - pattern: $CURSOR.execute(f"...")
+          - pattern: $CURSOR.execute("..." % ...)
+          - pattern: $CURSOR.execute("...".format(...))
+      - pattern-regex: "(?i)(SELECT|INSERT|UPDATE|DELETE|DROP|UNION)\\s"
+    message: 'SQL query constructed via string formatting or f-strings before execution. Use parameterized queries.'
+    severity: ERROR
+    languages:
+      - python
+    metadata:
+      cwe:
+        - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      category: security
+      confidence: HIGH
+      security-severity: '8.9'

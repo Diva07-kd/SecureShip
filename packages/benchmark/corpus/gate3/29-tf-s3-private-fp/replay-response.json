@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_FALSE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "Bucket ACL is private preventing unauthorized public access.",
+  "citations": [
+    {
+      "startLine": 3,
+      "endLine": 3,
+      "quote": "acl = \"private\""
+    }
+  ]
+}

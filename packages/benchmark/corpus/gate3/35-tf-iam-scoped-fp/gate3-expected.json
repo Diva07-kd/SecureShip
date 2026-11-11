@@ -1,0 +1,17 @@
+{
+  "id": "35-tf-iam-scoped-fp",
+  "category": "IAC",
+  "ruleId": "CKV_AWS_1",
+  "severity": "LOW",
+  "cweIds": [
+    "CWE-732"
+  ],
+  "groundTruth": "LIKELY_FALSE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "replay-only",
+  "description": "Scoped least-privilege IAM policy",
+  "file": "iam.tf",
+  "startLine": 6,
+  "endLine": 8
+}

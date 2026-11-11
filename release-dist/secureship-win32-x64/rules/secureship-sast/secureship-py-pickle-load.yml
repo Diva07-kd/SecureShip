@@ -1,0 +1,20 @@
+# Copyright (c) 2026 SecureShip Authors
+# SPDX-License-Identifier: Apache-2.0
+rules:
+  - id: secureship-py-pickle-load
+    patterns:
+      - pattern-either:
+          - pattern: pickle.load($STREAM, ...)
+          - pattern: pickle.loads($BYTES, ...)
+          - pattern: _pickle.load($STREAM, ...)
+          - pattern: _pickle.loads($BYTES, ...)
+    message: 'Deserializing untrusted data with pickle can execute arbitrary bytecode. Prefer safe serialization formats like JSON.'
+    severity: ERROR
+    languages:
+      - python
+    metadata:
+      cwe:
+        - 'CWE-502: Deserialization of Untrusted Data'
+      category: security
+      confidence: HIGH
+      security-severity: '9.8'

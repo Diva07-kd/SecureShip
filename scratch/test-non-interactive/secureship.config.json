@@ -1,0 +1,29 @@
+{
+  "scanners": {
+    "opengrep": true,
+    "gitleaks": true,
+    "trivy": true,
+    "osv-scanner": true,
+    "checkov": false,
+    "semgrep": false,
+    "generic": false
+  },
+  "failOn": "HIGH",
+  "ignore": [],
+  "gate1": {
+    "enabled": true,
+    "keepProviderSecrets": true,
+    "customTestDirs": []
+  },
+  "gate2": {
+    "mode": "annotate",
+    "neverSuppressSeverities": [
+      "CRITICAL"
+    ],
+    "maxFileBytes": 1048576,
+    "parseTimeoutMs": 5000
+  },
+  "extraRulePacks": [],
+  "baselinePath": ".secureship/baseline.json",
+  "checkovDefaultSeverity": "MEDIUM"
+}

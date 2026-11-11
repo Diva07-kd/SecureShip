@@ -1,0 +1,29 @@
+================================================================================
+SECURESHIP VERIFICATION LOG: T15 — Benchmark Replay Execution
+================================================================================
+Timestamp: 2026-10-27T07:07:09Z
+Command: pnpm benchmark:replay
+Exit Code: 0
+Output:
+$ pnpm --filter "@secureship/benchmark" run build && node packages/benchmark/dist/cli.js --mode replay
+$ tsc -p tsconfig.json
+
+📊 SecureShip Security Benchmark Results [REPLAY Canned Fixtures]
+
+  Metric                 Value        Threshold
+  ─────────────────────────────────────────────
+  Precision              92.3%       >= 85.0%
+  Recall                 92.3%       >= 80.0%
+  F1 Score               92.3%       >= 80.0%
+  Suppression Recall     92.3%       >= 90.0%
+
+Category Breakdown:
+  • SAST    : Precision 100.0% | Recall 100.0% | F1 100.0% (TP: 4, FP: 0, FN: 0)
+  • SCA     : Precision 100.0% | Recall 100.0% | F1 100.0% (TP: 3, FP: 0, FN: 0)
+  • SECRET  : Precision 66.7% | Recall 66.7% | F1 66.7% (TP: 2, FP: 1, FN: 1)
+  • IAC     : Precision 100.0% | Recall 100.0% | F1 100.0% (TP: 3, FP: 0, FN: 0)
+  • SUPPLY_CHAIN: N/A (no cases) (TP: 0, FP: 0, FN: 0)
+
+Note: Categories with no test cases are marked N/A and excluded from threshold evaluation.
+
+✔ All benchmark precision and recall thresholds satisfied!

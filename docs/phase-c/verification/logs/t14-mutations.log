@@ -1,0 +1,30 @@
+================================================================================
+SECURESHIP VERIFICATION LOG: T14 — Metamorphic Mutation Testing
+================================================================================
+Timestamp: 2026-10-27T07:06:18Z
+Command: node scripts/verify-mutations.mjs --phase C
+Exit Code: 0
+Output:
+== SecureShip Mutation Integrity Verification (Phase C (C1 to C9)) ==
+
+Setting up isolated temp repo in C:\Users\kdiva\AppData\Local\Temp\secureship-mut-repo-lNbtil...
+Isolated temp repo created successfully.
+
+Evaluating Mutation C1: Pin authority guard: remote manifest mismatch must fail hard and never override pin... CAUGHT! (1 failing test(s))
+Evaluating Mutation C2: Hash compare guard: downloaded asset checksum mismatch aborts install... CAUGHT! (1 failing test(s))
+Evaluating Mutation C3: SafeTarReader traversal/absolute entry guard... CAUGHT! (1 failing test(s))
+Evaluating Mutation C4: Ed25519 signature verification guard in offline bundle importer... CAUGHT! (1 failing test(s))
+Evaluating Mutation C5: Anti-rollback guard: rejecting older offline bundles unless --allow-downgrade... CAUGHT! (1 failing test(s))
+Evaluating Mutation C6: Atomic swap guard: publishing generation atomically via CURRENT pointer rename... CAUGHT! (1 failing test(s))
+Evaluating Mutation C7: Offline egress guard: strictly blocking unauthorized outbound operations... CAUGHT! (1 failing test(s))
+Evaluating Mutation C8: Stale DB guard: evaluating database expiration when age exceeds maxDbAgeDays... CAUGHT! (1 failing test(s))
+Evaluating Mutation C9: Planted binary guard: preventing execution of binaries planted inside target directory... CAUGHT! (1 failing test(s))
+
+All 9 mutations successfully verified and caught.
+Mutation verification log written to C:\dev\SecureShip-IDE\docs\phase-c\mutation-log.md
+Formatted C:\dev\SecureShip-IDE\docs\phase-c\mutation-log.md with prettier.
+== Mutation Integrity Verification Complete (Exit Code 0) ==
+
+Score: 9/9 mutations killed (100.0% Mutation Score)
+Target Threshold: >= 85.0%
+Result: PASS

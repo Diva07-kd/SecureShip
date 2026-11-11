@@ -1,0 +1,44 @@
+{
+  "spdxVersion": "SPDX-2.3",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "SecureShip-IDE",
+  "documentNamespace": "https://secureship.dev/spdx/15228800-dbcc-4a15-90fe-36a37289e0b4",
+  "creationInfo": {
+    "creators": [
+      "Tool: SecureShip-1.0.0-beta.1"
+    ],
+    "created": "2026-10-22T17:48:25.408Z"
+  },
+  "packages": [
+    {
+      "name": "secureship-monorepo",
+      "SPDXID": "SPDXRef-Package-secureship-monorepo-0.1.0",
+      "versionInfo": "0.1.0",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/secureship-monorepo@0.1.0"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "45004a9336fa9c35ad5a646aa29c90f7f2c45493a8e720ce442df37853f4605e"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relatedSpdxElement": "SPDXRef-Package-secureship-monorepo-0.1.0",
+      "relationshipType": "DESCRIBES"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+# Copyright (c) 2026 SecureShip Authors
+# SPDX-License-Identifier: Apache-2.0
+rules:
+  - id: secureship-js-eval
+    patterns:
+      - pattern-either:
+          - pattern: eval($X)
+          - pattern: new Function(..., $X)
+      - pattern-not: eval("...")
+      - pattern-not: new Function(..., "...")
+    message: 'Dynamic code execution via eval() or Function constructor with non-literal input can lead to Arbitrary Code Execution.'
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+    metadata:
+      cwe:
+        - "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+      category: security
+      confidence: HIGH
+      security-severity: '8.8'

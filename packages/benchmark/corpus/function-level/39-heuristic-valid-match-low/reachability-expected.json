@@ -1,0 +1,11 @@
+{
+  "id": "39-heuristic-valid-match-low",
+  "package": "samplelib",
+  "ecosystem": "npm",
+  "ruleId": "CVE-2026-99994",
+  "description": "Calling samplelib.vulnerableFunction() causes crash",
+  "expectedVerdict": "UNREACHABLE",
+  "expectedKind": "UNINVOKED_SYMBOL",
+  "expectedConfidence": "LOW",
+  "groundTruthUsed": false
+}

@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_TRUE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "privileged: true grants the container direct host device access and root capabilities.",
+  "citations": [
+    {
+      "startLine": 9,
+      "endLine": 9,
+      "quote": "privileged: true"
+    }
+  ]
+}

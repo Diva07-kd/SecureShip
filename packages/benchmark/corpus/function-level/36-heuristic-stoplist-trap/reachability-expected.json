@@ -1,0 +1,11 @@
+{
+  "id": "36-heuristic-stoplist-trap",
+  "package": "somepkg",
+  "ecosystem": "npm",
+  "ruleId": "CVE-2026-99991",
+  "description": "Vulnerability in the method of somepkg execution",
+  "expectedVerdict": "REACHABLE_IMPORT",
+  "expectedKind": "PACKAGE_IMPORTED",
+  "expectedNotes": "symbol data unavailable",
+  "groundTruthUsed": false
+}

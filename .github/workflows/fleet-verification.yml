@@ -1,0 +1,122 @@
+name: Fleet Security Verification (Wave 1 Gate 13)
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  schedule:
+    - cron: '0 2 * * *' # Nightly at 02:00 UTC
+  workflow_dispatch:
+
+jobs:
+  # (1) Layers A to L on ubuntu-latest, macos-latest, windows-latest x Node 18, 20, 22
+  fleet-multi-os:
+    name: Fleet Matrix Node ${{ matrix.node-version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node-version: [18, 20, 22]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.14.0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build fleet and CLI
+        run: pnpm --filter "@secureship/fleet" --filter "@secureship/cli" run build
+
+      - name: Run Anti-Fake-Test Law Auditor
+        run: node --experimental-strip-types scripts/verify-test-integrity.ts
+
+      - name: Run Fleet Verification Suites (Layers A-L, C1)
+        env:
+          CI: 'true'
+        run: pnpm --filter "@secureship/fleet" test
+
+  # (2) Linux Container Job (node:20-alpine, non-root UID 10001, read-only rootfs)
+  fleet-container-live-docker:
+    name: Fleet Container Job (node:20-alpine UID 10001 read-only rootfs)
+    runs-on: ubuntu-latest
+    container:
+      image: node:20-alpine
+      options: >-
+        --user 10001:10001
+        --read-only
+        --tmpfs /tmp:rw,noexec,nosuid,size=64m
+        -v /tmp/fleet-data:/data:rw
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm and dependencies
+        run: |
+          npm install -g pnpm@12.14.0
+          pnpm install --frozen-lockfile
+
+      - name: Build fleet
+        run: pnpm --filter "@secureship/fleet" run build
+
+      - name: Run Live M1 Tests
+        env:
+          CI: 'true'
+          SECURESHIP_LIVE_DOCKER: '1'
+        run: pnpm --filter "@secureship/fleet" test packages/fleet/test/fleet-store.live.test.ts -t "M1"
+
+  # (3) Nightly C3 Stress Loop (400 iterations) with uploaded random seed artifact
+  fleet-nightly-crash-loop:
+    name: Fleet Nightly C3 Stress Loop (400 iterations)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.14.0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build fleet
+        run: pnpm --filter "@secureship/fleet" run build
+
+      - name: Run Nightly C3 Crash Consistency Loop (400 iterations)
+        env:
+          CI: 'true'
+          CRASH_TEST_ITERATIONS: '400'
+        run: |
+          mkdir -p artifacts
+          SEED=$(node -e "const s = Math.floor(Math.random() * 1000000) + 1; console.log(s);")
+          echo "CRASH_TEST_SEED=$SEED" > artifacts/c3-run-seed.txt
+          echo "Executing C3 stress test with seed=$SEED and iterations=400"
+          CRASH_TEST_SEED=$SEED pnpm --filter "@secureship/fleet" test packages/fleet/test/fleet-store.crash.test.ts -t "C3"
+
+      - name: Upload C3 Random Seed Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: c3-random-seed
+          path: artifacts/c3-run-seed.txt

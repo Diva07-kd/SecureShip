@@ -1,0 +1,222 @@
+diff --git a/backend/app/exporters/html_exporter.py b/backend/app/exporters/html_exporter.py
+index b36a422..8fe1f65 100644
+--- a/backend/app/exporters/html_exporter.py
++++ b/backend/app/exporters/html_exporter.py
+@@ -11,6 +11,8 @@ from typing import Any
+ from app.models.report import ScanReport
+ from app.exporters.json_exporter import normalize_report_dict
+ 
++KNOWN_SEVERITIES = frozenset({"CRITICAL", "HIGH", "MEDIUM", "LOW", "INFO"})
++
+ 
+ def _escape(val: Any) -> str:
+     if val is None:
+@@ -46,7 +48,12 @@ def export_html(report: ScanReport | dict[str, Any]) -> str:
+         rule_id = f.get("rule_id", "UNKNOWN")
+         scanner = f.get("scanner_name", "generic")
+         category = f.get("category", "SAST")
+-        severity = str(f.get("severity", "MEDIUM")).upper()
++
++        # Whitelist known severities and normalize invalid/unrecognized values to INFO
++        raw_sev = str(f.get("severity") or "MEDIUM").strip().upper()
++        severity = raw_sev if raw_sev in KNOWN_SEVERITIES else "INFO"
++        sev_badge_cls = _escape(f"badge-{severity.lower()}")
++
+         title = f.get("title", rule_id)
+         desc = f.get("description", "")
+         owasp = f.get("owasp_category", "Unknown")
+@@ -81,8 +88,6 @@ def export_html(report: ScanReport | dict[str, Any]) -> str:
+                     f'</div>'
+                 )
+ 
+-        clean_sev = re.sub(r"[^a-zA-Z0-9_-]", "", severity.lower())
+-        sev_badge_cls = _escape(f"badge-{clean_sev}")
+         row = f"""
+         <div class="finding-card">
+           <div class="finding-header">
+@@ -362,6 +367,185 @@ def export_html(report: ScanReport | dict[str, Any]) -> str:
+       font-size: 0.8rem;
+       color: var(--text-muted);
+     }}
++
++    @media print {{
++      @page {{
++        margin: 0.5in;
++        size: auto;
++      }}
++      *, *:before, *:after {{
++        box-shadow: none !important;
++        text-shadow: none !important;
++      }}
++      body {{
++        background: #ffffff !important;
++        background-color: #ffffff !important;
++        color: #111827 !important;
++        padding: 0 !important;
++        font-size: 10pt !important;
++        line-height: 1.4 !important;
++      }}
++      .container {{
++        max-width: 100% !important;
++        width: 100% !important;
++        margin: 0 !important;
++        padding: 0 !important;
++      }}
++      header {{
++        padding-bottom: 0.75rem !important;
++        margin-bottom: 1rem !important;
++        border-bottom: 2px solid #111827 !important;
++      }}
++      h1 {{
++        color: #111827 !important;
++        font-size: 1.5rem !important;
++      }}
++      .brand-shield {{
++        color: #4338ca !important;
++        font-size: 1.5rem !important;
++      }}
++      .subtext {{
++        color: #4b5563 !important;
++      }}
++      .stat-grid {{
++        gap: 0.75rem !important;
++        margin-bottom: 1rem !important;
++      }}
++      .stat-card, .panel, .finding-card {{
++        background: #ffffff !important;
++        background-color: #ffffff !important;
++        border: 1px solid #d1d5db !important;
++        color: #111827 !important;
++        page-break-inside: avoid !important;
++        break-inside: avoid !important;
++      }}
++      .stat-card {{
++        padding: 0.75rem !important;
++      }}
++      .stat-title {{
++        color: #6b7280 !important;
++      }}
++      .stat-value {{
++        font-size: 1.5rem !important;
++        color: #111827 !important;
++      }}
++      .panel {{
++        margin-bottom: 1rem !important;
++        padding: 1rem !important;
++      }}
++      .panel h2 {{
++        color: #111827 !important;
++        border-bottom: 1px solid #e5e7eb !important;
++        padding-bottom: 0.5rem !important;
++        margin-bottom: 0.75rem !important;
++      }}
++      .two-col {{
++        gap: 1rem !important;
++        margin-bottom: 1rem !important;
++      }}
++      table {{
++        border: 1px solid #e5e7eb !important;
++      }}
++      th, td {{
++        border-bottom: 1px solid #e5e7eb !important;
++        color: #111827 !important;
++        padding: 0.4rem 0.5rem !important;
++      }}
++      th {{
++        background: #f9fafb !important;
++        color: #4b5563 !important;
++        font-weight: 700 !important;
++      }}
++      .scanner-chip {{
++        background: #f3f4f6 !important;
++        border: 1px solid #d1d5db !important;
++      }}
++      .chip-name {{
++        color: #1f2937 !important;
++      }}
++      .chip-status {{
++        background: #0d9488 !important;
++        color: #ffffff !important;
++        -webkit-print-color-adjust: exact !important;
++        print-color-adjust: exact !important;
++      }}
++      .badge {{
++        -webkit-print-color-adjust: exact !important;
++        print-color-adjust: exact !important;
++      }}
++      .badge-critical {{
++        background: #fee2e2 !important;
++        color: #991b1b !important;
++        border: 1px solid #ef4444 !important;
++      }}
++      .badge-high {{
++        background: #ffedd5 !important;
++        color: #9a3412 !important;
++        border: 1px solid #f97316 !important;
++      }}
++      .badge-medium {{
++        background: #fef9c3 !important;
++        color: #854d0e !important;
++        border: 1px solid #eab308 !important;
++      }}
++      .badge-low {{
++        background: #dbeafe !important;
++        color: #1e40af !important;
++        border: 1px solid #3b82f6 !important;
++      }}
++      .badge-info {{
++        background: #f1f5f9 !important;
++        color: #334155 !important;
++        border: 1px solid #94a3b8 !important;
++      }}
++      .finding-card {{
++        padding: 1rem !important;
++        margin-bottom: 0.75rem !important;
++      }}
++      .finding-title {{
++        color: #111827 !important;
++      }}
++      .finding-rule {{
++        color: #4b5563 !important;
++      }}
++      .finding-meta {{
++        color: #4b5563 !important;
++        border-bottom: 1px solid #e5e7eb !important;
++      }}
++      .finding-desc {{
++        color: #1f2937 !important;
++      }}
++      .code-box {{
++        background: #f8fafc !important;
++        border: 1px solid #cbd5e1 !important;
++        page-break-inside: avoid !important;
++        break-inside: avoid !important;
++      }}
++      .code-header {{
++        background: #f1f5f9 !important;
++        color: #334155 !important;
++        border-bottom: 1px solid #cbd5e1 !important;
++      }}
++      .line-normal {{
++        color: #334155 !important;
++      }}
++      .line-highlight {{
++        background: #fee2e2 !important;
++        color: #991b1b !important;
++        border-left: 3px solid #ef4444 !important;
++        -webkit-print-color-adjust: exact !important;
++        print-color-adjust: exact !important;
++      }}
++      .line-num {{
++        color: #64748b !important;
++      }}
++      footer {{
++        color: #6b7280 !important;
++        border-top: 1px solid #e5e7eb !important;
++        margin-top: 1.5rem !important;
++        padding-top: 1rem !important;
++      }}
++    }}
+   </style>
+ </head>
+ <body>

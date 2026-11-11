@@ -1,0 +1,63 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: securescan-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=production
+      - PYTHONUNBUFFERED=1
+      - SECURESHIP_CLI_PATH=/secureship/dist/index.js
+      - MAX_CONCURRENCY=1
+      - SCAN_TIMEOUT_SECONDS=600
+    deploy:
+      resources:
+        limits:
+          cpus: "1.5"
+          memory: 6144M
+        reservations:
+          cpus: "0.5"
+          memory: 512M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: securescan-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:80/healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: securescan-cloudflare-tunnel
+    restart: unless-stopped
+    command: tunnel --no-autoupdate --url http://frontend:80
+    depends_on:
+      frontend:
+        condition: service_started
+    profiles:
+      - tunnel

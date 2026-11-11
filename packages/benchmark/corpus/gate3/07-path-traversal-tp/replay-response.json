@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_TRUE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "Concatenation with userPath allows dot-dot-slash sequence to escape /var/data/ directory.",
+  "citations": [
+    {
+      "startLine": 3,
+      "endLine": 3,
+      "quote": "return fs.readFileSync('/var/data/' + userPath, 'utf-8');"
+    }
+  ]
+}

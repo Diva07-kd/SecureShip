@@ -1,0 +1,10 @@
+{
+  "id": "22-escape-python-wildcard-import",
+  "package": "requests",
+  "ecosystem": "pip",
+  "ruleId": "CVE-2023-32681",
+  "expectedVerdict": "REACHABLE_IMPORT",
+  "expectedKind": "NAMESPACE_ESCAPES",
+  "expectedConfidence": "MEDIUM",
+  "groundTruthUsed": true
+}

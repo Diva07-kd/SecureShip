@@ -1,0 +1,11 @@
+{
+  "id": "40-heuristic-short-id-trap",
+  "package": "somepkg",
+  "ecosystem": "npm",
+  "ruleId": "CVE-2026-99995",
+  "description": "Vulnerability in function a() of somepkg",
+  "expectedVerdict": "REACHABLE_IMPORT",
+  "expectedKind": "PACKAGE_IMPORTED",
+  "expectedNotes": "symbol data unavailable",
+  "groundTruthUsed": false
+}

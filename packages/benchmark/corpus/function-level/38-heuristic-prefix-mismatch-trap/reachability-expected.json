@@ -1,0 +1,11 @@
+{
+  "id": "38-heuristic-prefix-mismatch-trap",
+  "package": "lodash",
+  "ecosystem": "npm",
+  "ruleId": "CVE-2026-99993",
+  "description": "Vulnerability triggered by calling axios.get()",
+  "expectedVerdict": "REACHABLE_IMPORT",
+  "expectedKind": "PACKAGE_IMPORTED",
+  "expectedNotes": "symbol data unavailable",
+  "groundTruthUsed": false
+}

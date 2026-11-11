@@ -1,0 +1,10 @@
+{
+  "id": "54-python-standard-import-unused",
+  "package": "requests",
+  "ecosystem": "pip",
+  "ruleId": "CVE-2023-32681",
+  "expectedVerdict": "UNREACHABLE",
+  "expectedKind": "UNINVOKED_SYMBOL",
+  "expectedConfidence": "MEDIUM",
+  "groundTruthUsed": false
+}

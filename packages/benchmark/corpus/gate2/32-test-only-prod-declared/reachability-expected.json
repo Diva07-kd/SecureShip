@@ -1,0 +1,8 @@
+{
+  "id": "32-test-only-prod-declared",
+  "category": "SCA",
+  "package": "mocha",
+  "expectedVerdict": "UNKNOWN",
+  "expectedKind": "TEST_ONLY_IMPORT",
+  "expectedConfidence": "LOW"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "25-deserialization-json-fp",
+  "category": "SAST",
+  "ruleId": "rules.deserialization.pickle",
+  "severity": "LOW",
+  "cweIds": [
+    "CWE-502"
+  ],
+  "groundTruth": "LIKELY_FALSE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "replay-only",
+  "description": "Safe JSON deserialization without code execution capability",
+  "file": "loader.py",
+  "startLine": 3,
+  "endLine": 3
+}

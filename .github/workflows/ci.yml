@@ -1,0 +1,169 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  validate:
+    name: Node ${{ matrix.node-version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [18, 20, 22]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.14.0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Check code formatting
+        run: pnpm format:check
+
+      - name: Build all packages
+        run: pnpm build
+
+      - name: Verify WASM Grammar Integrity
+        run: pnpm verify:wasm
+
+      - name: Run tests with coverage
+        run: pnpm test:coverage
+
+      - name: Run mutation tests (anti-fake-test law gate)
+        run: pnpm verify:mutations
+
+      - name: Run synthetic benchmark replay
+        run: pnpm --filter "@secureship/benchmark" run benchmark:replay
+
+  packaging-verify:
+    name: Packaging Verify Node ${{ matrix.node-version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [18, 20, 22]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.14.0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build all packages
+        run: pnpm build
+
+      - name: Verify packaging test suite
+        run: pnpm run test:packaging
+
+      - name: Run clean-room end-to-end verification
+        run: node scripts/e2e-clean-room.mjs
+
+  standalone-verify:
+    name: Standalone Verify on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: linux-x64
+            binary_name: secureship-linux-x64
+            archive_ext: tar.gz
+          - os: windows-latest
+            target: win32-x64
+            binary_name: secureship-win32-x64.exe
+            archive_ext: zip
+          - os: macos-latest
+            target: darwin-arm64
+            binary_name: secureship-darwin-arm64
+            archive_ext: tar.gz
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.14.0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build all packages
+        run: pnpm build
+
+      - name: Install Bun for Standalone Compilation
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.3
+
+      - name: Compile Standalone Executable
+        shell: bash
+        run: |
+          mkdir -p release-dist
+          bun build packages/cli/dist/index.js \
+            --compile \
+            --target bun-${{ matrix.target }} \
+            --outfile release-dist/${{ matrix.binary_name }}
+
+      - name: Package Standalone Distribution
+        shell: bash
+        run: |
+          node scripts/release/package-standalone.mjs \
+            --target ${{ matrix.target }} \
+            --binary release-dist/${{ matrix.binary_name }} \
+            --assets packages/cli/dist \
+            --out release-dist
+
+      - name: Run Standalone Smoke Test
+        shell: bash
+        run: |
+          node scripts/release/smoke-standalone.mjs \
+            --archive release-dist/secureship-${{ matrix.target }}.${{ matrix.archive_ext }} \
+            --target ${{ matrix.target }}

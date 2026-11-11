@@ -1,0 +1,62 @@
+{
+  "opengrep": {
+    "minVersion": "1.0.0",
+    "recommended": ">=1.31.0",
+    "testedVersion": "1.31.0",
+    "installHints": {
+      "win32": "irm https://raw.githubusercontent.com/opengrep/opengrep/main/install.ps1 | iex",
+      "darwin": "brew install opengrep/opengrep/opengrep",
+      "linux": "curl -fsSL https://raw.githubusercontent.com/opengrep/opengrep/main/install.sh | bash"
+    }
+  },
+  "semgrep": {
+    "minVersion": "1.50.0",
+    "recommended": ">=1.50.0",
+    "testedVersion": "1.50.0",
+    "installHints": {
+      "win32": "pip install semgrep",
+      "darwin": "brew install semgrep",
+      "linux": "pip install semgrep"
+    }
+  },
+  "gitleaks": {
+    "minVersion": "8.18.0",
+    "recommended": ">=8.30.0",
+    "testedVersion": "8.30.1",
+    "installHints": {
+      "win32": "winget install Gitleaks.Gitleaks",
+      "darwin": "brew install gitleaks",
+      "linux": "sudo apt install gitleaks || brew install gitleaks"
+    }
+  },
+  "trivy": {
+    "minVersion": "0.50.0",
+    "recommended": ">=0.76.0",
+    "testedVersion": "0.76.0",
+    "installHints": {
+      "win32": "winget install Aquasecurity.Trivy",
+      "darwin": "brew install trivy",
+      "linux": "sudo apt-get install trivy || brew install trivy"
+    }
+  },
+  "osv-scanner": {
+    "minVersion": "2.0.0",
+    "recommended": ">=2.7.0",
+    "testedVersion": "2.7.0",
+    "installHints": {
+      "win32": "winget install Google.OSVScanner, scoop install osv-scanner, or go install github.com/google/osv-scanner/v2/cmd/osv-scanner@latest",
+      "darwin": "brew install osv-scanner",
+      "linux": "go install github.com/google/osv-scanner/v2/cmd/osv-scanner@latest"
+    }
+  },
+  "checkov": {
+    "minVersion": "3.2.0",
+    "recommended": ">=3.3.0",
+    "testedVersion": "3.3.29",
+    "installHints": {
+      "win32": "pip install checkov",
+      "darwin": "pip install checkov || brew install checkov",
+      "linux": "pip install checkov"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "24-deserialization-pickle-tp",
+  "category": "SAST",
+  "ruleId": "rules.deserialization.pickle",
+  "severity": "CRITICAL",
+  "cweIds": [
+    "CWE-502"
+  ],
+  "groundTruth": "LIKELY_TRUE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "real",
+  "description": "Python pickle loads arbitrary object deserialization",
+  "file": "loader.py",
+  "startLine": 3,
+  "endLine": 3
+}

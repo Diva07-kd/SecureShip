@@ -1,0 +1,17 @@
+{
+  "id": "31-k8s-non-root-fp",
+  "category": "IAC",
+  "ruleId": "CKV_K8S_16",
+  "severity": "LOW",
+  "cweIds": [
+    "CWE-250"
+  ],
+  "groundTruth": "LIKELY_FALSE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "real",
+  "description": "Kubernetes container with privileged disabled and runAsNonRoot enabled",
+  "file": "pod.yaml",
+  "startLine": 9,
+  "endLine": 10
+}

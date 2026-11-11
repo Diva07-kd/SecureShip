@@ -1,0 +1,8 @@
+{
+  "id": "07-type-only-import",
+  "category": "SCA",
+  "package": "@types/node",
+  "expectedVerdict": "UNREACHABLE",
+  "expectedKind": "DEV_ONLY",
+  "expectedConfidence": "MEDIUM"
+}

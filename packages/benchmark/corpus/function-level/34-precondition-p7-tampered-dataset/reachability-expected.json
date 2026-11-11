@@ -1,0 +1,12 @@
+{
+  "id": "34-precondition-p7-tampered-dataset",
+  "package": "lodash",
+  "ecosystem": "npm",
+  "ruleId": "CVE-2021-23337",
+  "simulateTamper": true,
+  "expectedVerdict": "REACHABLE_IMPORT",
+  "expectedKind": "PACKAGE_IMPORTED",
+  "expectedConfidence": "HIGH",
+  "expectedBlockedBy": "INTEGRITY_FAILED",
+  "groundTruthUsed": false
+}

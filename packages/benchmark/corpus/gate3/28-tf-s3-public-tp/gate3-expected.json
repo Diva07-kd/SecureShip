@@ -1,0 +1,17 @@
+{
+  "id": "28-tf-s3-public-tp",
+  "category": "IAC",
+  "ruleId": "CKV_AWS_20",
+  "severity": "MEDIUM",
+  "cweIds": [
+    "CWE-200"
+  ],
+  "groundTruth": "LIKELY_TRUE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "real",
+  "description": "S3 bucket configured with public-read ACL",
+  "file": "s3.tf",
+  "startLine": 3,
+  "endLine": 3
+}

@@ -1,0 +1,10 @@
+{
+  "id": "52-usage-new-constructor",
+  "package": "lodash",
+  "ecosystem": "npm",
+  "ruleId": "CVE-2021-23337",
+  "expectedVerdict": "REACHABLE_CALL_PATH",
+  "expectedKind": "SYMBOL_CALL_PATH",
+  "expectedConfidence": "HIGH",
+  "groundTruthUsed": true
+}

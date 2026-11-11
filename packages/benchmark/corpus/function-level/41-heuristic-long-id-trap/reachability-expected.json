@@ -1,0 +1,11 @@
+{
+  "id": "41-heuristic-long-id-trap",
+  "package": "somepkg",
+  "ecosystem": "npm",
+  "ruleId": "CVE-2026-99996",
+  "description": "Calling somepkg.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx() is dangerous",
+  "expectedVerdict": "REACHABLE_IMPORT",
+  "expectedKind": "PACKAGE_IMPORTED",
+  "expectedNotes": "symbol data unavailable",
+  "groundTruthUsed": false
+}

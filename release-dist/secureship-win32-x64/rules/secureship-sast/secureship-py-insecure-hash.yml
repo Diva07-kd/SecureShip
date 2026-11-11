@@ -1,0 +1,19 @@
+# Copyright (c) 2026 SecureShip Authors
+# SPDX-License-Identifier: Apache-2.0
+rules:
+  - id: secureship-py-insecure-hash
+    patterns:
+      - pattern-either:
+          - pattern: hashlib.md5(...)
+          - pattern: hashlib.sha1(...)
+      - pattern-regex: '(?i)(password|token|secret|signature|auth|session|key|credential)'
+    message: 'Weak hashing algorithms (MD5 / SHA1) used in a security, credential, or authentication context. Prefer SHA-256, Argon2, or bcrypt.'
+    severity: WARNING
+    languages:
+      - python
+    metadata:
+      cwe:
+        - 'CWE-328: Use of Weak Hash'
+      category: security
+      confidence: MEDIUM
+      security-severity: '5.5'

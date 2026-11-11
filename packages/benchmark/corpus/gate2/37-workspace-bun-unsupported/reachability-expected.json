@@ -1,0 +1,8 @@
+{
+  "id": "37-workspace-bun-unsupported",
+  "category": "SCA",
+  "package": "shared-dep",
+  "expectedVerdict": "UNKNOWN",
+  "expectedKind": "NO_LOCKFILE_TREE",
+  "expectedConfidence": "LOW"
+}

@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_FALSE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "Object.create(null) has no prototype chain and explicit __proto__ guard prevents pollution.",
+  "citations": [
+    {
+      "startLine": 2,
+      "endLine": 4,
+      "quote": "const map = Object.create(null);\n  for (const [k, v] of entries) {\n    if (k !== '__proto__') map[k] = v;"
+    }
+  ]
+}

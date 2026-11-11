@@ -1,0 +1,17 @@
+{
+  "id": "12-proto-pollution-tp",
+  "category": "SAST",
+  "ruleId": "rules.proto.pollution",
+  "severity": "HIGH",
+  "cweIds": [
+    "CWE-1321"
+  ],
+  "groundTruth": "LIKELY_TRUE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "replay-only",
+  "description": "Prototype pollution via unfiltered object property assignment",
+  "file": "merge.js",
+  "startLine": 3,
+  "endLine": 3
+}

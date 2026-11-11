@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_FALSE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "Policy is tightly scoped to s3:GetObject on specific bucket resource without wildcards.",
+  "citations": [
+    {
+      "startLine": 6,
+      "endLine": 8,
+      "quote": "Action = \"s3:GetObject\"\n      Effect = \"Allow\"\n      Resource = \"arn:aws:s3:::my-bucket/*\""
+    }
+  ]
+}

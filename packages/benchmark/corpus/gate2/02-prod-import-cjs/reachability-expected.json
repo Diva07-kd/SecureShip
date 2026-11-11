@@ -1,0 +1,8 @@
+{
+  "id": "02-prod-import-cjs",
+  "category": "SCA",
+  "package": "express",
+  "expectedVerdict": "REACHABLE_IMPORT",
+  "expectedKind": "PACKAGE_IMPORTED",
+  "expectedConfidence": "HIGH"
+}

@@ -1,0 +1,6 @@
+{
+  "name": "case15-clean",
+  "dependencies": {
+    "zod": "3.24.1"
+  }
+}

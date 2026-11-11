@@ -1,0 +1,8 @@
+{
+  "id": "27-package-named-only-in-dockerfile-ci",
+  "category": "SCA",
+  "package": "docker-tool",
+  "expectedVerdict": "UNKNOWN",
+  "expectedKind": "CONFIG_REFERENCE",
+  "expectedConfidence": "MEDIUM"
+}

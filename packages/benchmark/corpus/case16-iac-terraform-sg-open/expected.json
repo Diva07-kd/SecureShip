@@ -1,0 +1,12 @@
+{
+  "id": "case16-iac-terraform-sg-open",
+  "description": "True positive open 0.0.0.0/0 ingress in Terraform AWS security group",
+  "category": "IAC",
+  "expectedFindings": [
+    {
+      "file": "main.tf",
+      "ruleId": "CKV_AWS_24",
+      "label": "TRUE_POSITIVE"
+    }
+  ]
+}

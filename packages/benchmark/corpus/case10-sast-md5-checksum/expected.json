@@ -1,0 +1,12 @@
+{
+  "id": "case10-sast-md5-checksum",
+  "description": "False positive trap: safe MD5 hash used for non-cryptographic cache key",
+  "category": "SAST",
+  "expectedFindings": [
+    {
+      "file": "src/cache.js",
+      "ruleId": "rules.secureship-sast.secureship-py-insecure-hash",
+      "label": "FALSE_POSITIVE_TRAP"
+    }
+  ]
+}

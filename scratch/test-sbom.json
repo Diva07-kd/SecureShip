@@ -1,0 +1,53 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:0cd112b5-06a8-4c93-a776-dd9f390a9658",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-10-22T17:36:15.220Z",
+    "tools": [
+      {
+        "vendor": "SecureShip",
+        "name": "SecureShip CLI",
+        "version": "1.0.0-beta.1"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "name": "SecureShip-IDE",
+      "version": "0.1.0",
+      "description": "Application root"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "secureship-monorepo",
+      "version": "0.1.0",
+      "purl": "pkg:npm/secureship-monorepo@0.1.0",
+      "description": "Package secureship-monorepo (npm)",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "2e7ca8f6f302d9f48db65c2793fe10bdba65c543b09cae1730bfddb19afaa0f0"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "pkg:generic/SecureShip-IDE@0.1.0",
+      "dependsOn": [
+        "pkg:npm/secureship-monorepo@0.1.0"
+      ]
+    }
+  ]
+}

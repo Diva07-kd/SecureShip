@@ -1,0 +1,162 @@
+{
+  "name": "secureship-security",
+  "displayName": "SecureShip Security & Threat Engine",
+  "description": "Enterprise-grade real-time SAST, SCA, Secrets, and Supply-Chain security scanner with AST reachability and automated sandbox fixes.",
+  "version": "1.0.0-beta.1",
+  "publisher": "secureship",
+  "author": {
+    "name": "SecureShip Security Team",
+    "url": "https://secureship.dev"
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://secureship.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/secureship/secureship.git"
+  },
+  "bugs": {
+    "url": "https://github.com/secureship/secureship/issues"
+  },
+  "icon": "media/secureship-icon-128.png",
+  "categories": [
+    "Security",
+    "Linters",
+    "Programming Languages"
+  ],
+  "keywords": [
+    "security",
+    "sast",
+    "sca",
+    "sbom",
+    "secrets",
+    "supply-chain",
+    "vulnerability",
+    "reachability"
+  ],
+  "galleryBanner": {
+    "color": "#0d1117",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "workspaceContains:**/package.json",
+    "workspaceContains:**/requirements.txt",
+    "workspaceContains:**/pyproject.toml",
+    "onLanguage:typescript",
+    "onLanguage:javascript",
+    "onLanguage:typescriptreact",
+    "onLanguage:javascriptreact",
+    "onLanguage:python",
+    "onCommand:secureship.scanWorkspace",
+    "onCommand:secureship.openFindings"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "secureship.scanWorkspace",
+        "title": "SecureShip: Scan Workspace",
+        "category": "SecureShip",
+        "icon": "$(shield)"
+      },
+      {
+        "command": "secureship.openFindings",
+        "title": "SecureShip: Focus Findings Panel",
+        "category": "SecureShip",
+        "icon": "$(list-unordered)"
+      },
+      {
+        "command": "secureship.showStatus",
+        "title": "SecureShip: Show License & Tier Status",
+        "category": "SecureShip",
+        "icon": "$(info)"
+      },
+      {
+        "command": "secureship.installCli",
+        "title": "SecureShip: Install CLI Tools",
+        "category": "SecureShip",
+        "icon": "$(cloud-download)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "secureship-explorer",
+          "title": "SecureShip Security",
+          "icon": "$(shield)"
+        }
+      ]
+    },
+    "views": {
+      "secureship-explorer": [
+        {
+          "id": "secureship.findingsView",
+          "name": "Active Vulnerability Findings"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "SecureShip",
+      "properties": {
+        "secureship.cliPath": {
+          "type": "string",
+          "default": "",
+          "description": "Custom path to secureship CLI executable. If empty, auto-resolves from ~/.secureship/bin or PATH."
+        },
+        "secureship.autoScanOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically trigger background security analysis when source files or package manifests are saved."
+        },
+        "secureship.scanDebounceMs": {
+          "type": "number",
+          "default": 1500,
+          "description": "Debounce delay in milliseconds before executing scan on save."
+        },
+        "secureship.failOnSeverity": {
+          "type": "string",
+          "enum": [
+            "CRITICAL",
+            "HIGH",
+            "MEDIUM",
+            "LOW",
+            "INFO"
+          ],
+          "default": "HIGH",
+          "description": "Minimum severity required to show error status."
+        },
+        "secureship.gate2Mode": {
+          "type": "string",
+          "enum": [
+            "annotate",
+            "suppress",
+            "off"
+          ],
+          "default": "annotate",
+          "description": "Gate 2 reachability analysis mode."
+        },
+        "secureship.supplyChainOnly": {
+          "type": "boolean",
+          "default": false,
+          "description": "Run supply-chain threat engine exclusively without invoking external scanners."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "watch": "tsup --watch",
+    "test": "vitest run",
+    "package": "vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.24.0",
+    "tsup": "^8.3.6",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  }
+}

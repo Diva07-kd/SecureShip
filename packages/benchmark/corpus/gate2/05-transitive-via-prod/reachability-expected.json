@@ -1,0 +1,8 @@
+{
+  "id": "05-transitive-via-prod",
+  "category": "SCA",
+  "package": "nested-dep",
+  "expectedVerdict": "REACHABLE_IMPORT",
+  "expectedKind": "TRANSITIVE_VIA",
+  "expectedConfidence": "MEDIUM"
+}

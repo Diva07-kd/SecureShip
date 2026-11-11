@@ -1,0 +1,24 @@
+# Copyright (c) 2026 SecureShip Authors
+# SPDX-License-Identifier: Apache-2.0
+rules:
+  - id: secureship-py-yaml-load
+    patterns:
+      - pattern-either:
+          - pattern: yaml.load($STREAM, Loader=yaml.Loader)
+          - pattern: yaml.load($STREAM, Loader=yaml.CLoader)
+          - pattern: yaml.load($STREAM, Loader=yaml.UnsafeLoader)
+          - pattern: yaml.load($STREAM)
+          - pattern: yaml.unsafe_load($STREAM)
+      - pattern-not: yaml.load($STREAM, Loader=yaml.SafeLoader)
+      - pattern-not: yaml.load($STREAM, Loader=yaml.CSafeLoader)
+      - pattern-not: yaml.safe_load($STREAM)
+    message: 'Using yaml.load() without SafeLoader can result in arbitrary Python object deserialization and code execution.'
+    severity: ERROR
+    languages:
+      - python
+    metadata:
+      cwe:
+        - 'CWE-502: Deserialization of Untrusted Data'
+      category: security
+      confidence: HIGH
+      security-severity: '9.8'

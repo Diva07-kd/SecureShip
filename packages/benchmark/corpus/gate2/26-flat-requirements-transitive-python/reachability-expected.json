@@ -1,0 +1,8 @@
+{
+  "id": "26-flat-requirements-transitive-python",
+  "category": "SCA",
+  "package": "urllib3",
+  "expectedVerdict": "UNKNOWN",
+  "expectedKind": "NO_LOCKFILE_TREE",
+  "expectedConfidence": "LOW"
+}

@@ -1,0 +1,8 @@
+{
+  "id": "21-python-unmapped-package",
+  "category": "SCA",
+  "package": "internal-corp-custom-lib",
+  "expectedVerdict": "UNKNOWN",
+  "expectedKind": "UNMAPPED_PACKAGE",
+  "expectedConfidence": "LOW"
+}

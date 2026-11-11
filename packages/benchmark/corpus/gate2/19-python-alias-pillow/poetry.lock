@@ -1,0 +1,3 @@
+[[package]]
+name = "pillow"
+version = "10.0.0"

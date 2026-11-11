@@ -1,0 +1,16 @@
+name = "secureship-license-server"
+main = "src/index.ts"
+compatibility_date = "2024-10-22"
+
+# Public environment variables (non-secret configuration)
+# Note: JWT_PUBLIC_KEY is a public value configured under [vars] and must NOT be treated as a secret.
+# In contrast, JWT_PRIVATE_KEY and STRIPE_WEBHOOK_SECRET are confidential secrets and MUST be
+# provisioned securely via `wrangler secret put JWT_PRIVATE_KEY` and `wrangler secret put STRIPE_WEBHOOK_SECRET`.
+[vars]
+JWT_PUBLIC_KEY = ""
+
+[[d1_databases]]
+binding = "DB"
+database_name = "secureship-licenses"
+database_id = "local-d1-placeholder"
+

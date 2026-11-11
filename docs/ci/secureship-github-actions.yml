@@ -1,0 +1,77 @@
+name: SecureShip Security Verification CI
+
+# SecureShip Enterprise CI Reference Workflow
+# Documentation template for automated CI/CD integration
+# Compatible with GitHub Code Scanning, PR diff scanning, and baseline suppression
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+
+permissions:
+  contents: write # Needed if auto-updating baseline on main branch push; otherwise contents: read
+  security-events: write # Required for GitHub Code Scanning SARIF upload
+
+jobs:
+  secureship:
+    name: Security Scan, Supply Chain & Reachability
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full git history required for incremental diff calculation
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install SecureShip CLI & Security Engines
+        run: |
+          npm install -g @secureship/cli
+          secureship install-tools
+
+      # For Pull Requests: Run incremental diff scan against base commit with baseline suppression
+      - name: Incremental Diff Scan (Pull Request)
+        if: github.event_name == 'pull_request'
+        run: |
+          secureship scan . \
+            --diff ${{ github.event.pull_request.base.sha }} \
+            --sarif secureship.sarif \
+            --new-only \
+            --baseline .secureship/baseline.json \
+            --gate2 annotate \
+            --fail-on HIGH
+        continue-on-error: true
+
+      # For Main Branch: Run comprehensive full repository scan
+      - name: Full Repository Scan (Push)
+        if: github.event_name == 'push'
+        run: |
+          secureship scan . \
+            --sarif secureship.sarif \
+            --output secureship-report.json \
+            --gate2 annotate \
+            --fail-on HIGH
+
+      # Upload SARIF findings to GitHub Code Scanning tab
+      - name: Upload SARIF to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: secureship.sarif
+          category: secureship
+
+      # Optional: Automatically update baseline file upon merge into main branch
+      - name: Update Baseline on Main Merge
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          secureship scan . --update-baseline .secureship/baseline.json
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .secureship/baseline.json
+          git commit -m "chore: update secureship baseline [skip ci]" || true
+          git push || true

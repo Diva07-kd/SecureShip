@@ -1,0 +1,17 @@
+{
+  "id": "05-cmd-exec-tp",
+  "category": "SAST",
+  "ruleId": "rules.rce.childprocess",
+  "severity": "HIGH",
+  "cweIds": [
+    "CWE-78"
+  ],
+  "groundTruth": "LIKELY_TRUE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "real",
+  "description": "Command injection via child_process.exec with concatenated argument",
+  "file": "exec.js",
+  "startLine": 3,
+  "endLine": 3
+}

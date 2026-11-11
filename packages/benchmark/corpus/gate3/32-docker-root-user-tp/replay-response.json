@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_TRUE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "Container runs as default root user without dropping privileges via USER directive.",
+  "citations": [
+    {
+      "startLine": 3,
+      "endLine": 3,
+      "quote": "CMD [\"node\", \"app.js\"]"
+    }
+  ]
+}

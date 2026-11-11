@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_TRUE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "pickle.loads on untrusted raw input leads to remote arbitrary code execution.",
+  "citations": [
+    {
+      "startLine": 3,
+      "endLine": 3,
+      "quote": "return pickle.loads(raw)"
+    }
+  ]
+}

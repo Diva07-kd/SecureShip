@@ -1,0 +1,61 @@
+================================================================================
+SECURESHIP VERIFICATION LOG: T5 — Docker Build & Static Image Inspection
+================================================================================
+Timestamp: 2026-10-27T06:55:00Z
+Dockerfile: Dockerfile.cli
+Target: secureship/cli:local-test
+Host Runtime: Docker Desktop 29.8.2 on Windows 11 / WSL2
+
+Command: docker build -f Dockerfile.cli -t secureship/cli:local-test .
+Exit Code: 0
+Build Output Summary:
+[+] Building 84.2s (27/27) FINISHED
+ => [builder 1/7] FROM docker.io/library/node:22-bookworm-slim
+ => [checkov-builder 1/4] FROM docker.io/library/python:3.11-slim-bookworm
+ => [builder 6/7] RUN pnpm --filter @secureship/cli deploy --prod /out/cli
+ => [tools 4/5] RUN node /out/cli/dist/index.js install-tools --target-platform linux-amd64 --tools-dir /opt/secureship/bin
+ => [runner 6/7] COPY --from=tools /opt/secureship /opt/secureship
+ => [runner 7/7] COPY --from=builder /out/cli /app
+ => exporting to image
+ => => exporting layers
+ => => writing image sha256:51a581ed35da787e377a2a856f283f80e475369203aa399cc68b56f858f82e4e
+ => => naming to docker.io/library/secureship/cli:local-test
+
+Command: docker inspect secureship/cli:local-test --format '{{json .Config}}'
+Exit Code: 0
+Output:
+{
+  "User": "secureship",
+  "Env": [
+    "PATH=/opt/secureship/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+    "NODE_VERSION=22.23.4",
+    "YARN_VERSION=1.22.22",
+    "NODE_ENV=production",
+    "SECURESHIP_BIN_DIR=/opt/secureship/bin",
+    "SECURESHIP_HOME=/home/secureship/.secureship",
+    "SECURESHIP_DB_DIR=/home/secureship/.secureship/db",
+    "SECURESHIP_CONTAINER=1"
+  ],
+  "Entrypoint": [
+    "tini",
+    "--",
+    "secureship"
+  ],
+  "Cmd": [
+    "doctor"
+  ],
+  "WorkingDir": "/workspace",
+  "Labels": {
+    "org.opencontainers.image.description": "Zero-False-Positive DevSecOps Intelligence Engine & Verification Platform",
+    "org.opencontainers.image.licenses": "Apache-2.0",
+    "org.opencontainers.image.source": "https://github.com/secureship/secureship",
+    "org.opencontainers.image.title": "SecureShip CLI",
+    "org.opencontainers.image.vendor": "SecureShip"
+  }
+}
+
+Command: docker images secureship/cli:local-test
+Exit Code: 0
+Output:
+IMAGE                       ID             DISK USAGE   CONTENT SIZE   EXTRA
+secureship/cli:local-test   51a581ed35da       1.34GB          328MB

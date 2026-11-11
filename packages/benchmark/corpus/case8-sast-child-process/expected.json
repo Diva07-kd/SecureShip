@@ -1,0 +1,12 @@
+{
+  "id": "case8-sast-child-process",
+  "description": "True positive unsafe child_process.exec command execution",
+  "category": "SAST",
+  "expectedFindings": [
+    {
+      "file": "src/exec.js",
+      "ruleId": "rules.secureship-sast.secureship-js-child-process-exec",
+      "label": "TRUE_POSITIVE"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+================================================================================
+SECURESHIP VERIFICATION LOG: T4 — Doctor Diagnostics (Host & Container)
+================================================================================
+Timestamp: 2026-10-27T07:07:40Z
+
+--- Container Execution ---
+Command: docker run --rm secureship/cli:local-test doctor
+Exit Code: 0
+Output:
+
+🔍 SecureShip Environment & Security Doctor
+
+Node.js: ✔ v22.23.4 (Supported >= 18)
+OS Platform: linux (x64)
+Container:   ✔ Container Detected (Docker/OCI runtime)
+Process ID:  UID: 10001, GID: 10001
+
+SecureShip Storage Directories:
+  • SECURESHIP_HOME     : /home/secureship/.secureship [Writable ✔]
+  • Tool Candidate Dirs :
+    ↳ /opt/secureship/bin [System Read-Only (0555) ✔]
+    ↳ /home/secureship/.secureship/bin [Writable ✔]
+  • Vulnerability DB Dir: /home/secureship/.secureship/db [Writable ✔]
+Git: ✔ git version 2.39.5
+
+Core Security Sub-Engines:
+  ✔ Active               SecureShip Deep AST Engine           [SAST (Source Code)       ]
+    ↳ Engine Core : SecureShip SAST
+    ↳ Runtime Path: /opt/secureship/bin/opengrep
+    ↳ Version     : (Embedded / Active)
+    ↳ Pin Status  : ✔ Matches tools.lock.json (sha256:dbbe3c2058db...)
+  ✔ Active               SecureShip Credential Sentinel       [Secrets & Credentials    ]
+    ↳ Engine Core : SecureShip Secret
+    ↳ Runtime Path: /opt/secureship/bin/gitleaks
+    ↳ Version     : 8.24.0
+    ↳ Pin Status  : ⚠ Pin mismatch (actual: 00152acb3c26..., lock: cb49b7de5ee9...)
+  ✔ Active               SecureShip Component Auditor         [Dependencies & Containers]
+    ↳ Engine Core : SecureShip SCA
+    ↳ Runtime Path: /opt/secureship/bin/trivy
+    ↳ Version     : Version: 0.76.0
+    ↳ Pin Status  : ⚠ Pin mismatch (actual: 1f889576636d..., lock: e24b1c51293c...)
+  ✔ Active               SecureShip Threat Intelligence       [SCA / Lockfile CVEs      ]
+    ↳ Engine Core : SecureShip Intel
+    ↳ Runtime Path: /opt/secureship/bin/osv-scanner
+    ↳ Version     : osv-scanner version: 1.9.2
+    ↳ Pin Status  : ✔ Matches tools.lock.json (sha256:d6af4b67fa5d...)
+  ✔ Active               SecureShip Infrastructure Guard      [Infrastructure as Code   ]
+    ↳ Engine Core : SecureShip IaC
+    ↳ Runtime Path: /opt/secureship/bin/checkov
+    ↳ Version     : (Embedded / Active)
+    ↳ Pin Status  : ○ Unpinned / System distribution (sha256:eccca3be98f6...)
+
+Note: SecureShip sub-engines are fully managed and automatically provisioned,
+enabling unified security analysis with zero manual configuration.
+
+Reachability Engine WASM Grammars:
+  ✔ tree-sitter.wasm               Verified (188635 bytes)
+  ✔ tree-sitter-javascript.wasm    Verified (647334 bytes)
+  ✔ tree-sitter-typescript.wasm    Verified (2342690 bytes)
+  ✔ tree-sitter-tsx.wasm           Verified (2411272 bytes)
+  ✔ tree-sitter-python.wasm        Verified (476105 bytes)
+  ✔ tree-sitter-go.wasm            Verified (235957 bytes)
+  ✔ tree-sitter-java.wasm          Verified (430239 bytes)
+  ✔ tree-sitter-rust.wasm          Verified (818756 bytes)
+  ✔ tree-sitter-c_sharp.wasm       Verified (3978594 bytes)
+
+Function-Level Reachability Symbol Dataset:
+[WARNING] Symbol dataset file not found at '/opt/secureship/data/vulnerable-symbols.json'
+  • Dataset ID        : vulnerable-symbols
+  • Curated Entries   : 0 verified entries
+  • Cryptographic Hash: ✖ Integrity check failed
+
+Gate 3 AI Triage Configuration & Environment:
+  • AI Enablement: Disabled (enable via `secureship ai enable`)
+  • ANTHROPIC_API_KEY    : Not set
+  • OPENAI_API_KEY       : Not set
+  • SECURESHIP_AI_API_KEY: Not set
+  • Gitleaks Redaction   : Active (secondary egress scan)
+
+Gate 4 Remediation Sandbox Environment:
+  • Container Runtime : ⚠ Neither Docker nor Podman detected on PATH
+  • Sandbox Readiness : Requires Docker/Podman for container sandbox; host fallback requires explicit trust
+
+License Tier & Operational Capabilities:
+  • Active Tier       : FREE_BYOK
+  • License Status    : Unlicensed (Community Free)
+  • Monthly AI Quota  : 0 / 15 used
+  • CI/CD Suppress    : Gated (PRO_TEAM required)
+
+Offline Vulnerability Database:
+  • Status              : ○ No offline bundle installed (online mode or run `secureship import-offline`)
+  • Database Directory  : /home/secureship/.secureship/db

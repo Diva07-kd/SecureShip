@@ -1,0 +1,8 @@
+{
+  "id": "24-lockfile-tree-missing",
+  "category": "SCA",
+  "package": "transitive-unknown",
+  "expectedVerdict": "UNKNOWN",
+  "expectedKind": "NO_LOCKFILE_TREE",
+  "expectedConfidence": "LOW"
+}

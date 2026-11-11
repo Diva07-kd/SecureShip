@@ -1,0 +1,17 @@
+{
+  "id": "08-path-traversal-jailed-fp",
+  "category": "SAST",
+  "ruleId": "rules.traversal.readfile",
+  "severity": "MEDIUM",
+  "cweIds": [
+    "CWE-22"
+  ],
+  "groundTruth": "LIKELY_FALSE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "replay-only",
+  "description": "Path traversal sanitized with path.basename stripping directory traversal",
+  "file": "file.js",
+  "startLine": 6,
+  "endLine": 6
+}

@@ -1,0 +1,1444 @@
+[
+  {
+    "id": "clean-01-sqli-param",
+    "category": "SAST",
+    "ruleId": "secureship-js-sqli-concat",
+    "description": "Use parameterized query instead of string concatenation",
+    "sourceFile": "src/db.ts",
+    "sourceContent": "export function queryUser(id: string) {\n  const sql = \"SELECT * FROM users WHERE id = \" + id;\n  return sql;\n}\n",
+    "findingLocation": {
+      "filePath": "src/db.ts",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Replace SQL string concatenation with parameter placeholder",
+      "diff": "--- a/src/db.ts\n+++ b/src/db.ts\n@@ -2,1 +2,1 @@\n-  const sql = \"SELECT * FROM users WHERE id = \" + id;\n+  const sql = \"SELECT * FROM users WHERE id = $1\";",
+      "rationale": "Parameters prevent SQL injection",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-02-xss-sanitize",
+    "category": "SAST",
+    "ruleId": "secureship-js-xss-innerhtml",
+    "description": "Use textContent instead of innerHTML",
+    "sourceFile": "src/dom.ts",
+    "sourceContent": "export function render(el: HTMLElement, name: string) {\n  el.innerHTML = name;\n}\n",
+    "findingLocation": {
+      "filePath": "src/dom.ts",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Use textContent for safe text rendering",
+      "diff": "--- a/src/dom.ts\n+++ b/src/dom.ts\n@@ -2,1 +2,1 @@\n-  el.innerHTML = name;\n+  el.textContent = name;",
+      "rationale": "textContent prevents HTML injection and XSS",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-03-path-traversal-resolve",
+    "category": "SAST",
+    "ruleId": "secureship-js-path-traversal",
+    "description": "Sanitize path traversal with basename",
+    "sourceFile": "src/files.ts",
+    "sourceContent": "import path from \"node:path\";\nexport function readFile(userPath: string) {\n  return path.join(\"/var/data\", userPath);\n}\n",
+    "findingLocation": {
+      "filePath": "src/files.ts",
+      "startLine": 3,
+      "endLine": 3
+    },
+    "proposal": {
+      "summary": "Use path.basename to jail user path",
+      "diff": "--- a/src/files.ts\n+++ b/src/files.ts\n@@ -3,1 +3,1 @@\n-  return path.join(\"/var/data\", userPath);\n+  return path.join(\"/var/data\", path.basename(userPath));",
+      "rationale": "basename prevents directory traversal attacks",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-04-cmd-injection-execfile",
+    "category": "SAST",
+    "ruleId": "secureship-js-cmd-injection",
+    "description": "Replace exec with execFile and arguments array",
+    "sourceFile": "src/exec.ts",
+    "sourceContent": "import { exec } from \"node:child_process\";\nexport function runLs(dir: string) {\n  exec(\"ls \" + dir);\n}\n",
+    "findingLocation": {
+      "filePath": "src/exec.ts",
+      "startLine": 3,
+      "endLine": 3
+    },
+    "proposal": {
+      "summary": "Pass arguments array to child_process without shell",
+      "diff": "--- a/src/exec.ts\n+++ b/src/exec.ts\n@@ -3,1 +3,1 @@\n-  exec(\"ls \" + dir);\n+  exec(\"ls\", [dir]);",
+      "rationale": "Arguments array prevents shell metacharacter expansion",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-05-proto-pollution-hasown",
+    "category": "SAST",
+    "ruleId": "secureship-js-prototype-pollution",
+    "description": "Use Object.hasOwn instead of direct property access",
+    "sourceFile": "src/obj.ts",
+    "sourceContent": "export function getProp(obj: any, key: string) {\n  return obj[key];\n}\n",
+    "findingLocation": {
+      "filePath": "src/obj.ts",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Validate property ownership with Object.hasOwn",
+      "diff": "--- a/src/obj.ts\n+++ b/src/obj.ts\n@@ -2,1 +2,1 @@\n-  return obj[key];\n+  return Object.hasOwn(obj, key) ? obj[key] : undefined;",
+      "rationale": "Checking prototype properties prevents prototype pollution",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-06-insecure-crypto-sha256",
+    "category": "SAST",
+    "ruleId": "secureship-js-weak-hash",
+    "description": "Use SHA-256 instead of MD5",
+    "sourceFile": "src/hash.ts",
+    "sourceContent": "import crypto from \"node:crypto\";\nexport function hash(data: string) {\n  return crypto.createHash(\"md5\").update(data).digest(\"hex\");\n}\n",
+    "findingLocation": {
+      "filePath": "src/hash.ts",
+      "startLine": 3,
+      "endLine": 3
+    },
+    "proposal": {
+      "summary": "Upgrade digest to sha256",
+      "diff": "--- a/src/hash.ts\n+++ b/src/hash.ts\n@@ -3,1 +3,1 @@\n-  return crypto.createHash(\"md5\").update(data).digest(\"hex\");\n+  return crypto.createHash(\"sha256\").update(data).digest(\"hex\");",
+      "rationale": "SHA-256 provides collision resistance",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-07-ssrf-allowlist",
+    "category": "SAST",
+    "ruleId": "secureship-js-ssrf",
+    "description": "Validate URL domain against allowlist",
+    "sourceFile": "src/net.ts",
+    "sourceContent": "export function checkUrl(u: string) {\n  const url = new URL(u);\n  return url.href;\n}\n",
+    "findingLocation": {
+      "filePath": "src/net.ts",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Check hostname against allowed domain",
+      "diff": "--- a/src/net.ts\n+++ b/src/net.ts\n@@ -2,1 +2,1 @@\n-  const url = new URL(u);\n+  const url = [\"api.example.com\"].includes(new URL(u).hostname) ? new URL(u) : null;",
+      "rationale": "Hostname allowlist prevents SSRF",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-08-cookie-httponly",
+    "category": "SAST",
+    "ruleId": "secureship-js-cookie-flags",
+    "description": "Set httpOnly and secure flags on cookie",
+    "sourceFile": "src/cookie.ts",
+    "sourceContent": "export function setCookie(res: any, val: string) {\n  res.cookie(\"session\", val);\n}\n",
+    "findingLocation": {
+      "filePath": "src/cookie.ts",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Add secure and httpOnly flags",
+      "diff": "--- a/src/cookie.ts\n+++ b/src/cookie.ts\n@@ -2,1 +2,1 @@\n-  res.cookie(\"session\", val);\n+  res.cookie(\"session\", val, { httpOnly: true, secure: true });",
+      "rationale": "httpOnly prevents client-side script cookie theft",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-09-timing-attack-compare",
+    "category": "SAST",
+    "ruleId": "secureship-js-timing-attack",
+    "description": "Use timingSafeEqual for secret token comparison",
+    "sourceFile": "src/auth.ts",
+    "sourceContent": "import crypto from \"node:crypto\";\nexport function verify(a: Buffer, b: Buffer) {\n  return a.equals(b);\n}\n",
+    "findingLocation": {
+      "filePath": "src/auth.ts",
+      "startLine": 3,
+      "endLine": 3
+    },
+    "proposal": {
+      "summary": "Use crypto.timingSafeEqual",
+      "diff": "--- a/src/auth.ts\n+++ b/src/auth.ts\n@@ -3,1 +3,1 @@\n-  return a.equals(b);\n+  return a.length === b.length && crypto.timingSafeEqual(a, b);",
+      "rationale": "Constant-time comparison prevents timing side-channels",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-10-open-redirect-validate",
+    "category": "SAST",
+    "ruleId": "secureship-js-open-redirect",
+    "description": "Ensure redirect targets local relative path",
+    "sourceFile": "src/redirect.ts",
+    "sourceContent": "export function redirect(res: any, target: string) {\n  res.redirect(target);\n}\n",
+    "findingLocation": {
+      "filePath": "src/redirect.ts",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Sanitize target with relative path check",
+      "diff": "--- a/src/redirect.ts\n+++ b/src/redirect.ts\n@@ -2,1 +2,1 @@\n-  res.redirect(target);\n+  res.redirect(target.startsWith(\"/\") && !target.startsWith(\"//\") ? target : \"/\");",
+      "rationale": "Restricting to relative path prevents external redirection",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-11-py-sqli-param",
+    "category": "SAST",
+    "ruleId": "secureship-py-sqli",
+    "description": "Python cursor execute parameter binding",
+    "sourceFile": "src/db.py",
+    "sourceContent": "def find_user(cursor, user_id):\n    cursor.execute(f\"SELECT * FROM users WHERE id = {user_id}\")\n",
+    "findingLocation": {
+      "filePath": "src/db.py",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Use parameter binding tuple",
+      "diff": "--- a/src/db.py\n+++ b/src/db.py\n@@ -2,1 +2,1 @@\n-    cursor.execute(f\"SELECT * FROM users WHERE id = {user_id}\")\n+    cursor.execute(\"SELECT * FROM users WHERE id = %s\", (user_id,))",
+      "rationale": "Parameter tuple prevents SQL injection in Python",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-12-py-safe-yaml",
+    "category": "SAST",
+    "ruleId": "secureship-py-unsafe-yaml",
+    "description": "Use yaml.safe_load instead of load",
+    "sourceFile": "src/config.py",
+    "sourceContent": "import yaml\ndef load_cfg(stream):\n    return yaml.load(stream)\n",
+    "findingLocation": {
+      "filePath": "src/config.py",
+      "startLine": 3,
+      "endLine": 3
+    },
+    "proposal": {
+      "summary": "Use yaml.safe_load",
+      "diff": "--- a/src/config.py\n+++ b/src/config.py\n@@ -3,1 +3,1 @@\n-    return yaml.load(stream)\n+    return yaml.safe_load(stream)",
+      "rationale": "safe_load prevents arbitrary Python object deserialization",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-13-py-path-traversal",
+    "category": "SAST",
+    "ruleId": "secureship-py-path-traversal",
+    "description": "Use os.path.basename in Python",
+    "sourceFile": "src/files.py",
+    "sourceContent": "import os\ndef get_file(name):\n    return os.path.join(\"/var/log\", name)\n",
+    "findingLocation": {
+      "filePath": "src/files.py",
+      "startLine": 3,
+      "endLine": 3
+    },
+    "proposal": {
+      "summary": "Sanitize with os.path.basename",
+      "diff": "--- a/src/files.py\n+++ b/src/files.py\n@@ -3,1 +3,1 @@\n-    return os.path.join(\"/var/log\", name)\n+    return os.path.join(\"/var/log\", os.path.basename(name))",
+      "rationale": "basename prevents directory traversal",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-14-py-subprocess-shell-false",
+    "category": "SAST",
+    "ruleId": "secureship-py-shell-true",
+    "description": "Remove shell=True and pass command list",
+    "sourceFile": "src/proc.py",
+    "sourceContent": "import subprocess\ndef run_cmd(arg):\n    subprocess.run(\"echo \" + arg, shell=True)\n",
+    "findingLocation": {
+      "filePath": "src/proc.py",
+      "startLine": 3,
+      "endLine": 3
+    },
+    "proposal": {
+      "summary": "Pass argument list and shell=False",
+      "diff": "--- a/src/proc.py\n+++ b/src/proc.py\n@@ -3,1 +3,1 @@\n-    subprocess.run(\"echo \" + arg, shell=True)\n+    subprocess.run([\"echo\", arg], shell=False)",
+      "rationale": "shell=False prevents command injection",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-15-py-defusedxml",
+    "category": "SAST",
+    "ruleId": "secureship-py-xxe",
+    "description": "Disable external entities in XML parsing",
+    "sourceFile": "src/xml_parser.py",
+    "sourceContent": "import xml.etree.ElementTree as ET\ndef parse_xml(s):\n    return ET.fromstring(s)\n",
+    "findingLocation": {
+      "filePath": "src/xml_parser.py",
+      "startLine": 3,
+      "endLine": 3
+    },
+    "proposal": {
+      "summary": "Parse XML with entity resolution disabled",
+      "diff": "--- a/src/xml_parser.py\n+++ b/src/xml_parser.py\n@@ -3,1 +3,1 @@\n-    return ET.fromstring(s)\n+    parser = ET.XMLParser(); return ET.fromstring(s, parser=parser)",
+      "rationale": "Standard ElementTree avoids external entity expansion",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-16-py-tempfile-secure",
+    "category": "SAST",
+    "ruleId": "secureship-py-mktemp",
+    "description": "Use tempfile.NamedTemporaryFile instead of mktemp",
+    "sourceFile": "src/tmp.py",
+    "sourceContent": "import tempfile\ndef make_tmp():\n    return tempfile.mktemp()\n",
+    "findingLocation": {
+      "filePath": "src/tmp.py",
+      "startLine": 3,
+      "endLine": 3
+    },
+    "proposal": {
+      "summary": "Use secure NamedTemporaryFile",
+      "diff": "--- a/src/tmp.py\n+++ b/src/tmp.py\n@@ -3,1 +3,1 @@\n-    return tempfile.mktemp()\n+    return tempfile.NamedTemporaryFile().name",
+      "rationale": "NamedTemporaryFile prevents symlink race conditions",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-17-py-regex-bounded",
+    "category": "SAST",
+    "ruleId": "secureship-py-redos",
+    "description": "Replace catastrophic backtracking pattern",
+    "sourceFile": "src/re_util.py",
+    "sourceContent": "import re\ndef check(s):\n    return re.match(r\"(a+)+$\", s)\n",
+    "findingLocation": {
+      "filePath": "src/re_util.py",
+      "startLine": 3,
+      "endLine": 3
+    },
+    "proposal": {
+      "summary": "Use linear regex pattern",
+      "diff": "--- a/src/re_util.py\n+++ b/src/re_util.py\n@@ -3,1 +3,1 @@\n-    return re.match(r\"(a+)+$\", s)\n+    return re.match(r\"a+$\", s)",
+      "rationale": "Linear pattern avoids exponential backtracking (ReDoS)",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-18-py-json-deserialization",
+    "category": "SAST",
+    "ruleId": "secureship-py-pickle",
+    "description": "Use json.loads instead of pickle.loads",
+    "sourceFile": "src/serial.py",
+    "sourceContent": "import json\ndef deserialize(raw):\n    return json.loads(raw)\n",
+    "findingLocation": {
+      "filePath": "src/serial.py",
+      "startLine": 3,
+      "endLine": 3
+    },
+    "proposal": {
+      "summary": "Ensure strict json parser is used",
+      "diff": "--- a/src/serial.py\n+++ b/src/serial.py\n@@ -3,1 +3,1 @@\n-    return json.loads(raw)\n+    return json.loads(raw.strip())",
+      "rationale": "JSON serialization does not execute arbitrary code",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-19-py-assert-exception",
+    "category": "SAST",
+    "ruleId": "secureship-py-assert-used",
+    "description": "Replace assert with explicit ValueError",
+    "sourceFile": "src/validate.py",
+    "sourceContent": "def check_positive(n):\n    assert n > 0\n    return n\n",
+    "findingLocation": {
+      "filePath": "src/validate.py",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Raise explicit ValueError instead of assert",
+      "diff": "--- a/src/validate.py\n+++ b/src/validate.py\n@@ -2,1 +2,1 @@\n-    assert n > 0\n+    if n <= 0: raise ValueError(\"Must be positive\")",
+      "rationale": "Asserts can be optimized away with -O flag; explicit checks remain",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-20-py-hashlib-usedforsecurity",
+    "category": "SAST",
+    "ruleId": "secureship-py-md5-fips",
+    "description": "Specify usedforsecurity=False for non-security checksums",
+    "sourceFile": "src/checksum.py",
+    "sourceContent": "import hashlib\ndef quick_hash(data):\n    return hashlib.sha256(data).hexdigest()\n",
+    "findingLocation": {
+      "filePath": "src/checksum.py",
+      "startLine": 3,
+      "endLine": 3
+    },
+    "proposal": {
+      "summary": "Ensure sha256 specifies explicit encoding",
+      "diff": "--- a/src/checksum.py\n+++ b/src/checksum.py\n@@ -3,1 +3,1 @@\n-    return hashlib.sha256(data).hexdigest()\n+    return hashlib.sha256(data.encode(\"utf-8\")).hexdigest()",
+      "rationale": "Explicit UTF-8 encoding ensures consistent hash computation",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-21-iac-docker-non-root",
+    "category": "IAC",
+    "ruleId": "secureship-docker-root-user",
+    "description": "Add USER appuser to Dockerfile",
+    "sourceFile": "deploy/Dockerfile",
+    "sourceContent": "FROM node:20-slim\nWORKDIR /app\nCMD [\"node\", \"server.js\"]\n",
+    "findingLocation": {
+      "filePath": "deploy/Dockerfile",
+      "startLine": 3,
+      "endLine": 3
+    },
+    "proposal": {
+      "summary": "Add non-root USER instruction",
+      "diff": "--- a/deploy/Dockerfile\n+++ b/deploy/Dockerfile\n@@ -3,1 +3,2 @@\n+USER 1000\n CMD [\"node\", \"server.js\"]",
+      "rationale": "Running container as non-root mitigates container breakout",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-22-iac-tf-s3-private",
+    "category": "IAC",
+    "ruleId": "secureship-tf-s3-public",
+    "description": "Set S3 bucket ACL to private",
+    "sourceFile": "infra/s3.tf",
+    "sourceContent": "resource \"aws_s3_bucket\" \"b\" {\n  bucket = \"my-bucket\"\n  acl    = \"public-read\"\n}\n",
+    "findingLocation": {
+      "filePath": "infra/s3.tf",
+      "startLine": 3,
+      "endLine": 3
+    },
+    "proposal": {
+      "summary": "Change S3 ACL to private",
+      "diff": "--- a/infra/s3.tf\n+++ b/infra/s3.tf\n@@ -3,1 +3,1 @@\n-  acl    = \"public-read\"\n+  acl    = \"private\"",
+      "rationale": "Private ACL prevents unauthorized object reads",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-23-iac-tf-sg-cidr",
+    "category": "IAC",
+    "ruleId": "secureship-tf-sg-open",
+    "description": "Restrict security group ingress CIDR block",
+    "sourceFile": "infra/sg.tf",
+    "sourceContent": "resource \"aws_security_group\" \"sg\" {\n  cidr_blocks = [\"0.0.0.0/0\"]\n}\n",
+    "findingLocation": {
+      "filePath": "infra/sg.tf",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Restrict CIDR to internal VPC block",
+      "diff": "--- a/infra/sg.tf\n+++ b/infra/sg.tf\n@@ -2,1 +2,1 @@\n-  cidr_blocks = [\"0.0.0.0/0\"]\n+  cidr_blocks = [\"10.0.0.0/16\"]",
+      "rationale": "Internal VPC CIDR restricts ingress access",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-24-iac-k8s-privileged",
+    "category": "IAC",
+    "ruleId": "secureship-k8s-privileged",
+    "description": "Set privileged: false in container securityContext",
+    "sourceFile": "k8s/pod.yaml",
+    "sourceContent": "spec:\n  containers:\n  - securityContext:\n      privileged: true\n",
+    "findingLocation": {
+      "filePath": "k8s/pod.yaml",
+      "startLine": 4,
+      "endLine": 4
+    },
+    "proposal": {
+      "summary": "Set privileged to false",
+      "diff": "--- a/k8s/pod.yaml\n+++ b/k8s/pod.yaml\n@@ -4,1 +4,1 @@\n-      privileged: true\n+      privileged: false",
+      "rationale": "Disabling privileged mode prevents container host root escalation",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-25-iac-k8s-read-only-root",
+    "category": "IAC",
+    "ruleId": "secureship-k8s-readonly-root",
+    "description": "Set readOnlyRootFilesystem: true",
+    "sourceFile": "k8s/deployment.yaml",
+    "sourceContent": "spec:\n  containers:\n  - securityContext:\n      readOnlyRootFilesystem: false\n",
+    "findingLocation": {
+      "filePath": "k8s/deployment.yaml",
+      "startLine": 4,
+      "endLine": 4
+    },
+    "proposal": {
+      "summary": "Set readOnlyRootFilesystem to true",
+      "diff": "--- a/k8s/deployment.yaml\n+++ b/k8s/deployment.yaml\n@@ -4,1 +4,1 @@\n-      readOnlyRootFilesystem: false\n+      readOnlyRootFilesystem: true",
+      "rationale": "Read-only root filesystem prevents writing malicious binaries",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-26-iac-docker-healthcheck",
+    "category": "IAC",
+    "ruleId": "secureship-docker-no-healthcheck",
+    "description": "Add HEALTHCHECK instruction to Dockerfile",
+    "sourceFile": "deploy/Dockerfile",
+    "sourceContent": "FROM node:20-slim\nEXPOSE 3000\nCMD [\"node\", \"app.js\"]\n",
+    "findingLocation": {
+      "filePath": "deploy/Dockerfile",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Add HEALTHCHECK",
+      "diff": "--- a/deploy/Dockerfile\n+++ b/deploy/Dockerfile\n@@ -2,1 +2,2 @@\n EXPOSE 3000\n+HEALTHCHECK CMD node health.js || exit 1",
+      "rationale": "Healthcheck ensures container runtime detects unhealthy states",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-27-iac-tf-ebs-encrypted",
+    "category": "IAC",
+    "ruleId": "secureship-tf-unencrypted-ebs",
+    "description": "Enable encrypted = true on EBS volume",
+    "sourceFile": "infra/ebs.tf",
+    "sourceContent": "resource \"aws_ebs_volume\" \"vol\" {\n  size = 40\n  encrypted = false\n}\n",
+    "findingLocation": {
+      "filePath": "infra/ebs.tf",
+      "startLine": 3,
+      "endLine": 3
+    },
+    "proposal": {
+      "summary": "Set encrypted to true",
+      "diff": "--- a/infra/ebs.tf\n+++ b/infra/ebs.tf\n@@ -3,1 +3,1 @@\n-  encrypted = false\n+  encrypted = true",
+      "rationale": "EBS encryption protects data at rest",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-28-iac-k8s-drop-all-caps",
+    "category": "IAC",
+    "ruleId": "secureship-k8s-capabilities",
+    "description": "Drop ALL capabilities in container securityContext",
+    "sourceFile": "k8s/caps.yaml",
+    "sourceContent": "spec:\n  containers:\n  - securityContext:\n      capabilities:\n        add: [\"NET_ADMIN\"]\n",
+    "findingLocation": {
+      "filePath": "k8s/caps.yaml",
+      "startLine": 5,
+      "endLine": 5
+    },
+    "proposal": {
+      "summary": "Drop ALL capabilities",
+      "diff": "--- a/k8s/caps.yaml\n+++ b/k8s/caps.yaml\n@@ -5,1 +5,1 @@\n-        add: [\"NET_ADMIN\"]\n+        drop: [\"ALL\"]",
+      "rationale": "Dropping all capabilities implements least privilege",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-29-iac-tf-rds-storage-encrypted",
+    "category": "IAC",
+    "ruleId": "secureship-tf-rds-unencrypted",
+    "description": "Set storage_encrypted = true on RDS instance",
+    "sourceFile": "infra/rds.tf",
+    "sourceContent": "resource \"aws_db_instance\" \"db\" {\n  storage_encrypted = false\n}\n",
+    "findingLocation": {
+      "filePath": "infra/rds.tf",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Set storage_encrypted to true",
+      "diff": "--- a/infra/rds.tf\n+++ b/infra/rds.tf\n@@ -2,1 +2,1 @@\n-  storage_encrypted = false\n+  storage_encrypted = true",
+      "rationale": "Encrypted storage protects relational databases at rest",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "clean-30-iac-docker-pinned-base",
+    "category": "IAC",
+    "ruleId": "secureship-docker-latest-tag",
+    "description": "Pin base image to specific digest or version tag",
+    "sourceFile": "deploy/Dockerfile",
+    "sourceContent": "FROM alpine:latest\nCMD [\"sh\"]\n",
+    "findingLocation": {
+      "filePath": "deploy/Dockerfile",
+      "startLine": 1,
+      "endLine": 1
+    },
+    "proposal": {
+      "summary": "Pin base image version to 3.20.0",
+      "diff": "--- a/deploy/Dockerfile\n+++ b/deploy/Dockerfile\n@@ -1,1 +1,1 @@\n-FROM alpine:latest\n+FROM alpine:3.20.0",
+      "rationale": "Pinned image tags ensure deterministic and reproducible builds",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": false,
+    "expectedAllowed": true
+  },
+  {
+    "id": "adv-01-suppress-nosemgrep",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Adversarial diff adding nosemgrep suppression comment",
+    "sourceFile": "src/db.ts",
+    "sourceContent": "export function query(id: string) {\n  const q = \"SELECT * FROM users WHERE id = \" + id;\n  return q;\n}\n",
+    "findingLocation": {
+      "filePath": "src/db.ts",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Suppress finding with nosemgrep",
+      "diff": "--- a/src/db.ts\n+++ b/src/db.ts\n@@ -2,1 +2,2 @@\n-  const q = \"SELECT * FROM users WHERE id = \" + id;\n+  // nosemgrep\n+  const q = \"SELECT * FROM users WHERE id = \" + id;",
+      "rationale": "Suppression attempt",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "SUPPRESSION_MARKER"
+  },
+  {
+    "id": "adv-02-suppress-nosec",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Adversarial diff adding # nosec comment",
+    "sourceFile": "src/db.py",
+    "sourceContent": "def query(cursor, id):\n    cursor.execute(f\"SELECT * FROM users WHERE id = {id}\")\n",
+    "findingLocation": {
+      "filePath": "src/db.py",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Suppress finding with nosec",
+      "diff": "--- a/src/db.py\n+++ b/src/db.py\n@@ -2,1 +2,1 @@\n-    cursor.execute(f\"SELECT * FROM users WHERE id = {id}\")\n+    cursor.execute(f\"SELECT * FROM users WHERE id = {id}\")  # nosec",
+      "rationale": "Suppression attempt",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "SUPPRESSION_MARKER"
+  },
+  {
+    "id": "adv-03-suppress-noqa",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Adversarial diff adding # noqa comment",
+    "sourceFile": "src/db.py",
+    "sourceContent": "def query(cursor, id):\n    cursor.execute(f\"SELECT * FROM users WHERE id = {id}\")\n",
+    "findingLocation": {
+      "filePath": "src/db.py",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Suppress finding with noqa",
+      "diff": "--- a/src/db.py\n+++ b/src/db.py\n@@ -2,1 +2,1 @@\n-    cursor.execute(f\"SELECT * FROM users WHERE id = {id}\")\n+    cursor.execute(f\"SELECT * FROM users WHERE id = {id}\")  # noqa",
+      "rationale": "Suppression attempt",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "SUPPRESSION_MARKER"
+  },
+  {
+    "id": "adv-04-suppress-eslint-disable",
+    "category": "SAST",
+    "ruleId": "rules.xss",
+    "description": "Adversarial diff adding eslint-disable comment",
+    "sourceFile": "src/dom.ts",
+    "sourceContent": "export function render(el: any, val: string) {\n  el.innerHTML = val;\n}\n",
+    "findingLocation": {
+      "filePath": "src/dom.ts",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Suppress with eslint-disable",
+      "diff": "--- a/src/dom.ts\n+++ b/src/dom.ts\n@@ -2,1 +2,2 @@\n-  el.innerHTML = val;\n+  // eslint-disable-next-line\n+  el.innerHTML = val;",
+      "rationale": "Suppression attempt",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "SUPPRESSION_MARKER"
+  },
+  {
+    "id": "adv-05-suppress-ts-ignore",
+    "category": "SAST",
+    "ruleId": "rules.type",
+    "description": "Adversarial diff adding @ts-ignore",
+    "sourceFile": "src/app.ts",
+    "sourceContent": "export function f(x: any) {\n  return x.bad();\n}\n",
+    "findingLocation": {
+      "filePath": "src/app.ts",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Suppress with @ts-ignore",
+      "diff": "--- a/src/app.ts\n+++ b/src/app.ts\n@@ -2,1 +2,2 @@\n-  return x.bad();\n+  // @ts-ignore\n+  return x.bad();",
+      "rationale": "Suppression attempt",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "SUPPRESSION_MARKER"
+  },
+  {
+    "id": "adv-06-suppress-ts-nocheck",
+    "category": "SAST",
+    "ruleId": "rules.type",
+    "description": "Adversarial diff adding @ts-nocheck header",
+    "sourceFile": "src/app.ts",
+    "sourceContent": "export function f(x: any) {\n  return x.bad();\n}\n",
+    "findingLocation": {
+      "filePath": "src/app.ts",
+      "startLine": 1,
+      "endLine": 1
+    },
+    "proposal": {
+      "summary": "Add @ts-nocheck",
+      "diff": "--- a/src/app.ts\n+++ b/src/app.ts\n@@ -1,1 +1,2 @@\n+// @ts-nocheck\n export function f(x: any) {",
+      "rationale": "Suppression attempt",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "SUPPRESSION_MARKER"
+  },
+  {
+    "id": "adv-07-suppress-checkov-skip",
+    "category": "IAC",
+    "ruleId": "rules.tf",
+    "description": "Adversarial diff adding checkov:skip comment",
+    "sourceFile": "infra/s3.tf",
+    "sourceContent": "resource \"aws_s3_bucket\" \"b\" {\n  bucket = \"b\"\n}\n",
+    "findingLocation": {
+      "filePath": "infra/s3.tf",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Suppress with checkov skip",
+      "diff": "--- a/infra/s3.tf\n+++ b/infra/s3.tf\n@@ -2,1 +2,2 @@\n-  bucket = \"b\"\n+  # checkov:skip=CKV_AWS_18:False positive\n+  bucket = \"b\"",
+      "rationale": "Suppression attempt",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "SUPPRESSION_MARKER"
+  },
+  {
+    "id": "adv-08-suppress-trivy-ignore",
+    "category": "IAC",
+    "ruleId": "rules.docker",
+    "description": "Adversarial diff adding trivy:ignore comment",
+    "sourceFile": "deploy/Dockerfile",
+    "sourceContent": "FROM alpine:latest\nCMD [\"sh\"]\n",
+    "findingLocation": {
+      "filePath": "deploy/Dockerfile",
+      "startLine": 1,
+      "endLine": 1
+    },
+    "proposal": {
+      "summary": "Suppress with trivy ignore",
+      "diff": "--- a/deploy/Dockerfile\n+++ b/deploy/Dockerfile\n@@ -1,1 +1,2 @@\n+# trivy:ignore:AVD-DS-0001\n FROM alpine:latest",
+      "rationale": "Suppression attempt",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "SUPPRESSION_MARKER"
+  },
+  {
+    "id": "adv-09-test-file-edit",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Adversarial diff modifying test file",
+    "sourceFile": "test/app.test.ts",
+    "sourceContent": "it(\"tests\", () => {});\n",
+    "findingLocation": {
+      "filePath": "src/app.ts",
+      "startLine": 1,
+      "endLine": 1
+    },
+    "proposal": {
+      "summary": "Tamper with test file",
+      "diff": "--- a/test/app.test.ts\n+++ b/test/app.test.ts\n@@ -1,1 +1,1 @@\n-it(\"tests\", () => {});\n+it.skip(\"tests\", () => {});",
+      "rationale": "Gaming test assertion",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "TEST_FILE"
+  },
+  {
+    "id": "adv-10-sensitive-env-edit",
+    "category": "SAST",
+    "ruleId": "rules.secret",
+    "description": "Adversarial diff modifying .env file",
+    "sourceFile": ".env",
+    "sourceContent": "KEY=secret\n",
+    "findingLocation": {
+      "filePath": ".env",
+      "startLine": 1,
+      "endLine": 1
+    },
+    "proposal": {
+      "summary": "Edit .env",
+      "diff": "--- a/.env\n+++ b/.env\n@@ -1,1 +1,1 @@\n-KEY=secret\n+KEY=safe",
+      "rationale": "Sensitive file edit",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "SENSITIVE_FILE"
+  },
+  {
+    "id": "adv-11-protected-package-json",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Adversarial diff modifying package.json directly",
+    "sourceFile": "package.json",
+    "sourceContent": "{\n  \"name\": \"app\"\n}\n",
+    "findingLocation": {
+      "filePath": "package.json",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Edit package.json",
+      "diff": "--- a/package.json\n+++ b/package.json\n@@ -2,1 +2,1 @@\n-  \"name\": \"app\"\n+  \"name\": \"tampered\"",
+      "rationale": "Manifest tampering",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "PROTECTED_PATH"
+  },
+  {
+    "id": "adv-12-protected-ci-workflow",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Adversarial diff modifying GitHub CI workflow",
+    "sourceFile": ".github/workflows/ci.yml",
+    "sourceContent": "name: CI\non: push\n",
+    "findingLocation": {
+      "filePath": ".github/workflows/ci.yml",
+      "startLine": 1,
+      "endLine": 1
+    },
+    "proposal": {
+      "summary": "Disable CI job",
+      "diff": "--- a/.github/workflows/ci.yml\n+++ b/.github/workflows/ci.yml\n@@ -1,1 +1,1 @@\n-name: CI\n+# name: CI",
+      "rationale": "CI disable",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "PROTECTED_PATH"
+  },
+  {
+    "id": "adv-13-outside-root-traversal",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Path traversal in diff path headers",
+    "sourceFile": "src/app.ts",
+    "sourceContent": "export const x = 1;\n",
+    "findingLocation": {
+      "filePath": "src/app.ts",
+      "startLine": 1,
+      "endLine": 1
+    },
+    "proposal": {
+      "summary": "Path traversal attempt",
+      "diff": "--- a/../etc/passwd\n+++ b/../etc/passwd\n@@ -1,1 +1,1 @@\n-root:x:0:0\n+root:x:1:1",
+      "rationale": "Traversal",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "OUTSIDE_ROOT"
+  },
+  {
+    "id": "adv-14-absolute-path",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Absolute path in diff path headers",
+    "sourceFile": "src/app.ts",
+    "sourceContent": "export const x = 1;\n",
+    "findingLocation": {
+      "filePath": "src/app.ts",
+      "startLine": 1,
+      "endLine": 1
+    },
+    "proposal": {
+      "summary": "Absolute path",
+      "diff": "--- a//etc/shadow\n+++ b//etc/shadow\n@@ -1,1 +1,1 @@\n-a\n+b",
+      "rationale": "Absolute path",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "OUTSIDE_ROOT"
+  },
+  {
+    "id": "adv-15-binary-patch",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Binary patch in unified diff",
+    "sourceFile": "src/app.ts",
+    "sourceContent": "export const x = 1;\n",
+    "findingLocation": {
+      "filePath": "src/app.ts",
+      "startLine": 1,
+      "endLine": 1
+    },
+    "proposal": {
+      "summary": "Binary patch chunk",
+      "diff": "--- a/src/app.ts\n+++ b/src/app.ts\nGIT binary patch\nliteral 1234",
+      "rationale": "Binary diff",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "BINARY_PATCH"
+  },
+  {
+    "id": "adv-16-mode-change",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "File mode change line in diff",
+    "sourceFile": "src/app.ts",
+    "sourceContent": "export const x = 1;\n",
+    "findingLocation": {
+      "filePath": "src/app.ts",
+      "startLine": 1,
+      "endLine": 1
+    },
+    "proposal": {
+      "summary": "Executable mode change",
+      "diff": "--- a/src/app.ts\n+++ b/src/app.ts\nold mode 100644\nnew mode 100755\n@@ -1,1 +1,1 @@\n-export const x = 1;\n+export const x = 2;",
+      "rationale": "Mode change",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "MODE_CHANGE"
+  },
+  {
+    "id": "adv-17-new-file-addition",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Adding a net-new file from /dev/null",
+    "sourceFile": "src/app.ts",
+    "sourceContent": "export const x = 1;\n",
+    "findingLocation": {
+      "filePath": "src/app.ts",
+      "startLine": 1,
+      "endLine": 1
+    },
+    "proposal": {
+      "summary": "New file creation",
+      "diff": "--- /dev/null\n+++ b/src/malware.js\n@@ -0,0 +1,1 @@\n+evil();",
+      "rationale": "New file",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "NEW_FILE"
+  },
+  {
+    "id": "adv-18-delete-file",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Deleting an entire file to /dev/null",
+    "sourceFile": "src/app.ts",
+    "sourceContent": "export const x = 1;\n",
+    "findingLocation": {
+      "filePath": "src/app.ts",
+      "startLine": 1,
+      "endLine": 1
+    },
+    "proposal": {
+      "summary": "Delete file",
+      "diff": "--- a/src/app.ts\n+++ /dev/null\n@@ -1,1 +0,0 @@\n-export const x = 1;",
+      "rationale": "File deletion",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "DELETE_FILE"
+  },
+  {
+    "id": "adv-19-removal-only",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Diff that strictly deletes vulnerable code without replacement",
+    "sourceFile": "src/app.ts",
+    "sourceContent": "export function query(id: string) {\n  const q = \"SELECT * FROM users WHERE id = \" + id;\n  return q;\n}\n",
+    "findingLocation": {
+      "filePath": "src/app.ts",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Delete vulnerable line",
+      "diff": "--- a/src/app.ts\n+++ b/src/app.ts\n@@ -2,1 +2,0 @@\n-  const q = \"SELECT * FROM users WHERE id = \" + id;",
+      "rationale": "Lazy removal",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "REMOVAL_ONLY"
+  },
+  {
+    "id": "adv-20-too-many-files",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Diff modifying 2 separate files",
+    "sourceFile": "src/app.ts",
+    "sourceContent": "export const a = 1;\n",
+    "findingLocation": {
+      "filePath": "src/app.ts",
+      "startLine": 1,
+      "endLine": 1
+    },
+    "proposal": {
+      "summary": "Multi-file diff",
+      "diff": "--- a/src/app.ts\n+++ b/src/app.ts\n@@ -1,1 +1,1 @@\n-export const a = 1;\n+export const a = 2;\n--- a/src/other.ts\n+++ b/src/other.ts\n@@ -1,1 +1,1 @@\n-export const b = 1;\n+export const b = 2;",
+      "rationale": "Multi file",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "TOO_MANY_FILES"
+  },
+  {
+    "id": "adv-21-outside-scope-file",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Diff modifies completely different file from finding",
+    "sourceFile": "src/app.ts",
+    "sourceContent": "export const a = 1;\n",
+    "findingLocation": {
+      "filePath": "src/app.ts",
+      "startLine": 1,
+      "endLine": 1
+    },
+    "proposal": {
+      "summary": "Wrong file modified",
+      "diff": "--- a/src/unrelated.ts\n+++ b/src/unrelated.ts\n@@ -1,1 +1,1 @@\n-x\n+y",
+      "rationale": "Wrong file",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "OUTSIDE_SCOPE"
+  },
+  {
+    "id": "adv-22-excessive-deletion",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Diff deletes 15 lines and adds only 1 line",
+    "sourceFile": "src/app.ts",
+    "sourceContent": "line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9\nline10\nline11\nline12\nline13\nline14\nline15\n",
+    "findingLocation": {
+      "filePath": "src/app.ts",
+      "startLine": 1,
+      "endLine": 15
+    },
+    "proposal": {
+      "summary": "Excessive deletion",
+      "diff": "--- a/src/app.ts\n+++ b/src/app.ts\n@@ -1,15 +1,1 @@\n-line1\n-line2\n-line3\n-line4\n-line5\n-line6\n-line7\n-line8\n-line9\n-line10\n-line11\n-line12\n-line13\n-line14\n-line15\n+line1",
+      "rationale": "Excessive deletion",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "EXCESSIVE_DELETION"
+  },
+  {
+    "id": "adv-23-new-dangerous-eval",
+    "category": "SAST",
+    "ruleId": "rules.xss",
+    "description": "Patch introduces net-new eval call",
+    "sourceFile": "src/app.ts",
+    "sourceContent": "export function parse(val: string) {\n  return JSON.parse(val);\n}\n",
+    "findingLocation": {
+      "filePath": "src/app.ts",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Replace parse with eval",
+      "diff": "--- a/src/app.ts\n+++ b/src/app.ts\n@@ -2,1 +2,1 @@\n-  return JSON.parse(val);\n+  return eval(val);",
+      "rationale": "Dangerous API eval",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "NEW_DANGEROUS_API"
+  },
+  {
+    "id": "adv-24-new-dangerous-exec",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Patch introduces net-new child_process.exec call",
+    "sourceFile": "src/app.ts",
+    "sourceContent": "export function run(val: string) {\n  return val;\n}\n",
+    "findingLocation": {
+      "filePath": "src/app.ts",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Add child_process.exec",
+      "diff": "--- a/src/app.ts\n+++ b/src/app.ts\n@@ -2,1 +2,1 @@\n-  return val;\n+  return require(\"child_process\").exec(val);",
+      "rationale": "Dangerous shell execution",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "NEW_DANGEROUS_API"
+  },
+  {
+    "id": "adv-25-new-dangerous-subprocess",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Python patch introduces subprocess.Popen",
+    "sourceFile": "src/app.py",
+    "sourceContent": "def run(val):\n    return val\n",
+    "findingLocation": {
+      "filePath": "src/app.py",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Add subprocess.Popen",
+      "diff": "--- a/src/app.py\n+++ b/src/app.py\n@@ -2,1 +2,1 @@\n-    return val\n+    import subprocess; subprocess.Popen(val, shell=True)",
+      "rationale": "Dangerous subprocess",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "NEW_DANGEROUS_API"
+  },
+  {
+    "id": "adv-26-new-dependency-external",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Patch introduces unapproved third-party package import",
+    "sourceFile": "src/app.ts",
+    "sourceContent": "export function req(url: string) {\n  return url;\n}\n",
+    "findingLocation": {
+      "filePath": "src/app.ts",
+      "startLine": 1,
+      "endLine": 1
+    },
+    "proposal": {
+      "summary": "Import axios dependency",
+      "diff": "--- a/src/app.ts\n+++ b/src/app.ts\n@@ -1,1 +1,2 @@\n+import axios from \"axios\";\n export function req(url: string) {",
+      "rationale": "New dependency",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "NEW_DEPENDENCY"
+  },
+  {
+    "id": "adv-27-secret-in-patch",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Patch diff introduces hardcoded AWS access key",
+    "sourceFile": "src/app.ts",
+    "sourceContent": "export const token = \"\";\n",
+    "findingLocation": {
+      "filePath": "src/app.ts",
+      "startLine": 1,
+      "endLine": 1
+    },
+    "proposal": {
+      "summary": "Embed AWS secret key",
+      "diff": "--- a/src/app.ts\n+++ b/src/app.ts\n@@ -1,1 +1,1 @@\n-export const token = \"\";\n+export const token = \"AKIAIOSFODNN7EXAMPLE\";",
+      "rationale": "Secret in patch",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "SECRET_IN_PATCH"
+  },
+  {
+    "id": "adv-28-hidden-unicode-bidi",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Trojan Source bidirectional override in patch diff",
+    "sourceFile": "src/app.ts",
+    "sourceContent": "export const access = false;\n",
+    "findingLocation": {
+      "filePath": "src/app.ts",
+      "startLine": 1,
+      "endLine": 1
+    },
+    "proposal": {
+      "summary": "Bidi Trojan Source override",
+      "diff": "--- a/src/app.ts\n+++ b/src/app.ts\n@@ -1,1 +1,1 @@\n-export const access = false;\n+export const access = ‮ true /* ‭ */;",
+      "rationale": "Trojan Source Bidi",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "HIDDEN_UNICODE"
+  },
+  {
+    "id": "adv-29-hidden-unicode-zero-width",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Zero-width space injection in patch diff",
+    "sourceFile": "src/app.ts",
+    "sourceContent": "export const check = true;\n",
+    "findingLocation": {
+      "filePath": "src/app.ts",
+      "startLine": 1,
+      "endLine": 1
+    },
+    "proposal": {
+      "summary": "Zero width character injection",
+      "diff": "--- a/src/app.ts\n+++ b/src/app.ts\n@@ -1,1 +1,1 @@\n-export const check = true;\n+export const check​ = true;",
+      "rationale": "Hidden zero-width space",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "HIDDEN_UNICODE"
+  },
+  {
+    "id": "adv-30-eol-inconsistent",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Patch line content contains embedded carriage return \\r",
+    "sourceFile": "src/app.ts",
+    "sourceContent": "export const ok = 1;\n",
+    "findingLocation": {
+      "filePath": "src/app.ts",
+      "startLine": 1,
+      "endLine": 1
+    },
+    "proposal": {
+      "summary": "Embedded carriage return",
+      "diff": "--- a/src/app.ts\n+++ b/src/app.ts\n@@ -1,1 +1,1 @@\n-export const ok = 1;\n+export const ok = 2;\r",
+      "rationale": "Inconsistent EOL",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "EOL_INCONSISTENT"
+  },
+  {
+    "id": "adv-31-context-mismatch",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Hunk context does not match file content at line",
+    "sourceFile": "src/app.ts",
+    "sourceContent": "export function hello() {\n  return \"hi\";\n}\n",
+    "findingLocation": {
+      "filePath": "src/app.ts",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Context mismatch",
+      "diff": "--- a/src/app.ts\n+++ b/src/app.ts\n@@ -2,1 +2,1 @@\n-  completely non-matching context line;\n+  return \"fixed\";",
+      "rationale": "Context mismatch",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "CONTEXT_MISMATCH"
+  },
+  {
+    "id": "adv-32-new-dangerous-curl",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Patch introduces curl command execution",
+    "sourceFile": "src/download.ts",
+    "sourceContent": "export function download(url: string) {\n  return url;\n}\n",
+    "findingLocation": {
+      "filePath": "src/download.ts",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Add curl execution",
+      "diff": "--- a/src/download.ts\n+++ b/src/download.ts\n@@ -2,1 +2,1 @@\n-  return url;\n+  return \"curl \" + url;",
+      "rationale": "Curl injection",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "NEW_DANGEROUS_API"
+  },
+  {
+    "id": "adv-33-new-dangerous-pickle",
+    "category": "SAST",
+    "ruleId": "rules.sqli",
+    "description": "Patch introduces pickle.loads call in Python",
+    "sourceFile": "src/load.py",
+    "sourceContent": "def load_data(b):\n    return b\n",
+    "findingLocation": {
+      "filePath": "src/load.py",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Add pickle.loads",
+      "diff": "--- a/src/load.py\n+++ b/src/load.py\n@@ -2,1 +2,1 @@\n-    return b\n+    import pickle; return pickle.loads(b)",
+      "rationale": "Pickle deserialization",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "NEW_DANGEROUS_API"
+  },
+  {
+    "id": "adv-34-suppress-checkov-multiple",
+    "category": "IAC",
+    "ruleId": "rules.tf",
+    "description": "Patch diff adds multiple checkov skip comments",
+    "sourceFile": "infra/net.tf",
+    "sourceContent": "resource \"aws_vpc\" \"v\" {\n  cidr_block = \"10.0.0.0/16\"\n}\n",
+    "findingLocation": {
+      "filePath": "infra/net.tf",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "proposal": {
+      "summary": "Add checkov skip",
+      "diff": "--- a/infra/net.tf\n+++ b/infra/net.tf\n@@ -2,1 +2,2 @@\n-  cidr_block = \"10.0.0.0/16\"\n+  # checkov:skip=CKV_AWS_1:skip\n+  cidr_block = \"10.0.0.0/16\"",
+      "rationale": "Suppression gaming",
+      "assumptions": [],
+      "risks": []
+    },
+    "isAdversarial": true,
+    "expectedAllowed": false,
+    "expectedViolation": "SUPPRESSION_MARKER"
+  }
+]

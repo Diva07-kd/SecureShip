@@ -1,0 +1,12 @@
+{
+  "id": "case6-secrets-docs-example",
+  "description": "False positive trap: example token in docs guide",
+  "category": "SECRET",
+  "expectedFindings": [
+    {
+      "file": "docs/guide.md",
+      "ruleId": "gitlab-pat",
+      "label": "FALSE_POSITIVE_TRAP"
+    }
+  ]
+}

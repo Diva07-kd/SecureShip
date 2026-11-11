@@ -1,0 +1,287 @@
+[
+  {
+    "id": "F-SEC-001",
+    "severity": "P0",
+    "category": "SECURITY",
+    "cwe": "CWE-347",
+    "title": "Unverified & Forged JWT Signing Oracle on License Server",
+    "location": {
+      "file": "packages/license-server/src/worker.ts",
+      "startLine": 270,
+      "endLine": 327
+    },
+    "description": "GET /v1/validate parses JWT using unverified atob() without verifying incoming RSA cryptographic signatures, and re-signs near-expiry claims with server private key, creating an arbitrary enterprise token signing oracle.",
+    "remediation": "Verify incoming JWT with env.JWT_PUBLIC_KEY before inspecting claims, check Cloudflare D1 for license revocation, and eliminate automatic re-signing of unverified payloads.",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "F-SEC-002",
+    "severity": "P0",
+    "category": "SECURITY",
+    "cwe": "CWE-353",
+    "title": "Unverified & Stubbed Stripe Webhook Handler",
+    "location": {
+      "file": "packages/license-server/src/worker.ts",
+      "startLine": 338,
+      "endLine": 374
+    },
+    "description": "POST /v1/webhook/stripe ignores STRIPE_WEBHOOK_SECRET, skips stripe-signature verification, and returns a dummy JSON response without persisting purchased licenses to Cloudflare D1.",
+    "remediation": "Validate Stripe HMAC-SHA256 signature against request body and persist checkout.session.completed transactions to D1 database.",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "F-DIS-001",
+    "severity": "P0",
+    "category": "DISTRIBUTION",
+    "cwe": "CWE-427",
+    "title": "NPM Package Dependency Confusion & CLI Installation Implosion",
+    "location": {
+      "file": "packages/cli/package.json",
+      "startLine": 33,
+      "endLine": 41
+    },
+    "description": "@secureship/cli bundles internal packages via tsup, but leaves 9 unpublished private workspace packages in dependencies. npm install -g fails or downloads attacker-registered packages.",
+    "remediation": "Remove private workspace packages from runtime dependencies in packages/cli/package.json since they are bundled into dist/index.js.",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "F-REL-001",
+    "severity": "P0",
+    "category": "RELEASE",
+    "cwe": "CWE-440",
+    "title": "Standalone Binaries Missing Bundled WASM Grammars",
+    "location": {
+      "file": ".github/workflows/release.yml",
+      "startLine": 79,
+      "endLine": 83
+    },
+    "description": "bun build --compile creates standalone binaries without packaging packages/reachability/wasm/*.wasm, causing clean standalone executions to fail with 'WASM directory not found'.",
+    "remediation": "Package standalone binaries alongside wasm/ directory in tar.gz/zip archives and update wasm-manifest.ts search candidates.",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "F-LIC-001",
+    "severity": "P0",
+    "category": "LICENSING",
+    "cwe": "CWE-436",
+    "title": "Fatal Client-Server Protocol Incompatibility in Background Renewal",
+    "location": {
+      "file": "packages/core-engine/src/license/tier-resolver.ts",
+      "startLine": 178,
+      "endLine": 190
+    },
+    "description": "refreshLicenseInBackground sends HTTP POST with { sub } body and expects data.jwt, whereas license-server handles GET /v1/validate with Authorization Bearer and returns refreshedJwt. Renewal requests 404 and are swallowed, causing licenses to expire.",
+    "remediation": "Update client to send GET /v1/validate with Bearer header, parse data.refreshedJwt, and verify RSA signature before saving.",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "F-FLT-003",
+    "severity": "P0",
+    "category": "SECURITY",
+    "cwe": "CWE-346",
+    "title": "Wildcard CORS * on Fleet Server Exposes Telemetry and Policy Tampering",
+    "location": {
+      "file": "packages/fleet/src/server/fleet-server.ts",
+      "startLine": 81,
+      "endLine": 85
+    },
+    "description": "FleetServer unconditionally sets Access-Control-Allow-Origin: * on all responses, allowing malicious web pages visited by developers or CISOs to make cross-origin requests to unauthenticated endpoints to read corporate telemetry or overwrite security policies.",
+    "remediation": "Remove wildcard CORS header, restrict CORS to configured enterprise dashboard origins, and enforce Bearer token authentication.",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "F-LIC-002",
+    "severity": "P0",
+    "category": "MONETIZATION",
+    "cwe": "CWE-799",
+    "title": "Zero Seat Limit Enforcement on License Server / Infinite Activations",
+    "location": {
+      "file": "packages/license-server/src/worker.ts",
+      "startLine": 180,
+      "endLine": 248
+    },
+    "description": "POST /v1/activate issues RS256 signed JWTs without querying existing activation count in D1 against record.seats, enabling unlimited activations on a single 1-seat license.",
+    "remediation": "Add transactional COUNT(DISTINCT machine_fingerprint) check against activations table in worker.ts and reject with 403 when seat limit is exceeded.",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "F-PKG-001",
+    "severity": "P0",
+    "category": "DISTRIBUTION",
+    "cwe": "CWE-427",
+    "title": "Curated Symbol Dataset & SAST Rules Missing From Shipped Artifacts",
+    "location": {
+      "file": "packages/reachability/src/symbols/dataset-loader.ts",
+      "startLine": 28,
+      "endLine": 47
+    },
+    "description": "Runtime symbol reachability and SAST rules resolve via process.cwd() or monorepo relative paths and are omitted from @secureship/cli files in package.json, causing reachability and custom scanning to fail on clean global installations.",
+    "remediation": "Bundle rules/ and packages/reachability/data inside CLI dist/assets and resolve them using import.meta.url relative to package directory.",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "F-ENG-001",
+    "severity": "P1",
+    "category": "ENGINE",
+    "cwe": "CWE-393",
+    "title": "Fake Remediation Backend in Production Engine",
+    "location": {
+      "file": "packages/core-engine/src/remediation/verification-ladder.ts",
+      "startLine": 608,
+      "endLine": 610
+    },
+    "description": "When sandbox.backend is 'none', verification ladder instantiates FakeSandboxBackend, which unconditionally returns exit code 0 and certifies unverified code patches as VERIFIED_RUNTIME.",
+    "remediation": "Delete FakeSandboxBackend from production builds; cap verification ladder at VERIFIED_STATIC when backend is none.",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "F-GIT-001",
+    "severity": "P1",
+    "category": "CLI_GIT",
+    "cwe": "CWE-754",
+    "title": "Fatal Crash on Subdirectory Monorepo Incremental Git Diff Scans",
+    "location": {
+      "file": "packages/core-engine/src/git/diff-scope.ts",
+      "startLine": 68,
+      "endLine": 73
+    },
+    "description": "DiffScope expects .git strictly inside targetDir rather than workspace root, throwing an unhandled exception when scanning monorepo subdirectories with --staged.",
+    "remediation": "Traverse parent directories or invoke git rev-parse --show-toplevel to find git root, and filter diff files by relative path.",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "F-FLT-001",
+    "severity": "P1",
+    "category": "FLEET",
+    "cwe": "CWE-306",
+    "title": "Fleet Server Token Leak to stdout & Unauthenticated Control Endpoints",
+    "location": {
+      "file": "packages/fleet/src/server/fleet-server.ts",
+      "startLine": 138,
+      "endLine": 190
+    },
+    "description": "Fleet server prints FLEET_TOKEN in plaintext to stdout upon startup, and leaves /api/fleet/repos, /api/fleet/summary, and /api/policy unauthenticated.",
+    "remediation": "Remove plaintext token print from CLI and enforce Authorization: Bearer <FLEET_TOKEN> checks on all Fleet routes.",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "F-SAN-001",
+    "severity": "P1",
+    "category": "PLATFORM",
+    "cwe": "CWE-436",
+    "title": "Windows Container Mount Path /c/... Translation Rejection by Docker Desktop",
+    "location": {
+      "file": "packages/sandbox/src/backends/container-backend.ts",
+      "startLine": 39,
+      "endLine": 50
+    },
+    "description": "ContainerBackend.translateHostPath converts Windows drive paths (C:\\...) to /c/..., which Docker Desktop for Windows rejects as an invalid local volume name, breaking container sandbox execution.",
+    "remediation": "Preserve Windows drive letter formatting with forward slashes (e.g. C:/Users/...) on Windows when building Docker volume arguments.",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "F-FLT-004",
+    "severity": "P1",
+    "category": "ARCHITECTURE",
+    "cwe": "CWE-362",
+    "title": "Unsynchronized Non-Atomic fs.writeFileSync in FleetStore Data Loss",
+    "location": {
+      "file": "packages/fleet/src/storage/fleet-store.ts",
+      "startLine": 60,
+      "endLine": 76
+    },
+    "description": "FleetStore synchronously overwrites its database file in place with fs.writeFileSync; interruptions cause JSON corruption which is swallowed on restart, wiping all fleet repositories and policies.",
+    "remediation": "Write to a temporary file and atomically rename (fs.renameSync), and add backup file rotation on disk persistence.",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "F-SEC-003",
+    "severity": "P2",
+    "category": "SECURITY",
+    "cwe": "CWE-78",
+    "title": "Prohibited Shell Invocations in License Command",
+    "location": {
+      "file": "packages/cli/src/commands/license.ts",
+      "startLine": 169,
+      "endLine": 178
+    },
+    "description": "License checkout launcher uses child_process.exec() with shell: true, violating architectural safety principles and creating command injection risk on Windows.",
+    "remediation": "Replace child_process.exec with spawnSafe using shell: false and array arguments.",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "F-VSC-001",
+    "severity": "P2",
+    "category": "SECURITY",
+    "cwe": "CWE-377",
+    "title": "Insecure Temp File Permissions in VSCode Extension Runner",
+    "location": {
+      "file": "packages/vscode-extension/src/cli/cli-runner.ts",
+      "startLine": 46,
+      "endLine": 49
+    },
+    "description": "VSCode extension creates temporary scan output files in shared os.tmpdir() with default world-readable permissions, leaking findings to other users on multi-user systems.",
+    "remediation": "Use fs.mkdtempSync to create a restricted temp directory with 0o700 permissions before writing scan files.",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "F-SUP-001",
+    "severity": "P2",
+    "category": "SUPPLY_CHAIN",
+    "cwe": "CWE-547",
+    "title": "Completely Stubbed Registry Supply-Chain Risk Provider",
+    "location": {
+      "file": "packages/core-engine/src/supply-chain/providers/registry.provider.ts",
+      "startLine": 10,
+      "endLine": 75
+    },
+    "description": "All 4 methods in RegistryProvider return hardcoded UNAVAILABLE error objects without performing any live HTTP queries to NPM or PyPI registries.",
+    "remediation": "Implement live HTTP registry client querying npmjs.org and pypi.org with caching and offline fallback.",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "F-LEG-001",
+    "severity": "P2",
+    "category": "LEGAL",
+    "cwe": "CWE-1025",
+    "title": "Rebranded Third-Party Scanner Rule IDs Missing Upstream Notices",
+    "location": {
+      "file": "packages/contracts/src/engine-brand.ts",
+      "startLine": 13,
+      "endLine": 115
+    },
+    "description": "White-labeled upstream scanner engines (Opengrep, Checkov, Trivy) reference container-only license paths in THIRD_PARTY_NOTICES.md that do not exist in binary/npm releases.",
+    "remediation": "Embed full license texts and copyright notices for all rebranded engines directly inside shipping distributions and root notices file.",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "F-TST-001",
+    "severity": "P2",
+    "category": "TEST_QUALITY",
+    "cwe": "CWE-1076",
+    "title": "Anti-Fake-Test Law Integrity Violations in Reachability Suite",
+    "location": {
+      "file": "packages/reachability/test/hostile-stress.test.ts",
+      "startLine": 12,
+      "endLine": 136
+    },
+    "description": "4 test cases in hostile-stress.test.ts violate Anti-Fake-Test Laws by asserting on real wall-clock elapsed time or using weak toBeDefined() checks without structural verification.",
+    "remediation": "Replace weak assertions with strict AST structural comparisons and use deterministic fake timers for performance tests.",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "F-WIN-001",
+    "severity": "P3",
+    "category": "PLATFORM",
+    "cwe": "CWE-178",
+    "title": "Windows Path Normalization Inconsistencies in VSCode Runner",
+    "location": {
+      "file": "packages/vscode-extension/src/extension.ts",
+      "startLine": 80,
+      "endLine": 95
+    },
+    "description": "Inconsistent mixing of forward slashes and backslashes causes diagnostic markers to occasionally fail to attach to open editor tabs on Windows workstations.",
+    "remediation": "Standardize all internal path comparisons using path.normalize() or POSIX-style paths before matching URIs.",
+    "status": "VERIFIED"
+  }
+]

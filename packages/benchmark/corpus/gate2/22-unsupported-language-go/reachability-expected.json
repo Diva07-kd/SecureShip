@@ -1,0 +1,8 @@
+{
+  "id": "22-unsupported-language-go",
+  "category": "SAST",
+  "filePath": "main.rb",
+  "expectedVerdict": "UNKNOWN",
+  "expectedKind": "UNSUPPORTED_LANGUAGE",
+  "expectedConfidence": "LOW"
+}

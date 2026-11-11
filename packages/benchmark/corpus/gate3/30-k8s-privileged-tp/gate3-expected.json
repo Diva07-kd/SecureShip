@@ -1,0 +1,17 @@
+{
+  "id": "30-k8s-privileged-tp",
+  "category": "IAC",
+  "ruleId": "CKV_K8S_16",
+  "severity": "MEDIUM",
+  "cweIds": [
+    "CWE-250"
+  ],
+  "groundTruth": "LIKELY_TRUE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "real",
+  "description": "Kubernetes container running in privileged mode",
+  "file": "pod.yaml",
+  "startLine": 9,
+  "endLine": 9
+}

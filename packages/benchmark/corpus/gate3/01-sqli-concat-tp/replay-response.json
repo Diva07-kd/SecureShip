@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_TRUE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "Direct string concatenation of userId into SQL query without parameterization or escaping.",
+  "citations": [
+    {
+      "startLine": 2,
+      "endLine": 2,
+      "quote": "return db.query(\"SELECT * FROM users WHERE id = \" + userId);"
+    }
+  ]
+}

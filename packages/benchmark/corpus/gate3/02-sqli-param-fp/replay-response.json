@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_FALSE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "Query uses dollar parameter placeholder $1 and passes userId via arguments array to db.execute.",
+  "citations": [
+    {
+      "startLine": 3,
+      "endLine": 3,
+      "quote": "return db.execute(query, [userId]);"
+    }
+  ]
+}

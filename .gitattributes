@@ -1,0 +1,2 @@
+packages/reachability/data/* text eol=lf
+rules/secureship-sast/** text eol=lf

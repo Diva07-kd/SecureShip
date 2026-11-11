@@ -1,0 +1,12 @@
+{
+  "id": "case18-iac-k8s-privileged",
+  "description": "True positive Kubernetes privileged container definition",
+  "category": "IAC",
+  "expectedFindings": [
+    {
+      "file": "pod.yaml",
+      "ruleId": "CKV_K8S_16",
+      "label": "TRUE_POSITIVE"
+    }
+  ]
+}

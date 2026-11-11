@@ -1,0 +1,12 @@
+{
+  "id": "case5-secrets-placeholder",
+  "description": "False positive trap: documentation placeholder AWS key",
+  "category": "SECRET",
+  "expectedFindings": [
+    {
+      "file": "docs/config.example.js",
+      "ruleId": "aws-access-key-id",
+      "label": "FALSE_POSITIVE_TRAP"
+    }
+  ]
+}

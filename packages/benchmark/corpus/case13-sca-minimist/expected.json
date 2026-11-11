@@ -1,0 +1,12 @@
+{
+  "id": "case13-sca-minimist",
+  "description": "True positive Minimist prototype pollution vulnerability",
+  "category": "SCA",
+  "expectedFindings": [
+    {
+      "file": "package-lock.json",
+      "ruleId": "CVE-2020-7598",
+      "label": "TRUE_POSITIVE"
+    }
+  ]
+}

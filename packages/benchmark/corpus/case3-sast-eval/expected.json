@@ -1,0 +1,17 @@
+{
+  "id": "case3-sast-eval",
+  "description": "True positive dynamic eval execution vulnerability",
+  "category": "SAST",
+  "expectedFindings": [
+    {
+      "file": "src/eval-dynamic.js",
+      "ruleId": "rules.secureship-sast.secureship-js-eval",
+      "label": "TRUE_POSITIVE"
+    },
+    {
+      "file": "src/eval-static.js",
+      "ruleId": "rules.secureship-sast.secureship-js-eval",
+      "label": "FALSE_POSITIVE_TRAP"
+    }
+  ]
+}

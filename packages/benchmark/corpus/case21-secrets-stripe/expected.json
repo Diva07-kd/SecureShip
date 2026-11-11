@@ -1,0 +1,12 @@
+{
+  "id": "case21-secrets-stripe",
+  "description": "True positive Stripe API secret key in production billing service",
+  "category": "SECRET",
+  "expectedFindings": [
+    {
+      "file": "src/billing.ts",
+      "ruleId": "stripe-api-key",
+      "label": "TRUE_POSITIVE"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "26-tf-sg-open-tp",
+  "category": "IAC",
+  "ruleId": "CKV_AWS_24",
+  "severity": "MEDIUM",
+  "cweIds": [
+    "CWE-200"
+  ],
+  "groundTruth": "LIKELY_TRUE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "real",
+  "description": "SSH port 22 exposed to 0.0.0.0/0",
+  "file": "main.tf",
+  "startLine": 6,
+  "endLine": 6
+}

@@ -1,0 +1,10 @@
+{
+  "id": "33-precondition-p6-bin-exposure",
+  "package": "semver",
+  "ecosystem": "npm",
+  "ruleId": "CVE-2022-25883",
+  "expectedVerdict": "UNREACHABLE",
+  "expectedKind": "UNINVOKED_SYMBOL",
+  "expectedConfidence": "MEDIUM",
+  "groundTruthUsed": false
+}

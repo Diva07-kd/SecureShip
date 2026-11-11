@@ -1,0 +1,10 @@
+{
+  "id": "01-binding-esm-default-unused",
+  "package": "lodash",
+  "ecosystem": "npm",
+  "ruleId": "CVE-2021-23337",
+  "expectedVerdict": "UNREACHABLE",
+  "expectedKind": "UNINVOKED_SYMBOL",
+  "expectedConfidence": "HIGH",
+  "groundTruthUsed": false
+}

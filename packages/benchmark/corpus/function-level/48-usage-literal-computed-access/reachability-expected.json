@@ -1,0 +1,10 @@
+{
+  "id": "48-usage-literal-computed-access",
+  "package": "lodash",
+  "ecosystem": "npm",
+  "ruleId": "CVE-2021-23337",
+  "expectedVerdict": "REACHABLE_CALL_PATH",
+  "expectedKind": "SYMBOL_CALL_PATH",
+  "expectedConfidence": "HIGH",
+  "groundTruthUsed": true
+}

@@ -1,0 +1,12 @@
+{
+  "id": "case17-iac-dockerfile-root",
+  "description": "True positive Dockerfile missing non-root USER instruction",
+  "category": "IAC",
+  "expectedFindings": [
+    {
+      "file": "Dockerfile",
+      "ruleId": "CKV_DOCKER_3",
+      "label": "TRUE_POSITIVE"
+    }
+  ]
+}

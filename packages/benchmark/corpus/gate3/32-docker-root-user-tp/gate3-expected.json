@@ -1,0 +1,17 @@
+{
+  "id": "32-docker-root-user-tp",
+  "category": "IAC",
+  "ruleId": "CKV_DOCKER_3",
+  "severity": "MEDIUM",
+  "cweIds": [
+    "CWE-250"
+  ],
+  "groundTruth": "LIKELY_TRUE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "real",
+  "description": "Dockerfile missing USER directive defaulting to root",
+  "file": "Dockerfile",
+  "startLine": 3,
+  "endLine": 3
+}

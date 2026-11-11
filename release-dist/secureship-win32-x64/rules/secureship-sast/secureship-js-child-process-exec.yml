@@ -1,0 +1,36 @@
+# Copyright (c) 2026 SecureShip Authors
+# SPDX-License-Identifier: Apache-2.0
+rules:
+  - id: secureship-js-child-process-exec
+    patterns:
+      - pattern-either:
+          - pattern: child_process.exec($CMD, ...)
+          - pattern: exec($CMD, ...)
+          - pattern: child_process.execSync($CMD, ...)
+          - pattern: execSync($CMD, ...)
+      - pattern-either:
+          - pattern-inside: |
+              $CMD = $A + $B;
+              ...
+          - pattern-inside: |
+              $CMD = `...${...}...`;
+              ...
+          - pattern: child_process.exec($A + $B, ...)
+          - pattern: exec($A + $B, ...)
+          - pattern: child_process.exec(`...${...}...`, ...)
+          - pattern: exec(`...${...}...`, ...)
+          - pattern: child_process.execSync($A + $B, ...)
+          - pattern: execSync($A + $B, ...)
+          - pattern: child_process.execSync(`...${...}...`, ...)
+          - pattern: execSync(`...${...}...`, ...)
+    message: 'Untrusted subprocess command execution with dynamic string concatenation can lead to Command Injection.'
+    severity: ERROR
+    languages:
+      - javascript
+      - typescript
+    metadata:
+      cwe:
+        - "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+      category: security
+      confidence: HIGH
+      security-severity: '9.3'

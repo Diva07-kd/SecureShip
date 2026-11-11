@@ -1,0 +1,8 @@
+{
+  "id": "23-no-entrypoint-found",
+  "category": "SAST",
+  "filePath": "helper.js",
+  "expectedVerdict": "UNKNOWN",
+  "expectedKind": "NO_ENTRYPOINT",
+  "expectedConfidence": "LOW"
+}

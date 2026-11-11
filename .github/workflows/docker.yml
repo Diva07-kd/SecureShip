@@ -1,0 +1,147 @@
+name: SecureShip Container Build & Hardening Quality Gates
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - main
+  schedule:
+    # Weekly audit of pinned upstream tool checksums & release manifests
+    - cron: '0 4 * * 1'
+
+permissions:
+  contents: read
+  packages: write
+  security-events: write
+
+jobs:
+  verify-tool-pins:
+    name: Verify Upstream Tool Pins & SHA-256 SSoT
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4.1.0
+        with:
+          version: 12.14.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.2.0
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Re-download and cryptographically verify all tool lockfile pins
+        run: pnpm verify:tool-pins
+
+  build-and-smoke-test:
+    name: Build & Smoke-Test Self-Contained Multi-Arch Image
+    runs-on: ubuntu-latest
+    needs: [verify-tool-pins]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3.6.0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3.10.0
+
+      # Build local amd64 image and load into daemon for pre-push verification
+      - name: Build local smoke-test image
+        uses: docker/build-push-action@v6.15.0
+        with:
+          context: .
+          file: ./Dockerfile.cli
+          load: true
+          tags: secureship/cli:smoke-test
+          build-args: |
+            TARGETARCH=amd64
+
+      # Gate 1: Doctor all-engines verification
+      - name: 'Smoke-Test: secureship doctor'
+        run: |
+          docker run --rm secureship/cli:smoke-test doctor
+
+      # Gate 2: Version display
+      - name: 'Smoke-Test: secureship --version'
+        run: |
+          docker run --rm secureship/cli:smoke-test --version
+
+      # Gate 3: Air-gap verification (zero outbound network capability)
+      - name: 'Smoke-Test: Air-gap isolated execution (--network none)'
+        run: |
+          docker run --rm --network none secureship/cli:smoke-test doctor
+
+      # Gate 4: Read-only rootfs and non-root execution
+      - name: 'Smoke-Test: Hardened runtime (--read-only, arbitrary UID, tmpfs)'
+        run: |
+          docker run --rm \
+            --user 10001:10001 \
+            --read-only \
+            --tmpfs /tmp:rw,noexec,nosuid \
+            --tmpfs /home/secureship/.secureship:rw \
+            secureship/cli:smoke-test doctor
+
+      # Gate 5: Read-only volume mount scan
+      - name: 'Smoke-Test: Scan read-only repository fixture'
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}:/workspace:ro" \
+            secureship/cli:smoke-test scan /workspace --scanners gitleaks
+
+      # Gate 6: Signal handling test (docker stop must terminate cleanly < 3s)
+      - name: 'Smoke-Test: Tini PID 1 signal propagation on docker stop'
+        run: |
+          CID=$(docker run -d secureship/cli:smoke-test scan --watch /workspace)
+          sleep 2
+          START_TIME=$(date +%s)
+          docker stop -t 3 "$CID"
+          END_TIME=$(date +%s)
+          DURATION=$((END_TIME - START_TIME))
+          echo "Container terminated in ${DURATION}s"
+          if [ "$DURATION" -gt 3 ]; then
+            echo "Error: docker stop exceeded 3 seconds (signal propagation failure)"
+            exit 1
+          fi
+
+      # Gate 7: Self-scan image for CRITICAL CVEs with Trivy
+      - name: Run Trivy vulnerability scan on built image
+        uses: aquasecurity/trivy-action@0.29.0
+        with:
+          image-ref: secureship/cli:smoke-test
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL'
+
+      # Authenticate only if releasing
+      - name: Login to DockerHub
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: docker/login-action@v3.3.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Build and push multi-arch image only after all smoke tests and gates pass
+      - name: Build & Push Multi-Arch Distribution (amd64, arm64)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: docker/build-push-action@v6.15.0
+        with:
+          context: .
+          file: ./Dockerfile.cli
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            secureship/cli:latest
+            secureship/cli:${{ github.ref_name }}

@@ -1,0 +1,8 @@
+{
+  "id": "04-dev-only-dependency",
+  "category": "SCA",
+  "package": "nodemon",
+  "expectedVerdict": "UNREACHABLE",
+  "expectedKind": "DEV_ONLY",
+  "expectedConfidence": "MEDIUM"
+}

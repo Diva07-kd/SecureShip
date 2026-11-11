@@ -1,0 +1,8 @@
+{
+  "id": "10-config-only-usage",
+  "category": "SCA",
+  "package": "babel-core",
+  "expectedVerdict": "UNKNOWN",
+  "expectedKind": "CONFIG_REFERENCE",
+  "expectedConfidence": "MEDIUM"
+}

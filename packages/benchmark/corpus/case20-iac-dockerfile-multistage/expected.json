@@ -1,0 +1,12 @@
+{
+  "id": "case20-iac-dockerfile-multistage",
+  "description": "False positive trap: clean hardened Dockerfile with dedicated non-root USER",
+  "category": "IAC",
+  "expectedFindings": [
+    {
+      "file": "Dockerfile",
+      "ruleId": "CKV_DOCKER_3",
+      "label": "FALSE_POSITIVE_TRAP"
+    }
+  ]
+}

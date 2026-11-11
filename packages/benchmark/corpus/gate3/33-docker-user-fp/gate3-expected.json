@@ -1,0 +1,17 @@
+{
+  "id": "33-docker-user-fp",
+  "category": "IAC",
+  "ruleId": "CKV_DOCKER_3",
+  "severity": "LOW",
+  "cweIds": [
+    "CWE-250"
+  ],
+  "groundTruth": "LIKELY_FALSE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "real",
+  "description": "Dockerfile with unprivileged USER directive",
+  "file": "Dockerfile",
+  "startLine": 3,
+  "endLine": 3
+}

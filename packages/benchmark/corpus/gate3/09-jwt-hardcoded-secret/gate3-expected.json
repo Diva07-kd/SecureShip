@@ -1,0 +1,17 @@
+{
+  "id": "09-jwt-hardcoded-secret",
+  "category": "SAST",
+  "ruleId": "secureship-js-hardcoded-jwt-secret",
+  "severity": "HIGH",
+  "cweIds": [
+    "CWE-798"
+  ],
+  "groundTruth": "LIKELY_TRUE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "synthetic",
+  "description": "Hardcoded JWT secret token (Credential class finding)",
+  "file": "auth.js",
+  "startLine": 3,
+  "endLine": 3
+}

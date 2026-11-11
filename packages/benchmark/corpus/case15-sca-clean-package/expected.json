@@ -1,0 +1,12 @@
+{
+  "id": "case15-sca-clean-package",
+  "description": "False positive trap: completely clean modern dependencies without CVEs",
+  "category": "SCA",
+  "expectedFindings": [
+    {
+      "file": "package-lock.json",
+      "ruleId": "CVE-NONE",
+      "label": "FALSE_POSITIVE_TRAP"
+    }
+  ]
+}

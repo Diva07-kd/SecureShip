@@ -1,0 +1,11 @@
+{
+  "id": "31-precondition-p5-dependents-present",
+  "package": "lodash",
+  "ecosystem": "npm",
+  "ruleId": "CVE-2021-23337",
+  "expectedVerdict": "REACHABLE_IMPORT",
+  "expectedKind": "PACKAGE_IMPORTED",
+  "expectedConfidence": "HIGH",
+  "expectedBlockedBy": "NOT_LEAF_PACKAGE",
+  "groundTruthUsed": false
+}

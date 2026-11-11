@@ -1,0 +1,12 @@
+{
+  "id": "case9-sast-sql-concat",
+  "description": "True positive SQL query string concatenation injection",
+  "category": "SAST",
+  "expectedFindings": [
+    {
+      "file": "src/query.js",
+      "ruleId": "rules.secureship-sast.secureship-js-sql-concat",
+      "label": "TRUE_POSITIVE"
+    }
+  ]
+}

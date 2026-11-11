@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_FALSE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "privileged is explicitly false and runAsNonRoot is enforced.",
+  "citations": [
+    {
+      "startLine": 9,
+      "endLine": 10,
+      "quote": "privileged: false\n      runAsNonRoot: true"
+    }
+  ]
+}

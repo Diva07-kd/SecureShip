@@ -1,0 +1,17 @@
+{
+  "id": "02-sqli-param-fp",
+  "category": "SAST",
+  "ruleId": "rules.sqli.concat",
+  "severity": "MEDIUM",
+  "cweIds": [
+    "CWE-89"
+  ],
+  "groundTruth": "LIKELY_FALSE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "replay-only",
+  "description": "Parameterized query falsely flagged as SQL injection",
+  "file": "db.js",
+  "startLine": 2,
+  "endLine": 3
+}

@@ -1,0 +1,12 @@
+{
+  "id": "case4-sca-lockfile",
+  "description": "True positive known vulnerable dependency in package-lock.json",
+  "category": "SCA",
+  "expectedFindings": [
+    {
+      "file": "package-lock.json",
+      "ruleId": "CVE-2020-28500",
+      "label": "TRUE_POSITIVE"
+    }
+  ]
+}

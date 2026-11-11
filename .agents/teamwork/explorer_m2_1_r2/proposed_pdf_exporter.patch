@@ -1,0 +1,116 @@
+--- a/backend/app/exporters/pdf_exporter.py
++++ b/backend/app/exporters/pdf_exporter.py
+@@ -32,2 +32,8 @@
+     if val is None:
+         return ""
+     return html.escape(str(val))
++
++def _safe_int(val: Any, default: int = 0) -> int:
++    try:
++        return int(val)
++    except (ValueError, TypeError):
++        return default
+@@ -43,6 +49,6 @@
+     created_at = str(norm.get("created_at", ""))[:19]
+-    summary = norm.get("summary", {})
+-    total = summary.get("total_findings", 0)
+-    by_sev = summary.get("by_severity", {})
+-    by_owasp = summary.get("by_owasp", {})
+-    findings = norm.get("findings", [])
++    summary = norm.get("summary") or {}
++    findings = norm.get("findings") or []
++    total = _safe_int(summary.get("total_findings"), default=len(findings))
++    by_sev = summary.get("by_severity") or {}
++    by_owasp = summary.get("by_owasp") or {}
+@@ -122,5 +128,5 @@
+     # Summary Statistics Table
+-    crit = by_sev.get("CRITICAL", 0)
+-    high = by_sev.get("HIGH", 0)
+-    med = by_sev.get("MEDIUM", 0)
+-    low = by_sev.get("LOW", 0)
+-    info = by_sev.get("INFO", 0)
++    crit = _safe_int(by_sev.get("CRITICAL", 0))
++    high = _safe_int(by_sev.get("HIGH", 0))
++    med = _safe_int(by_sev.get("MEDIUM", 0))
++    low = _safe_int(by_sev.get("LOW", 0))
++    info = _safe_int(by_sev.get("INFO", 0))
+@@ -160,3 +166,8 @@
+     # OWASP Breakdown
+-    active_owasp = [(cat, cnt) for cat, cnt in by_owasp.items() if cnt > 0]
++    active_owasp: list[tuple[str, int]] = []
++    if isinstance(by_owasp, dict):
++        for cat, cnt in by_owasp.items():
++            cnt_int = _safe_int(cnt)
++            if cnt_int > 0:
++                active_owasp.append((str(cat), cnt_int))
+     if active_owasp:
+@@ -188,10 +199,20 @@
+         for idx, f in enumerate(findings, 1):
+-            severity = str(f.get("severity", "MEDIUM")).upper()
++            severity = str(f.get("severity") or "MEDIUM").upper()
+             title = f.get("title") or f.get("rule_id") or f"Finding {idx}"
+-            rule_id = f.get("rule_id", "N/A")
+-            desc = f.get("description", "No description provided.")
+-            loc = f.get("location", {})
+-            file_path = loc.get("file_path", "unknown")
++            rule_id = f.get("rule_id") or "N/A"
++            desc = f.get("description") or "No description provided."
++            loc = f.get("location") or {}
++            file_path = loc.get("file_path") or "unknown"
+             start_line = loc.get("start_line", 1)
+-            owasp = f.get("owasp_category", "Unknown")
+-            cwes = ", ".join(f.get("cwe_ids", [])) or "None"
+-            reach = f.get("reachability", "UNKNOWN")
++            start_line_display = _safe_int(start_line, default=1) if isinstance(start_line, (int, str)) and str(start_line).isdigit() else _escape_pdf(start_line)
++            owasp = f.get("owasp_category") or "Unknown"
++
++            raw_cwes = f.get("cwe_ids")
++            if isinstance(raw_cwes, list):
++                cwes = ", ".join(str(c) for c in raw_cwes if c is not None) or "None"
++            elif raw_cwes is not None:
++                cwes = str(raw_cwes) or "None"
++            else:
++                cwes = "None"
++
++            reach = f.get("reachability") or "UNKNOWN"
+@@ -214,5 +235,5 @@
+             f_meta = (
+-                f"<b>File:</b> {_escape_pdf(file_path)}:{start_line} &nbsp;|&nbsp; "
++                f"<b>File:</b> {_escape_pdf(file_path)}:{start_line_display} &nbsp;|&nbsp; "
+                 f"<b>CWE:</b> {_escape_pdf(cwes)} &nbsp;|&nbsp; <b>OWASP:</b> {_escape_pdf(owasp)} &nbsp;|&nbsp; "
+                 f"<b>Reachability:</b> {_escape_pdf(reach)}"
+             )
+             finding_flowables.append(Paragraph(f_meta, subtitle_style))
+-            finding_flowables.append(Paragraph(_escape_pdf(desc), body_style))
++            safe_desc = _escape_pdf(desc).replace("\n", "<br/>")
++            finding_flowables.append(Paragraph(safe_desc, body_style))
+@@ -224,11 +245,23 @@
+             # Code Snippet if present
+             snippet_data = f.get("snippet") or f.get("snippet_context")
+             if snippet_data and isinstance(snippet_data, dict):
+-                lines = snippet_data.get("lines", [])
+-                if lines:
++                lines = snippet_data.get("lines")
++                if not lines and snippet_data.get("raw_content"):
++                    raw_lines = str(snippet_data["raw_content"]).splitlines()
++                    start_lno = _safe_int(snippet_data.get("start_line"), default=1)
++                    lines = [
++                        {"line_number": start_lno + i, "content": l, "is_target": False}
++                        for i, l in enumerate(raw_lines[:12])
++                    ]
++                if lines and isinstance(lines, list):
+                     snippet_text = []
+                     for ln in lines[:12]:  # cap lines to fit page cleanly
+-                        lno = ln.get("line_number", 0)
+-                        cnt = _escape_pdf(ln.get("content", ""))
+-                        is_tgt = ln.get("is_target") or ln.get("is_vulnerable", False)
++                        if isinstance(ln, dict):
++                            lno = _safe_int(ln.get("line_number"), default=0)
++                            cnt = _escape_pdf(str(ln.get("content") or "").expandtabs(4))
++                            is_tgt = bool(ln.get("is_target") or ln.get("is_vulnerable", False))
++                        else:
++                            lno = 0
++                            cnt = _escape_pdf(str(ln).expandtabs(4))
++                            is_tgt = False
+                         marker = "&gt;&gt;" if is_tgt else "  "
+                         snippet_text.append(f"{lno:4d} | {marker} {cnt}")

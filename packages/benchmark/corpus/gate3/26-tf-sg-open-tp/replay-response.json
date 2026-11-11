@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_TRUE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "Ingress rule exposes SSH port 22 to the public internet via 0.0.0.0/0 cidr block.",
+  "citations": [
+    {
+      "startLine": 6,
+      "endLine": 6,
+      "quote": "cidr_blocks = [\"0.0.0.0/0\"]"
+    }
+  ]
+}

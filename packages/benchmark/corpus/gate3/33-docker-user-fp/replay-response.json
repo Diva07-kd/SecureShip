@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_FALSE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "USER app directive drops root privileges before container execution.",
+  "citations": [
+    {
+      "startLine": 3,
+      "endLine": 3,
+      "quote": "USER app"
+    }
+  ]
+}

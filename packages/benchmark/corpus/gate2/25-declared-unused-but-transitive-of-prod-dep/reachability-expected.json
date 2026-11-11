@@ -1,0 +1,8 @@
+{
+  "id": "25-declared-unused-but-transitive-of-prod-dep",
+  "category": "SCA",
+  "package": "transitive-pkg",
+  "expectedVerdict": "REACHABLE_IMPORT",
+  "expectedKind": "TRANSITIVE_VIA",
+  "expectedConfidence": "MEDIUM"
+}

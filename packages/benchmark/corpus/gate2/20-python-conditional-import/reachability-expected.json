@@ -1,0 +1,8 @@
+{
+  "id": "20-python-conditional-import",
+  "category": "SCA",
+  "package": "requests",
+  "expectedVerdict": "REACHABLE_IMPORT",
+  "expectedKind": "PACKAGE_IMPORTED",
+  "expectedConfidence": "HIGH"
+}

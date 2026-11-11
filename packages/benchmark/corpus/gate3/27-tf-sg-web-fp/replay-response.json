@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_FALSE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "Public HTTPS on port 443 is intended for public web traffic and not a remote administration exposure.",
+  "citations": [
+    {
+      "startLine": 3,
+      "endLine": 4,
+      "quote": "from_port = 443\n  to_port = 443"
+    }
+  ]
+}

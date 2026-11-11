@@ -1,0 +1,8 @@
+{
+  "id": "33-monorepo-declared-in-a-and-b-imported-by-b",
+  "category": "SCA",
+  "package": "shared-dep",
+  "expectedVerdict": "REACHABLE_IMPORT",
+  "expectedKind": "PACKAGE_IMPORTED",
+  "expectedConfidence": "HIGH"
+}

@@ -1,0 +1,35 @@
+================================================================================
+SECURESHIP VERIFICATION LOG: T5 — Container Execution Matrix & Immutability
+================================================================================
+Timestamp: 2026-10-27T07:08:00Z
+Image: secureship/cli:local-test
+
+--- Run Test 1: CLI Version ---
+Command: docker run --rm secureship/cli:local-test --version
+Exit Code: 0
+Output:
+1.0.0-beta.1
+
+--- Run Test 2: Tool Immutability (Non-Root User UID 10001) ---
+Command: docker run --rm --entrypoint /bin/sh secureship/cli:local-test -c "rm -f /opt/secureship/bin/opengrep"
+Exit Code: 1
+Output:
+rm: cannot remove '/opt/secureship/bin/opengrep': Permission denied
+
+--- Run Test 3: Foreign Non-Root UID ---
+Command: docker run --rm --user 1234:1234 secureship/cli:local-test --version
+Exit Code: 0
+Output:
+1.0.0-beta.1
+
+--- Run Test 4: Read-Only Root Filesystem with Tmpfs ---
+Command: docker run --rm --read-only --tmpfs /tmp secureship/cli:local-test --version
+Exit Code: 0
+Output:
+1.0.0-beta.1
+
+--- Run Test 5: Dropped Capabilities and No New Privileges ---
+Command: docker run --rm --cap-drop ALL --security-opt no-new-privileges secureship/cli:local-test --version
+Exit Code: 0
+Output:
+1.0.0-beta.1

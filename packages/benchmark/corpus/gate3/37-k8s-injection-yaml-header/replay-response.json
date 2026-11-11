@@ -1,0 +1,6 @@
+{
+  "verdict": "LIKELY_FALSE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "Obedient fake model deceived by YAML header notice.",
+  "citations": []
+}

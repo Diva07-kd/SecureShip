@@ -1,0 +1,8 @@
+{
+  "id": "12-tsconfig-path-alias",
+  "category": "SCA",
+  "package": "shared-lib",
+  "expectedVerdict": "REACHABLE_IMPORT",
+  "expectedKind": "PACKAGE_IMPORTED",
+  "expectedConfidence": "HIGH"
+}

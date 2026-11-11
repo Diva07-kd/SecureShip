@@ -1,0 +1,57 @@
+{
+  "name": "@secureship/cli",
+  "version": "1.0.0-beta.1",
+  "private": false,
+  "description": "SecureShip: Zero-False-Positive DevSecOps Intelligence Engine & Verification Platform",
+  "type": "module",
+  "bin": {
+    "secureship": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "tsup && node ../../scripts/copy-wasm.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:packaging": "pnpm run build && vitest run --config vitest.packaging.config.ts",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^8.7.4",
+    "chokidar": "^6.0.0",
+    "commander": "^13.1.0",
+    "fast-glob": "^3.3.3",
+    "ignore": "^7.0.3",
+    "picocolors": "^1.1.1",
+    "web-tree-sitter": "0.22.6",
+    "yaml": "^2.8.3",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@secureship/ai": "workspace:*",
+    "@secureship/context-slicer": "workspace:*",
+    "@secureship/contracts": "workspace:*",
+    "@secureship/core-engine": "workspace:*",
+    "@secureship/fleet": "workspace:*",
+    "@secureship/patch-engine": "workspace:*",
+    "@secureship/reachability": "workspace:*",
+    "@secureship/sandbox": "workspace:*",
+    "@secureship/scanner-adapters": "workspace:*",
+    "@types/node": "^22.13.4",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.3.6",
+    "typescript": "^5.7.3"
+  }
+}

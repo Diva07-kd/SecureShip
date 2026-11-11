@@ -1,0 +1,8 @@
+{
+  "id": "01-prod-import-esm",
+  "category": "SCA",
+  "package": "lodash",
+  "expectedVerdict": "REACHABLE_IMPORT",
+  "expectedKind": "PACKAGE_IMPORTED",
+  "expectedConfidence": "HIGH"
+}

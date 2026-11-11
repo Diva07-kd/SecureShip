@@ -1,0 +1,12 @@
+{
+  "id": "case19-iac-terraform-examples",
+  "description": "False positive trap: demo terraform in examples/ directory suppressed by Gate 1",
+  "category": "IAC",
+  "expectedFindings": [
+    {
+      "file": "examples/demo/main.tf",
+      "ruleId": "CKV_AWS_24",
+      "label": "FALSE_POSITIVE_TRAP"
+    }
+  ]
+}

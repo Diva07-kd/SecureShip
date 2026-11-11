@@ -1,0 +1,41 @@
+{
+  "id": "44-dataset-triggered-on-import",
+  "package": "importpkg",
+  "ecosystem": "npm",
+  "ruleId": "CUSTOM-CVE-IMPORT-TIME",
+  "expectedVerdict": "REACHABLE_IMPORT",
+  "expectedKind": "PACKAGE_IMPORTED",
+  "expectedConfidence": "HIGH",
+  "expectedBlockedBy": "TRIGGER_NOT_CALL",
+  "groundTruthUsed": true,
+  "customDataset": {
+    "version": "1.0.0",
+    "datasetId": "test-import-time",
+    "entries": [
+      {
+        "id": "CUSTOM-CVE-IMPORT-TIME",
+        "aliases": [],
+        "ecosystem": "npm",
+        "package": "importpkg",
+        "entryPoints": [
+          {
+            "module": ".",
+            "export": "init",
+            "kind": "FUNCTION"
+          }
+        ],
+        "triggeredOn": "IMPORT_TIME",
+        "entryPointsComplete": true,
+        "sourceUrls": [
+          "https://example.com/advisory"
+        ],
+        "fixCommitUrls": [
+          "https://example.com/fix"
+        ],
+        "verifiedAt": "2026-10-25",
+        "verifiedBy": "Test Runner",
+        "notes": "Test import time trigger"
+      }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+.git
+.github
+node_modules
+packages/*/node_modules
+packages/*/dist
+dist
+coverage
+.secureship
+.env*
+license.jwt
+*.log
+*.tmp
+.vscode
+.idea
+docs/self-scans
+test
+packages/*/test

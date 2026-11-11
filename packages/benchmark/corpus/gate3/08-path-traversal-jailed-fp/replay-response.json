@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_FALSE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "path.basename removes all directory traversal sequences ensuring the resolved path stays inside base.",
+  "citations": [
+    {
+      "startLine": 5,
+      "endLine": 5,
+      "quote": "const safe = path.resolve(base, path.basename(userPath));"
+    }
+  ]
+}

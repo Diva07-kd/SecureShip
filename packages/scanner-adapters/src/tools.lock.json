@@ -1,0 +1,230 @@
+{
+  "$schema": "https://secureship.dev/schemas/tools.lock.json",
+  "schemaVersion": 1,
+  "updatedAt": "2026-10-26T16:00:00.000Z",
+  "tools": {
+    "opengrep": {
+      "name": "opengrep",
+      "description": "Fast, open-source static analysis engine for code (SAST)",
+      "version": "1.31.0",
+      "binaryName": "opengrep",
+      "sha256ManifestUrl": null,
+      "platforms": {
+        "linux-x64": {
+          "url": "https://github.com/opengrep/opengrep/releases/download/v1.31.0/opengrep_manylinux_x86",
+          "archiveType": "binary",
+          "sha256": "dbbe3c2058dbe600c449a8ba22ea79a1643a6660658400090d0323a8d0d31147",
+          "verifiedAgainst": "computed-bytes-sha256",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        },
+        "linux-x64-glibc": {
+          "url": "https://github.com/opengrep/opengrep/releases/download/v1.31.0/opengrep_manylinux_x86",
+          "archiveType": "binary",
+          "sha256": "dbbe3c2058dbe600c449a8ba22ea79a1643a6660658400090d0323a8d0d31147",
+          "verifiedAgainst": "computed-bytes-sha256",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        },
+        "linux-x64-musl": {
+          "url": "https://github.com/opengrep/opengrep/releases/download/v1.31.0/opengrep_musllinux_x86",
+          "archiveType": "binary",
+          "sha256": "02c9fba481611aa0664bc79ccf7ce59e9e334b76af8921c80b2f738d17fabf9b",
+          "verifiedAgainst": "computed-bytes-sha256",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        },
+        "linux-arm64": {
+          "url": "https://github.com/opengrep/opengrep/releases/download/v1.31.0/opengrep_manylinux_aarch64",
+          "archiveType": "binary",
+          "sha256": "2b713a29a00237f85408b83002fc111db5b94c7fa8d263f0a93184a960655d9d",
+          "verifiedAgainst": "computed-bytes-sha256",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        },
+        "linux-arm64-glibc": {
+          "url": "https://github.com/opengrep/opengrep/releases/download/v1.31.0/opengrep_manylinux_aarch64",
+          "archiveType": "binary",
+          "sha256": "2b713a29a00237f85408b83002fc111db5b94c7fa8d263f0a93184a960655d9d",
+          "verifiedAgainst": "computed-bytes-sha256",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        },
+        "linux-arm64-musl": {
+          "url": "https://github.com/opengrep/opengrep/releases/download/v1.31.0/opengrep_musllinux_aarch64",
+          "archiveType": "binary",
+          "sha256": "b7cbedab0b6c9953ea27ce3baa006ad8b6fa1c50ee7433638b63f7fc731519d9",
+          "verifiedAgainst": "computed-bytes-sha256",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        },
+        "darwin-x64": {
+          "url": "https://github.com/opengrep/opengrep/releases/download/v1.31.0/opengrep_osx_x86",
+          "archiveType": "binary",
+          "sha256": "2f0d0c7a41a3e48dc02c30dabc4851bc37c18f021b46c9ae54b15177ece088ee",
+          "verifiedAgainst": "computed-bytes-sha256",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        },
+        "darwin-arm64": {
+          "url": "https://github.com/opengrep/opengrep/releases/download/v1.31.0/opengrep_osx_arm64",
+          "archiveType": "binary",
+          "sha256": "035dd8fd2410fe68513916df0c2895257fffafcd5314b4a118484ce8db62bedb",
+          "verifiedAgainst": "computed-bytes-sha256",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        },
+        "win32-x64": {
+          "url": "https://github.com/opengrep/opengrep/releases/download/v1.31.0/opengrep_windows_x86.exe",
+          "archiveType": "binary",
+          "sha256": "fdd2e22549e7000ceb66976a01366db6910760b2aa4e457b6bda62545070d26a",
+          "verifiedAgainst": "computed-bytes-sha256",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        }
+      }
+    },
+    "gitleaks": {
+      "name": "gitleaks",
+      "description": "Audit git repositories for secrets and credentials",
+      "version": "8.24.0",
+      "binaryName": "gitleaks",
+      "sha256ManifestUrl": "https://github.com/gitleaks/gitleaks/releases/download/v8.24.0/gitleaks_8.24.0_checksums.txt",
+      "platforms": {
+        "linux-x64": {
+          "url": "https://github.com/gitleaks/gitleaks/releases/download/v8.24.0/gitleaks_8.24.0_linux_x64.tar.gz",
+          "archiveType": "tar.gz",
+          "binarySubpath": "gitleaks",
+          "sha256": "cb49b7de5ee986510fe8666ca0273a6cc15eb82571f2f14832c9e8920751f3a4",
+          "verifiedAgainst": "upstream-checksum-file:gitleaks_8.24.0_checksums.txt",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        },
+        "linux-arm64": {
+          "url": "https://github.com/gitleaks/gitleaks/releases/download/v8.24.0/gitleaks_8.24.0_linux_arm64.tar.gz",
+          "archiveType": "tar.gz",
+          "binarySubpath": "gitleaks",
+          "sha256": "3755cc9b81f2466ad308f722a064ca04df27f59d551396183efe07978fef8fcb",
+          "verifiedAgainst": "upstream-checksum-file:gitleaks_8.24.0_checksums.txt",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        },
+        "darwin-x64": {
+          "url": "https://github.com/gitleaks/gitleaks/releases/download/v8.24.0/gitleaks_8.24.0_darwin_x64.tar.gz",
+          "archiveType": "tar.gz",
+          "binarySubpath": "gitleaks",
+          "sha256": "bd9ed3294c086f10dcc5fc25de57d44ba940c19c1a5a3d5f1cfeb10b9dff005e",
+          "verifiedAgainst": "upstream-checksum-file:gitleaks_8.24.0_checksums.txt",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        },
+        "darwin-arm64": {
+          "url": "https://github.com/gitleaks/gitleaks/releases/download/v8.24.0/gitleaks_8.24.0_darwin_arm64.tar.gz",
+          "archiveType": "tar.gz",
+          "binarySubpath": "gitleaks",
+          "sha256": "a3d281867df087ded8c2f9afd35d61ff923a25e64caa127b720991ee433d763b",
+          "verifiedAgainst": "upstream-checksum-file:gitleaks_8.24.0_checksums.txt",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        },
+        "win32-x64": {
+          "url": "https://github.com/gitleaks/gitleaks/releases/download/v8.24.0/gitleaks_8.24.0_windows_x64.zip",
+          "archiveType": "zip",
+          "binarySubpath": "gitleaks.exe",
+          "sha256": "dab91070b01feec49bd157375085c93a16fe85e13b3bff6916aaaa0a3b3b5fac",
+          "verifiedAgainst": "upstream-checksum-file:gitleaks_8.24.0_checksums.txt",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        }
+      }
+    },
+    "osv-scanner": {
+      "name": "osv-scanner",
+      "description": "Vulnerability scanner with Open Source Vulnerabilities (OSV) database",
+      "version": "1.9.2",
+      "binaryName": "osv-scanner",
+      "sha256ManifestUrl": "https://github.com/google/osv-scanner/releases/download/v1.9.2/osv-scanner_SHA256SUMS",
+      "platforms": {
+        "linux-x64": {
+          "url": "https://github.com/google/osv-scanner/releases/download/v1.9.2/osv-scanner_linux_amd64",
+          "archiveType": "binary",
+          "sha256": "d6af4b67fa5de658598bd2d445efb99e90d1734b3146962418719c4350ecb74b",
+          "verifiedAgainst": "upstream-checksum-file:osv-scanner_SHA256SUMS",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        },
+        "linux-arm64": {
+          "url": "https://github.com/google/osv-scanner/releases/download/v1.9.2/osv-scanner_linux_arm64",
+          "archiveType": "binary",
+          "sha256": "9c6160afb26c79449a1f1b667323b989a57dda8fc19f22936c9ff920fd97ddfa",
+          "verifiedAgainst": "upstream-checksum-file:osv-scanner_SHA256SUMS",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        },
+        "darwin-x64": {
+          "url": "https://github.com/google/osv-scanner/releases/download/v1.9.2/osv-scanner_darwin_amd64",
+          "archiveType": "binary",
+          "sha256": "487ab433b2c2a8c80b737c0bd428a80e6d2e211b4adf775a52a6964163fa3249",
+          "verifiedAgainst": "upstream-checksum-file:osv-scanner_SHA256SUMS",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        },
+        "darwin-arm64": {
+          "url": "https://github.com/google/osv-scanner/releases/download/v1.9.2/osv-scanner_darwin_arm64",
+          "archiveType": "binary",
+          "sha256": "393f2c7089d9431bd26a3804d6e46d417b1c05abd5d49c41c7dfc174c520acf0",
+          "verifiedAgainst": "upstream-checksum-file:osv-scanner_SHA256SUMS",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        },
+        "win32-x64": {
+          "url": "https://github.com/google/osv-scanner/releases/download/v1.9.2/osv-scanner_windows_amd64.exe",
+          "archiveType": "binary",
+          "sha256": "c041e84d6b58150a31e8cf49fb3eb9b1e87b305c77db6aa82959262e2b1e9c9d",
+          "verifiedAgainst": "upstream-checksum-file:osv-scanner_SHA256SUMS",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        }
+      }
+    },
+    "trivy": {
+      "name": "trivy",
+      "description": "Comprehensive vulnerability and container scanner (SCA)",
+      "version": "0.76.0",
+      "binaryName": "trivy",
+      "sha256ManifestUrl": "https://github.com/aquasecurity/trivy/releases/download/v0.76.0/trivy_0.76.0_checksums.txt",
+      "platforms": {
+        "linux-x64": {
+          "url": "https://github.com/aquasecurity/trivy/releases/download/v0.76.0/trivy_0.76.0_Linux-64bit.tar.gz",
+          "archiveType": "tar.gz",
+          "binarySubpath": "trivy",
+          "sha256": "e24b1c51293c1b15e4ba8d45bbc7891ba053f90278ec2698f3562c993e145fe7",
+          "verifiedAgainst": "upstream-checksum-file:trivy_0.76.0_checksums.txt",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        },
+        "linux-arm64": {
+          "url": "https://github.com/aquasecurity/trivy/releases/download/v0.76.0/trivy_0.76.0_Linux-ARM64.tar.gz",
+          "archiveType": "tar.gz",
+          "binarySubpath": "trivy",
+          "sha256": "aab21e677a7b7071fc79f1711480840754c18a1b9d9cefa7ccd06af63a0e8f4c",
+          "verifiedAgainst": "upstream-checksum-file:trivy_0.76.0_checksums.txt",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        },
+        "darwin-x64": {
+          "url": "https://github.com/aquasecurity/trivy/releases/download/v0.76.0/trivy_0.76.0_macOS-64bit.tar.gz",
+          "archiveType": "tar.gz",
+          "binarySubpath": "trivy",
+          "sha256": "89563d4d495cf4ef06a0d1950f8710b124e9f7bd2615ec6c47b03673f4ad45a2",
+          "verifiedAgainst": "upstream-checksum-file:trivy_0.76.0_checksums.txt",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        },
+        "darwin-arm64": {
+          "url": "https://github.com/aquasecurity/trivy/releases/download/v0.76.0/trivy_0.76.0_macOS-ARM64.tar.gz",
+          "archiveType": "tar.gz",
+          "binarySubpath": "trivy",
+          "sha256": "e7ec0d21fe842553f59af99aba2efbcc822369fbaed27019c575408b6d135fce",
+          "verifiedAgainst": "upstream-checksum-file:trivy_0.76.0_checksums.txt",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        },
+        "win32-x64": {
+          "url": "https://github.com/aquasecurity/trivy/releases/download/v0.76.0/trivy_0.76.0_windows-64bit.zip",
+          "archiveType": "zip",
+          "binarySubpath": "trivy.exe",
+          "sha256": "7b4762a5a5326cb4b83dfd2bb5d9aaf15a1ed867c75cad7dd8b38840a28e7be6",
+          "verifiedAgainst": "upstream-checksum-file:trivy_0.76.0_checksums.txt",
+          "checkedAt": "2026-10-26T16:00:00.000Z"
+        }
+      }
+    },
+    "checkov": {
+      "name": "checkov",
+      "description": "Policy-as-code analysis tool for infrastructure-as-code (IaC)",
+      "version": "3.3.29",
+      "binaryName": "checkov",
+      "sha256ManifestUrl": null,
+      "platforms": {},
+      "unsupportedReason": "Checkov is Python-based. Run pip install checkov or use a virtual environment."
+    }
+  }
+}

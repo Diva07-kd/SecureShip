@@ -1,0 +1,17 @@
+{
+  "id": "07-path-traversal-tp",
+  "category": "SAST",
+  "ruleId": "rules.traversal.readfile",
+  "severity": "HIGH",
+  "cweIds": [
+    "CWE-22"
+  ],
+  "groundTruth": "LIKELY_TRUE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "replay-only",
+  "description": "Path traversal via concatenated relative file paths",
+  "file": "file.js",
+  "startLine": 3,
+  "endLine": 3
+}

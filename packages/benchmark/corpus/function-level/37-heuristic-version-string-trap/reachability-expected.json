@@ -1,0 +1,11 @@
+{
+  "id": "37-heuristic-version-string-trap",
+  "package": "somepkg",
+  "ecosystem": "npm",
+  "ruleId": "CVE-2026-99992",
+  "description": "Vulnerability in version 1.2.3 of somepkg",
+  "expectedVerdict": "REACHABLE_IMPORT",
+  "expectedKind": "PACKAGE_IMPORTED",
+  "expectedNotes": "symbol data unavailable",
+  "groundTruthUsed": false
+}

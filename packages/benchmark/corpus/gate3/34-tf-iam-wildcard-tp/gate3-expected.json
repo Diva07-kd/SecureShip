@@ -1,0 +1,17 @@
+{
+  "id": "34-tf-iam-wildcard-tp",
+  "category": "IAC",
+  "ruleId": "CKV_AWS_1",
+  "severity": "MEDIUM",
+  "cweIds": [
+    "CWE-732"
+  ],
+  "groundTruth": "LIKELY_TRUE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "real",
+  "description": "IAM policy with full administrative wildcard Action and Resource",
+  "file": "iam.tf",
+  "startLine": 6,
+  "endLine": 8
+}

@@ -1,0 +1,8 @@
+{
+  "id": "18-python-alias-pyyaml",
+  "category": "SCA",
+  "package": "PyYAML",
+  "expectedVerdict": "REACHABLE_IMPORT",
+  "expectedKind": "PACKAGE_IMPORTED",
+  "expectedConfidence": "HIGH"
+}

@@ -1,0 +1,63 @@
+name: SecureShip Security Verification
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  secureship:
+    name: Security Scan & Reachability Verification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install SecureShip CLI
+        run: |
+          npm install -g @secureship/cli
+          secureship install-tools
+
+      - name: Incremental Diff Scan (Pull Request)
+        if: github.event_name == 'pull_request'
+        run: |
+          secureship scan . \
+            --diff ${{ github.event.pull_request.base.sha }} \
+            --sarif secureship.sarif \
+            --new-only \
+            --baseline .secureship/baseline.json \
+            --fail-on HIGH
+        continue-on-error: true
+
+      - name: Upload SARIF to GitHub Code Scanning (Pull Request)
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: secureship.sarif
+          category: secureship
+
+      - name: Full Repository Scan (Push)
+        if: github.event_name == 'push'
+        run: |
+          secureship scan . \
+            --sarif secureship.sarif \
+            --fail-on HIGH
+
+      - name: Upload SARIF to GitHub Code Scanning (Push)
+        uses: github/codeql-action/upload-sarif@v3
+        if: github.event_name == 'push'
+        with:
+          sarif_file: secureship.sarif
+          category: secureship

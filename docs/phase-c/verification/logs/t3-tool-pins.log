@@ -1,0 +1,83 @@
+================================================================================
+SECURESHIP VERIFICATION LOG: T3 — Tool Pins Upstream SSoT Verification
+================================================================================
+Timestamp: 2026-10-27T07:03:10Z
+Command: node --experimental-strip-types scripts/verify-tool-pins.ts
+Exit Code: 0
+Output:
+🔒 Verifying SecureShip External Tool Pins (C:\dev\SecureShip-IDE\tools.lock.json)
+
+• Checking tool: opengrep (v1.31.0)
+  ↳ [linux-x64] opengrep_manylinux_x86
+    ✔ Downloaded bytes verified byte-for-byte (dbbe3c2058dbe600...)
+  ↳ [linux-x64-glibc] opengrep_manylinux_x86
+    ✔ Downloaded bytes verified byte-for-byte (dbbe3c2058dbe600...)
+  ↳ [linux-x64-musl] opengrep_musllinux_x86
+    ✔ Downloaded bytes verified byte-for-byte (02c9fba481611aa0...)
+  ↳ [linux-arm64] opengrep_manylinux_aarch64
+    ✔ Downloaded bytes verified byte-for-byte (2b713a29a00237f8...)
+  ↳ [linux-arm64-glibc] opengrep_manylinux_aarch64
+    ✔ Downloaded bytes verified byte-for-byte (2b713a29a00237f8...)
+  ↳ [linux-arm64-musl] opengrep_musllinux_aarch64
+    ✔ Downloaded bytes verified byte-for-byte (b7cbedab0b6c9953...)
+  ↳ [darwin-x64] opengrep_osx_x86
+    ✔ Downloaded bytes verified byte-for-byte (2f0d0c7a41a3e48d...)
+  ↳ [darwin-arm64] opengrep_osx_arm64
+    ✔ Downloaded bytes verified byte-for-byte (035dd8fd2410fe68...)
+  ↳ [win32-x64] opengrep_windows_x86.exe
+    ✔ Downloaded bytes verified byte-for-byte (fdd2e22549e7000c...)
+• Checking tool: gitleaks (v8.24.0)
+  ↳ Fetching upstream checksum manifest: https://github.com/gitleaks/gitleaks/releases/download/v8.24.0/gitleaks_8.24.0_checksums.txt
+  ↳ [linux-x64] gitleaks_8.24.0_linux_x64.tar.gz
+    ✔ Matched upstream checksum manifest (cb49b7de5ee98651...)
+    ✔ Downloaded bytes verified byte-for-byte (cb49b7de5ee98651...)
+  ↳ [linux-arm64] gitleaks_8.24.0_linux_arm64.tar.gz
+    ✔ Matched upstream checksum manifest (3755cc9b81f2466a...)
+    ✔ Downloaded bytes verified byte-for-byte (3755cc9b81f2466a...)
+  ↳ [darwin-x64] gitleaks_8.24.0_darwin_x64.tar.gz
+    ✔ Matched upstream checksum manifest (bd9ed3294c086f10...)
+    ✔ Downloaded bytes verified byte-for-byte (bd9ed3294c086f10...)
+  ↳ [darwin-arm64] gitleaks_8.24.0_darwin_arm64.tar.gz
+    ✔ Matched upstream checksum manifest (a3d281867df087de...)
+    ✔ Downloaded bytes verified byte-for-byte (a3d281867df087de...)
+  ↳ [win32-x64] gitleaks_8.24.0_windows_x64.zip
+    ✔ Matched upstream checksum manifest (dab91070b01feec4...)
+    ✔ Downloaded bytes verified byte-for-byte (dab91070b01feec4...)
+• Checking tool: osv-scanner (v1.9.2)
+  ↳ Fetching upstream checksum manifest: https://github.com/google/osv-scanner/releases/download/v1.9.2/osv-scanner_SHA256SUMS
+  ↳ [linux-x64] osv-scanner_linux_amd64
+    ✔ Matched upstream checksum manifest (d6af4b67fa5de658...)
+    ✔ Downloaded bytes verified byte-for-byte (d6af4b67fa5de658...)
+  ↳ [linux-arm64] osv-scanner_linux_arm64
+    ✔ Matched upstream checksum manifest (9c6160afb26c7944...)
+    ✔ Downloaded bytes verified byte-for-byte (9c6160afb26c7944...)
+  ↳ [darwin-x64] osv-scanner_darwin_amd64
+    ✔ Matched upstream checksum manifest (487ab433b2c2a8c8...)
+    ✔ Downloaded bytes verified byte-for-byte (487ab433b2c2a8c8...)
+  ↳ [darwin-arm64] osv-scanner_darwin_arm64
+    ✔ Matched upstream checksum manifest (393f2c7089d9431b...)
+    ✔ Downloaded bytes verified byte-for-byte (393f2c7089d9431b...)
+  ↳ [win32-x64] osv-scanner_windows_amd64.exe
+    ✔ Matched upstream checksum manifest (c041e84d6b58150a...)
+    ✔ Downloaded bytes verified byte-for-byte (c041e84d6b58150a...)
+• Checking tool: trivy (v0.76.0)
+  ↳ Fetching upstream checksum manifest: https://github.com/aquasecurity/trivy/releases/download/v0.76.0/trivy_0.76.0_checksums.txt
+  ↳ [linux-x64] trivy_0.76.0_linux-64bit.tar.gz
+    ✔ Matched upstream checksum manifest (e24b1c51293c1b15...)
+    ✔ Downloaded bytes verified byte-for-byte (e24b1c51293c1b15...)
+  ↳ [linux-arm64] trivy_0.76.0_linux-arm64.tar.gz
+    ✔ Matched upstream checksum manifest (aab21e677a7b7071...)
+    ✔ Downloaded bytes verified byte-for-byte (aab21e677a7b7071...)
+  ↳ [darwin-x64] trivy_0.76.0_macos-64bit.tar.gz
+    ✔ Matched upstream checksum manifest (89563d4d495cf4ef...)
+    ✔ Downloaded bytes verified byte-for-byte (89563d4d495cf4ef...)
+  ↳ [darwin-arm64] trivy_0.76.0_macos-arm64.tar.gz
+    ✔ Matched upstream checksum manifest (e7ec0d21fe842553...)
+    ✔ Downloaded bytes verified byte-for-byte (e7ec0d21fe842553...)
+  ↳ [win32-x64] trivy_0.76.0_windows-64bit.zip
+    ✔ Matched upstream checksum manifest (7b4762a5a5326cb4...)
+    ✔ Downloaded bytes verified byte-for-byte (7b4762a5a5326cb4...)
+• Checking tool: checkov (v3.3.29)
+
+Summary: 24 asset pins evaluated across 3 upstream manifests.
+✔ All tool pins strictly match upstream release assets and manifests. Zero drift.

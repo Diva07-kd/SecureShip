@@ -1,0 +1,12 @@
+{
+  "id": "case7-secrets-wrongly-suppressed",
+  "description": "True positive secret wrongly suppressed by Gate 1 inside test fixtures",
+  "category": "SECRET",
+  "expectedFindings": [
+    {
+      "file": "tests/fixtures/prod-keys.ts",
+      "ruleId": "gitlab-pat",
+      "label": "TRUE_POSITIVE"
+    }
+  ]
+}

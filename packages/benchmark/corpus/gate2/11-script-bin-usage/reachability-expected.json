@@ -1,0 +1,8 @@
+{
+  "id": "11-script-bin-usage",
+  "category": "SCA",
+  "package": "rimraf",
+  "expectedVerdict": "UNKNOWN",
+  "expectedKind": "CONFIG_REFERENCE",
+  "expectedConfidence": "MEDIUM"
+}

@@ -1,0 +1,19 @@
+# Copyright (c) 2026 SecureShip Authors
+# SPDX-License-Identifier: Apache-2.0
+rules:
+  - id: secureship-js-insecure-random
+    patterns:
+      - pattern-either:
+          - pattern: Math.random(...)
+      - pattern-regex: '(?i)(token|nonce|secret|session|key|salt|password)'
+    message: 'Math.random() is cryptographically weak and should not be used to generate security tokens, salts, nonces, or passwords.'
+    severity: WARNING
+    languages:
+      - javascript
+      - typescript
+    metadata:
+      cwe:
+        - 'CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)'
+      category: security
+      confidence: MEDIUM
+      security-severity: '5.3'

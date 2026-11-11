@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_TRUE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "Direct assignment of unsanitized rawInput to dangerouslySetInnerHTML introduces DOM XSS.",
+  "citations": [
+    {
+      "startLine": 2,
+      "endLine": 2,
+      "quote": "return <div dangerouslySetInnerHTML={{ __html: rawInput }} />;"
+    }
+  ]
+}

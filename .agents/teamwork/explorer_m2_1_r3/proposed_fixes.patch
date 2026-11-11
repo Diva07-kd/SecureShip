@@ -1,0 +1,314 @@
+--- a/backend/app/exporters/html_exporter.py
++++ b/backend/app/exporters/html_exporter.py
+@@ -19,6 +19,13 @@ def _escape(val: Any) -> str:
+     return html.escape(str(val))
+ 
+ 
++def _safe_int(val: Any, default: int = 0) -> int:
++    try:
++        return int(val)
++    except (ValueError, TypeError):
++        return default
++
++
+ def export_html(report: ScanReport | dict[str, Any]) -> str:
+     """
+     Exports a scan report to a single-file, self-contained HTML document.
+@@ -28,18 +35,26 @@ def export_html(report: ScanReport | dict[str, Any]) -> str:
+     target_name = norm.get("target_name", "Target Archive")
+     created_at = norm.get("created_at", "")
+     summary = norm.get("summary", {})
+-    total = summary.get("total_findings", 0)
++    findings = norm.get("findings", [])
++    if not isinstance(findings, list):
++        findings = []
++    total = _safe_int(summary.get("total_findings"), default=len(findings))
+     by_sev = summary.get("by_severity", {})
++    if not isinstance(by_sev, dict):
++        by_sev = {}
+     by_owasp = summary.get("by_owasp", {})
++    if not isinstance(by_owasp, dict):
++        by_owasp = {}
+     scanners = norm.get("scanners", [])
+-    findings = norm.get("findings", [])
++    if not isinstance(scanners, list):
++        scanners = []
+ 
+-    crit = by_sev.get("CRITICAL", 0)
+-    high = by_sev.get("HIGH", 0)
+-    med = by_sev.get("MEDIUM", 0)
+-    low = by_sev.get("LOW", 0)
+-    info = by_sev.get("INFO", 0)
++    crit = _safe_int(by_sev.get("CRITICAL"), default=0)
++    high = _safe_int(by_sev.get("HIGH"), default=0)
++    med = _safe_int(by_sev.get("MEDIUM"), default=0)
++    low = _safe_int(by_sev.get("LOW"), default=0)
++    info = _safe_int(by_sev.get("INFO"), default=0)
+ 
+     # Build findings HTML rows and code snippets
+     findings_rows = []
+     for idx, f in enumerate(findings, 1):
++        if not isinstance(f, dict):
++            continue
+         fid = f.get("id", f"finding-{idx}")
+         rule_id = f.get("rule_id", "UNKNOWN")
+         scanner = f.get("scanner_name", "generic")
+@@ -58,28 +73,49 @@ def export_html(report: ScanReport | dict[str, Any]) -> str:
+         desc = f.get("description", "")
+         owasp = f.get("owasp_category", "Unknown")
+         reach = f.get("reachability", "UNKNOWN")
+-        cwes = ", ".join(f.get("cwe_ids", [])) or "None"
++
++        raw_cwes = f.get("cwe_ids")
++        if isinstance(raw_cwes, list):
++            cwes = ", ".join(str(c) for c in raw_cwes if c is not None) or "None"
++        elif raw_cwes is not None:
++            cwes = str(raw_cwes) or "None"
++        else:
++            cwes = "None"
+ 
+         loc = f.get("location", {})
++        if not isinstance(loc, dict):
++            loc = {}
+         file_path = loc.get("file_path", "")
+-        start_line = loc.get("start_line", 1)
+-        end_line = loc.get("end_line", start_line)
++        start_line = max(1, _safe_int(loc.get("start_line"), default=1))
++        end_line = max(start_line, _safe_int(loc.get("end_line"), default=start_line))
+ 
+         # Snippet rendering
+         snippet_html = ""
+         snippet_data = f.get("snippet") or f.get("snippet_context")
+         if snippet_data and isinstance(snippet_data, dict):
+-            lines = snippet_data.get("lines", [])
++            lines = snippet_data.get("lines")
++            if not lines and snippet_data.get("raw_content"):
++                raw_lines = str(snippet_data["raw_content"]).splitlines()
++                start_lno = _safe_int(snippet_data.get("start_line"), default=start_line)
++                lines = [
++                    {"line_number": start_lno + i, "content": l, "is_target": False}
++                    for i, l in enumerate(raw_lines[:20])
++                ]
+             if lines:
+                 snippet_lines = []
+                 for ln in lines:
+-                    lno = ln.get("line_number")
+-                    cnt = ln.get("content", "")
+-                    is_tgt = ln.get("is_target") or ln.get("is_vulnerable", False)
++                    if isinstance(ln, dict):
++                        lno = _safe_int(ln.get("line_number"), default=0)
++                        cnt = ln.get("content", "")
++                        is_tgt = bool(ln.get("is_target") or ln.get("is_vulnerable", False))
++                    else:
++                        lno = 0
++                        cnt = str(ln)
++                        is_tgt = False
+                     cls = "line-highlight" if is_tgt else "line-normal"
+                     marker = ">> " if is_tgt else "   "
+                     snippet_lines.append(
+                         f'<div class="{cls}"><span class="line-num">{lno:4d} | {marker}</span>{_escape(cnt)}</div>'
+                     )
+                 snippet_html = (
+                     f'<div class="code-box">'
+@@ -123,9 +159,10 @@ def export_html(report: ScanReport | dict[str, Any]) -> str:
+ 
+     # OWASP Table Rows
+     owasp_rows = []
+-    for cat, cnt in sorted(by_owasp.items(), key=lambda x: -x[1]):
+-        if cnt > 0:
+-            owasp_rows.append(f"<tr><td>{_escape(cat)}</td><td style='text-align: right; font-weight: bold;'>{cnt}</td></tr>")
++    if isinstance(by_owasp, dict):
++        for cat, cnt in sorted(by_owasp.items(), key=lambda x: -_safe_int(x[1])):
++            cnt_int = _safe_int(cnt)
++            if cnt_int > 0:
++                owasp_rows.append(f"<tr><td>{_escape(cat)}</td><td style='text-align: right; font-weight: bold;'>{cnt_int}</td></tr>")
+     owasp_content = "".join(owasp_rows) or "<tr><td colspan='2'>No vulnerabilities recorded</td></tr>"
+--- a/backend/app/exporters/sarif_exporter.py
++++ b/backend/app/exporters/sarif_exporter.py
+@@ -16,6 +16,13 @@ SARIF_SCHEMA = "https://json.schemastore.org/sarif-2.1.0.json"
+ SARIF_VERSION = "2.1.0"
+ 
+ 
++def _safe_int(val: Any, default: int = 0) -> int:
++    try:
++        return int(val)
++    except (ValueError, TypeError):
++        return default
++
++
+ def _map_severity_to_sarif_level(severity: Any) -> str:
+     if hasattr(severity, "value"):
+         sev = str(severity.value).upper()
+@@ -51,8 +58,9 @@ def generate_sarif_dict(report: ScanReport | dict[str, Any]) -> dict[str, Any]:
+         # Build rule entry if not present
+         if rule_id not in rules_dict:
+             tags: list[str] = []
+-            for cwe in f.get("cwe_ids", []):
+-                tags.append(str(cwe))
++            for cwe in (f.get("cwe_ids") or []):
++                if cwe is not None:
++                    tags.append(str(cwe))
+             owasp = f.get("owasp_category")
+             if owasp and owasp != "A00:2021-Other/Unknown":
+                 tags.append(str(owasp))
+@@ -87,9 +95,13 @@ def generate_sarif_dict(report: ScanReport | dict[str, Any]) -> dict[str, Any]:
+         start_col = loc.get("start_column") or loc.get("startColumn") or 1
+         end_col = loc.get("end_column") or loc.get("endColumn")
+ 
++        start_line_int = max(1, _safe_int(start_line, default=1))
++        end_line_int = max(start_line_int, _safe_int(end_line, default=start_line_int))
++        start_col_int = max(1, _safe_int(start_col, default=1))
++
+         region: dict[str, Any] = {
+-            "startLine": max(1, int(start_line)),
+-            "endLine": max(1, int(end_line)),
+-            "startColumn": max(1, int(start_col)),
++            "startLine": start_line_int,
++            "endLine": end_line_int,
++            "startColumn": start_col_int,
+         }
+         if end_col:
+-            region["endColumn"] = int(end_col)
++            end_col_int = _safe_int(end_col, default=0)
++            if end_col_int > 0:
++                region["endColumn"] = end_col_int
+--- a/backend/app/exporters/json_exporter.py
++++ b/backend/app/exporters/json_exporter.py
+@@ -86,9 +86,15 @@ def normalize_report_dict(report: ScanReport | dict[str, Any]) -> dict[str, Any
+             f_dict["snippet_context"] = s_dict
+ 
+         # Ensure cwe_ids and owasp_category
+-        if "cwe_ids" not in f_dict and "cweIds" in f_dict:
+-            f_dict["cwe_ids"] = f_dict["cweIds"]
++        raw_cwes = f_dict.get("cwe_ids") if f_dict.get("cwe_ids") is not None else f_dict.get("cweIds")
++        if isinstance(raw_cwes, list):
++            clean_cwes = [str(c) for c in raw_cwes if c is not None]
++        elif raw_cwes is not None:
++            clean_cwes = [str(raw_cwes)]
++        else:
++            clean_cwes = []
++        f_dict["cwe_ids"] = clean_cwes
++        f_dict["cweIds"] = clean_cwes
++
+         if "owasp_category" not in f_dict and "owaspCategory" in f_dict:
+             f_dict["owasp_category"] = f_dict["owaspCategory"]
+ 
+         # Ensure camelCase aliases for frontend compatibility
+         f_dict["ruleId"] = f_dict.get("rule_id", "")
+         f_dict["scannerName"] = f_dict.get("scanner_name", "")
+-        f_dict["cweIds"] = f_dict.get("cwe_ids", [])
+         f_dict["owaspCategory"] = f_dict.get("owasp_category", "")
+--- a/backend/tests/test_adversarial_exporters.py
++++ b/backend/tests/test_adversarial_exporters.py
+@@ -390,6 +390,26 @@ class TestSarifExporterAdversarial:
+             if "snippet" in region:
+                 assert region["snippet"]["text"] != ""
+ 
++    def test_sarif_null_cwe_and_malformed_location(self, sarif_schema: dict[str, Any]):
++        """Verify null cwe_ids and string line numbers produce valid SARIF without crashing."""
++        report = {
++            "job_id": "sarif-null-cwe",
++            "status": "done",
++            "findings": [
++                {
++                    "id": "f-sarif-null",
++                    "rule_id": "r1",
++                    "cwe_ids": None,
++                    "location": {
++                        "file_path": "a.py",
++                        "start_line": "<script>alert(1)</script>",
++                        "end_line": "20",
++                        "start_column": "bad",
++                    },
++                }
++            ],
++        }
++        sarif_doc = generate_sarif_dict(report)
++        jsonschema.validate(instance=sarif_doc, schema=sarif_schema)
++        region = sarif_doc["runs"][0]["results"][0]["locations"][0]["physicalLocation"]["region"]
++        assert region["startLine"] >= 1
++        assert region["endLine"] >= 1
++
+ # =========================================================================
+ # 3. HTML Exporter Adversarial Tests
+ # =========================================================================
+@@ -510,6 +530,68 @@ class TestHtmlExporterAdversarial:
+         assert "page-break-inside: avoid" in html_str or "break-inside: avoid" in html_str
+         assert "#ffffff" in html_str
+ 
++    def test_html_xss_in_start_line_and_summary_counts(self):
++        """Verify stored XSS payloads in start_line, end_line, and summary counts are coerced or eliminated."""
++        report = {
++            "job_id": "xss-lines-job",
++            "status": "done",
++            "summary": {
++                "total_findings": "<script>alert('total')</script>",
++                "by_severity": {
++                    "CRITICAL": "<script>alert('crit')</script>",
++                    "HIGH": "1",
++                    "MEDIUM": 2,
++                    "LOW": "0",
++                    "INFO": 0,
++                },
++                "by_owasp": {
++                    "A01:2021-Broken Access Control": "<script>alert('owasp')</script>"
++                },
++            },
++            "findings": [
++                {
++                    "id": "f-line-xss",
++                    "rule_id": "r-line-xss",
++                    "severity": "CRITICAL",
++                    "location": {
++                        "file_path": "vuln.py",
++                        "start_line": "<script>alert('start')</script>",
++                        "end_line": "<script>alert('end')</script>",
++                    },
++                }
++            ],
++        }
++
++        html_str = export_html(report)
++        assert "<script>alert('total')</script>" not in html_str
++        assert "<script>alert('crit')</script>" not in html_str
++        assert "<script>alert('owasp')</script>" not in html_str
++        assert "<script>alert('start')</script>" not in html_str
++        assert "<script>alert('end')</script>" not in html_str
++
++    def test_html_malformed_cwe_and_snippet_lines(self):
++        """Verify null/non-iterable CWEs and string/none line numbers do not crash html_exporter."""
++        report = {
++            "job_id": "null-cwe-job",
++            "status": "done",
++            "findings": [
++                {
++                    "id": "f-null-cwe",
++                    "rule_id": "r1",
++                    "cwe_ids": None,
++                    "location": {"file_path": "a.py", "start_line": 1},
++                    "snippet": {
++                        "lines": [
++                            {"line_number": "10", "content": "x = 1", "is_target": True},
++                            {"line_number": None, "content": "y = 2", "is_target": False},
++                            "raw string line",
++                        ]
++                    },
++                },
++                {
++                    "id": "f-raw-snippet",
++                    "rule_id": "r2",
++                    "cwe_ids": ["CWE-89", None, 79],
++                    "location": {"file_path": "b.py", "start_line": "15"},
++                    "snippet": {
++                        "raw_content": "def foo():\n    return 42\n",
++                        "start_line": "14",
++                    },
++                },
++            ],
++        }
++
++        html_str = export_html(report)
++        assert "None" in html_str
++        assert "CWE-89" in html_str
++        assert "x = 1" in html_str
++        assert "def foo():" in html_str

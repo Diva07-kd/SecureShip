@@ -1,0 +1,8 @@
+{
+  "id": "09-dynamic-require-eval",
+  "category": "SCA",
+  "package": "target-pkg",
+  "expectedVerdict": "UNKNOWN",
+  "expectedKind": "DYNAMIC_UNKNOWN",
+  "expectedConfidence": "LOW"
+}

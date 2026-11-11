@@ -1,0 +1,20 @@
+id,severity,category,cwe,title,file,startLine,endLine,status
+F-SEC-001,P0,SECURITY,CWE-347,"Unverified & Forged JWT Signing Oracle on License Server",packages/license-server/src/worker.ts,270,327,VERIFIED
+F-SEC-002,P0,SECURITY,CWE-353,"Unverified & Stubbed Stripe Webhook Handler",packages/license-server/src/worker.ts,338,374,VERIFIED
+F-DIS-001,P0,DISTRIBUTION,CWE-427,"NPM Package Dependency Confusion & CLI Installation Implosion",packages/cli/package.json,33,41,VERIFIED
+F-REL-001,P0,RELEASE,CWE-440,"Standalone Binaries Missing Bundled WASM Grammars",.github/workflows/release.yml,79,83,VERIFIED
+F-LIC-001,P0,LICENSING,CWE-436,"Fatal Client-Server Protocol Incompatibility in Background Renewal",packages/core-engine/src/license/tier-resolver.ts,178,190,VERIFIED
+F-FLT-003,P0,SECURITY,CWE-346,"Wildcard CORS * on Fleet Server Exposes Telemetry and Policy Tampering",packages/fleet/src/server/fleet-server.ts,81,85,VERIFIED
+F-LIC-002,P0,MONETIZATION,CWE-799,"Zero Seat Limit Enforcement on License Server / Infinite Activations",packages/license-server/src/worker.ts,180,248,VERIFIED
+F-PKG-001,P0,DISTRIBUTION,CWE-427,"Curated Symbol Dataset & SAST Rules Missing From Shipped Artifacts",packages/reachability/src/symbols/dataset-loader.ts,28,47,VERIFIED
+F-ENG-001,P1,ENGINE,CWE-393,"Fake Remediation Backend in Production Engine",packages/core-engine/src/remediation/verification-ladder.ts,608,610,VERIFIED
+F-GIT-001,P1,CLI_GIT,CWE-754,"Fatal Crash on Subdirectory Monorepo Incremental Git Diff Scans",packages/core-engine/src/git/diff-scope.ts,68,73,VERIFIED
+F-FLT-001,P1,FLEET,CWE-306,"Fleet Server Token Leak to stdout & Unauthenticated Control Endpoints",packages/fleet/src/server/fleet-server.ts,138,190,VERIFIED
+F-SAN-001,P1,PLATFORM,CWE-436,"Windows Container Mount Path /c/... Translation Rejection by Docker Desktop",packages/sandbox/src/backends/container-backend.ts,39,50,VERIFIED
+F-FLT-004,P1,ARCHITECTURE,CWE-362,"Unsynchronized Non-Atomic fs.writeFileSync in FleetStore Data Loss",packages/fleet/src/storage/fleet-store.ts,60,76,VERIFIED
+F-SEC-003,P2,SECURITY,CWE-78,"Prohibited Shell Invocations in License Command",packages/cli/src/commands/license.ts,169,178,VERIFIED
+F-VSC-001,P2,SECURITY,CWE-377,"Insecure Temp File Permissions in VSCode Extension Runner",packages/vscode-extension/src/cli/cli-runner.ts,46,49,VERIFIED
+F-SUP-001,P2,SUPPLY_CHAIN,CWE-547,"Completely Stubbed Registry Supply-Chain Risk Provider",packages/core-engine/src/supply-chain/providers/registry.provider.ts,10,75,VERIFIED
+F-LEG-001,P2,LEGAL,CWE-1025,"Rebranded Third-Party Scanner Rule IDs Missing Upstream Notices",packages/contracts/src/engine-brand.ts,13,115,VERIFIED
+F-TST-001,P2,TEST_QUALITY,CWE-1076,"Anti-Fake-Test Law Integrity Violations in Reachability Suite",packages/reachability/test/hostile-stress.test.ts,12,136,VERIFIED
+F-WIN-001,P3,PLATFORM,CWE-178,"Windows Path Normalization Inconsistencies in VSCode Runner",packages/vscode-extension/src/extension.ts,80,95,VERIFIED

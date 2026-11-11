@@ -1,0 +1,33 @@
+{
+  "name": "@secureship/reachability",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./wasm/*": "./wasm/*"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@secureship/contracts": "workspace:*",
+    "picocolors": "^1.1.1",
+    "web-tree-sitter": "0.22.6",
+    "yaml": "^2.8.3",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "rimraf": "^6.0.1",
+    "tree-sitter-wasms": "0.1.13",
+    "typescript": "^5.7.3"
+  }
+}

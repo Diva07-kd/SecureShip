@@ -1,0 +1,12 @@
+{
+  "id": "case14-sca-dev-dependency",
+  "description": "False positive trap: dev-only testing tool in devDependencies",
+  "category": "SCA",
+  "expectedFindings": [
+    {
+      "file": "tests/package-lock.json",
+      "ruleId": "CVE-2020-28500",
+      "label": "FALSE_POSITIVE_TRAP"
+    }
+  ]
+}

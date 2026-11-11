@@ -1,0 +1,8 @@
+{
+  "id": "03-test-only-import",
+  "category": "SCA",
+  "package": "mocha",
+  "expectedVerdict": "UNREACHABLE",
+  "expectedKind": "DEV_ONLY",
+  "expectedConfidence": "MEDIUM"
+}

@@ -1,0 +1,8 @@
+{
+  "id": "29-python-312-syntax-file",
+  "category": "SCA",
+  "package": "unused-py-pkg",
+  "expectedVerdict": "UNKNOWN",
+  "expectedKind": "UNMAPPED_PACKAGE",
+  "expectedConfidence": "LOW"
+}

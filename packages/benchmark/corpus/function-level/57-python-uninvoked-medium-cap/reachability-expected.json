@@ -1,0 +1,10 @@
+{
+  "id": "57-python-uninvoked-medium-cap",
+  "package": "pyyaml",
+  "ecosystem": "pip",
+  "ruleId": "CVE-2020-14343",
+  "expectedVerdict": "UNREACHABLE",
+  "expectedKind": "UNINVOKED_SYMBOL",
+  "expectedConfidence": "MEDIUM",
+  "groundTruthUsed": false
+}

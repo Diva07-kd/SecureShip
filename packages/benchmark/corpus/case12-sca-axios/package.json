@@ -1,0 +1,6 @@
+{
+  "name": "case12",
+  "dependencies": {
+    "axios": "0.21.0"
+  }
+}

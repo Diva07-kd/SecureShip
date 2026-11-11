@@ -1,0 +1,17 @@
+{
+  "id": "27-tf-sg-web-fp",
+  "category": "IAC",
+  "ruleId": "CKV_AWS_24",
+  "severity": "LOW",
+  "cweIds": [
+    "CWE-200"
+  ],
+  "groundTruth": "LIKELY_FALSE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "real",
+  "description": "Public web ingress on HTTPS port 443",
+  "file": "main.tf",
+  "startLine": 6,
+  "endLine": 6
+}

@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_TRUE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "child_process.exec runs shell commands where concatenated host parameter allows command chaining.",
+  "citations": [
+    {
+      "startLine": 3,
+      "endLine": 3,
+      "quote": "child_process.exec(\"ping -c 1 \" + host);"
+    }
+  ]
+}

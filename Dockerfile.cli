@@ -1,0 +1,147 @@
+# syntax=docker/dockerfile:1.4
+# ==============================================================================
+# SECURESHIP PRODUCTION CLI DOCKERFILE
+# Self-contained, multi-arch (amd64 / arm64), zero-network-at-runtime container
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Stage 1: Build & bundle standalone SecureShip CLI distribution
+# ------------------------------------------------------------------------------
+FROM node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d AS builder
+WORKDIR /workspace
+
+# Activate corepack with pinned pnpm matching root packageManager
+RUN corepack enable && corepack prepare pnpm@12.14.0 --activate
+
+# Copy root manifest and workspace specifications
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.base.json tsconfig.json tools.lock.json ./
+COPY packages/contracts/package.json ./packages/contracts/
+COPY packages/reachability/package.json ./packages/reachability/
+COPY packages/context-slicer/package.json ./packages/context-slicer/
+COPY packages/patch-engine/package.json ./packages/patch-engine/
+COPY packages/sandbox/package.json ./packages/sandbox/
+COPY packages/ai/package.json ./packages/ai/
+COPY packages/core-engine/package.json ./packages/core-engine/
+COPY packages/scanner-adapters/package.json ./packages/scanner-adapters/
+COPY packages/fleet/package.json ./packages/fleet/
+COPY packages/cli/package.json ./packages/cli/
+COPY packages/benchmark/package.json ./packages/benchmark/
+
+# Install frozen dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy full source trees
+COPY scripts/ ./scripts/
+COPY packages/ ./packages/
+
+# Build all monorepo packages (tsup bundles @secureship/* workspaces into CLI standalone dist)
+RUN pnpm build
+
+# Assemble clean deployable bundle with production dependencies
+RUN pnpm --filter @secureship/cli deploy --prod /out/cli && \
+    chmod +x /out/cli/dist/index.js
+
+# ------------------------------------------------------------------------------
+# Stage 2: Provision verified external scanner binaries via SecureShip SSoT
+# ------------------------------------------------------------------------------
+FROM node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d AS tools
+ARG TARGETARCH=amd64
+WORKDIR /workspace
+
+# Install the standalone CLI produced by builder stage
+COPY --from=builder /out/cli /opt/secureship/cli
+RUN ln -s /opt/secureship/cli/dist/index.js /usr/local/bin/secureship
+
+# Install opengrep, gitleaks, trivy, and osv-scanner using authoritative lockfile pins
+# ZERO arbitrary shell/curl commands: all assets verified against cryptographic SHA-256 pins
+RUN mkdir -p /out/bin && \
+    secureship install-tools --dir /out/bin --target-platform linux-${TARGETARCH} --force && \
+    chmod 0555 /out/bin/*
+
+# ------------------------------------------------------------------------------
+# Stage 3: Build hash-locked Python virtualenv for Checkov (IaC Scanner)
+# ------------------------------------------------------------------------------
+FROM python:3.11-slim-bookworm@sha256:f06d01d4ba3f8ad5af45a3ec87df19c1d317d8e8961edc0fabda61811af6f7cf AS checkov
+WORKDIR /opt
+
+# Build pinned virtualenv for Checkov
+RUN python3 -m venv /opt/checkov-venv && \
+    /opt/checkov-venv/bin/pip install --no-cache-dir checkov==3.3.29 && \
+    mkdir -p /opt/checkov-bin && \
+    printf '#!/bin/sh\nexec /opt/checkov-venv/bin/checkov "$@"\n' > /opt/checkov-bin/checkov && \
+    chmod 0555 /opt/checkov-bin/checkov
+
+# ------------------------------------------------------------------------------
+# Stage 4: Final hardened, non-root, air-gap-ready runner image
+# ------------------------------------------------------------------------------
+FROM node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d AS runner
+
+# OCI Metadata Annotations
+LABEL org.opencontainers.image.title="SecureShip CLI" \
+      org.opencontainers.image.description="Zero-False-Positive DevSecOps Intelligence Engine & Verification Platform" \
+      org.opencontainers.image.licenses="Apache-2.0" \
+      org.opencontainers.image.vendor="SecureShip" \
+      org.opencontainers.image.source="https://github.com/secureship/secureship"
+
+# Install minimal runtime system requirements (git for diff scans, tini for PID 1 signal safety, python3 for venv)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+      git \
+      ca-certificates \
+      tini \
+      python3 && \
+    ln -s /usr/bin/python3 /usr/local/bin/python3 && \
+    rm -rf /var/lib/apt/lists/*
+
+# Fixed non-root UID/GID 10001
+RUN groupadd -g 10001 secureship && \
+    useradd -u 10001 -g secureship -m -s /bin/sh secureship
+
+# Setup immutable, root-owned system tool directory (0555)
+RUN mkdir -p /opt/secureship/bin /opt/secureship/cli /licenses
+
+# Copy standalone CLI
+COPY --from=builder /out/cli /opt/secureship/cli
+RUN ln -s /opt/secureship/cli/dist/index.js /usr/local/bin/secureship
+
+# Copy pre-installed scanner tools
+COPY --from=tools /out/bin/ /opt/secureship/bin/
+
+# Copy checkov venv and executable wrapper
+COPY --from=checkov /opt/checkov-venv /opt/checkov-venv
+COPY --from=checkov /opt/checkov-bin/checkov /opt/secureship/bin/checkov
+
+# Copy third-party notices and licenses
+COPY licenses/ /licenses/
+COPY THIRD_PARTY_NOTICES.md /licenses/THIRD_PARTY_NOTICES.md
+
+# Enforce root-owned immutable permissions on binaries (0555)
+RUN chown -R root:root /opt/secureship/bin && \
+    chmod 0555 /opt/secureship/bin && \
+    chmod 0555 /opt/secureship/bin/*
+
+# Create writable runtime data and database directories owned by secureship (UID 10001)
+RUN mkdir -p /home/secureship/.secureship/db /home/secureship/.secureship/cache /tmp && \
+    chown -R secureship:secureship /home/secureship && \
+    chmod 0700 /home/secureship/.secureship
+
+# Environment variables
+ENV NODE_ENV=production \
+    PATH="/opt/secureship/bin:${PATH}" \
+    SECURESHIP_BIN_DIR="/opt/secureship/bin" \
+    SECURESHIP_HOME="/home/secureship/.secureship" \
+    SECURESHIP_DB_DIR="/home/secureship/.secureship/db" \
+    SECURESHIP_CONTAINER="1"
+
+# HEALTHCHECK Decision:
+# Explicitly omitted for one-shot CLI utility.
+# Rationale: Continuous container health monitoring on batch analysis CLIs induces background CPU/IO churn,
+# risks false-fails during prolonged deep AST scans, and contradicts OCI best practices for ephemeral CLI images.
+
+# Switch to non-root user (UID 10001)
+USER secureship
+WORKDIR /workspace
+
+# PID 1 signal supervisor (D7): ensures prompt SIGTERM/SIGINT propagation on docker stop
+ENTRYPOINT ["tini", "--", "secureship"]
+CMD ["doctor"]

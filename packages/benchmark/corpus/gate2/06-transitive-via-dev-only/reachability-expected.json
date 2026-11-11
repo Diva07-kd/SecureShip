@@ -1,0 +1,8 @@
+{
+  "id": "06-transitive-via-dev-only",
+  "category": "SCA",
+  "package": "dev-nested",
+  "expectedVerdict": "UNREACHABLE",
+  "expectedKind": "DEV_ONLY",
+  "expectedConfidence": "MEDIUM"
+}

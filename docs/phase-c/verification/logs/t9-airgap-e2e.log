@@ -1,0 +1,95 @@
+================================================================================
+SECURESHIP VERIFICATION LOG: T9 — Air-Gap Container E2E Execution
+================================================================================
+Timestamp: 2026-10-27T07:07:56Z
+Image: secureship/cli:local-test
+Target: packages/benchmark/fixtures/replay/simple-repo (mounted read-only to /workspace)
+
+--- Test 1: Full Scan under Strict Network Isolation (--network none) ---
+Command: docker run --rm --network none -v "C:\dev\SecureShip-IDE\packages\benchmark\fixtures\replay\simple-repo:/workspace:ro" secureship/cli:local-test scan /workspace --offline --json
+Exit Code: 0
+Output:
+{
+  "schemaVersion": "1.3",
+  "tool": {
+    "name": "secureship",
+    "version": "1.0.0-beta.1"
+  },
+  "target": "/workspace",
+  "mode": "FULL",
+  "startedAt": "2026-10-27T07:07:56.230Z",
+  "durationMs": 2186,
+  "scanners": [
+    {
+      "name": "gitleaks",
+      "version": "8.24.0",
+      "status": "SUCCESS",
+      "durationMs": 955,
+      "rawFindingCount": 0
+    }
+  ],
+  "findings": [],
+  "suppressed": [],
+  "summary": {
+    "totalRaw": 0,
+    "totalReported": 0,
+    "totalSuppressed": 0,
+    "totalOutOfScope": 0,
+    "bySeverity": {
+      "CRITICAL": 0,
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0,
+      "INFO": 0
+    },
+    "byCategory": {
+      "SAST": 0,
+      "SCA": 0,
+      "SECRET": 0,
+      "IAC": 0,
+      "SUPPLY_CHAIN": 0
+    },
+    "byReachability": {
+      "REACHABLE_CALL_PATH": 0,
+      "REACHABLE_IMPORT": 0,
+      "UNREACHABLE": 0,
+      "UNKNOWN": 0
+    },
+    "suppressedByReason": {
+      "GATE1_TEST_OR_MOCK": 0,
+      "GATE1_EXAMPLE": 0,
+      "GATE1_DOCUMENTATION": 0,
+      "USER_IGNORE_RULE": 0,
+      "BASELINE_KNOWN": 0,
+      "GATE2_UNREACHABLE": 0,
+      "GATE3_LIKELY_FALSE_POSITIVE": 0,
+      "SUPPLY_CHAIN_ALLOWLISTED": 0
+    },
+    "functionLevel": {
+      "evaluated": 0,
+      "noSymbolData": 0,
+      "symbolReferenced": 0,
+      "callPathProven": 0,
+      "uninvoked": 0,
+      "escapedOrUnknown": 0,
+      "skippedTier": 1,
+      "blockedByReason": {}
+    }
+  },
+  "tier": "FREE_BYOK",
+  "offline": {
+    "enabled": true,
+    "completeness": "DEGRADED",
+    "databases": []
+  },
+  "warnings": [
+    "[Warning] No offline vulnerability database installed in '/home/secureship/.secureship/db'. Vulnerability scanning is operating in degraded mode. Run 'secureship import-offline <bundle>' to install an offline database.",
+    "Function-level reachability requires a higher tier; import-level analysis used."
+  ]
+}
+
+--- Test 2: Air-Gap Strict Enforcement (--strict flag) ---
+Command: docker run --rm --network none -v "C:\dev\SecureShip-IDE\packages\benchmark\fixtures\replay\simple-repo:/workspace:ro" secureship/cli:local-test scan /workspace --offline --strict
+Exit Code: 1
+Output:
+✖ Error: [Offline Security Violation] No offline vulnerability database installed in '/home/secureship/.secureship/db'. Under --strict, scanning cannot proceed without a valid offline database.

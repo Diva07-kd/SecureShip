@@ -1,0 +1,49 @@
+FROM node:22-alpine AS builder
+WORKDIR /workspace
+
+RUN npm install -g pnpm@12.14.0
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json* ./
+COPY packages/contracts/ ./packages/contracts/
+COPY packages/context-slicer/ ./packages/context-slicer/
+COPY packages/core-engine/ ./packages/core-engine/
+COPY packages/fleet/ ./packages/fleet/
+
+RUN pnpm install --frozen-lockfile
+RUN pnpm --filter "@secureship/contracts" run build
+RUN pnpm --filter "@secureship/fleet" run build
+
+FROM node:22-alpine AS runner
+LABEL org.opencontainers.image.title="SecureShip Fleet CISO Cockpit"
+LABEL org.opencontainers.image.description="Centralized Zero-Code-Leak Risk Telemetry & CISO Dashboard"
+LABEL org.opencontainers.image.licenses="Apache-2.0"
+
+WORKDIR /app
+
+RUN apk add --no-cache ca-certificates
+RUN addgroup -S secureship && adduser -S secureship -G secureship
+RUN mkdir -p /data && chown -R secureship:secureship /data
+
+COPY --from=builder /workspace/package.json ./package.json
+COPY --from=builder /workspace/node_modules ./node_modules
+COPY --from=builder /workspace/packages/contracts/dist ./packages/contracts/dist
+COPY --from=builder /workspace/packages/contracts/package.json ./packages/contracts/package.json
+COPY --from=builder /workspace/packages/fleet/dist ./packages/fleet/dist
+COPY --from=builder /workspace/packages/fleet/package.json ./packages/fleet/package.json
+
+USER secureship
+# Production container configuration:
+# When binding 0.0.0.0, configure allowed hosts/origins and secret token via Kubernetes / Docker secrets:
+# e.g., FLEET_TOKEN_FILE=/run/secrets/fleet_token
+ENV NODE_ENV=production
+ENV FLEET_PORT=4000
+ENV FLEET_HOST=0.0.0.0
+ENV FLEET_DATA=/data/fleet-db.json
+
+EXPOSE 4000
+
+# Public health check endpoint: GET / or /dashboard returns 200 without exposing telemetry
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+  CMD wget -qO- http://127.0.0.1:4000/ || exit 1
+
+ENTRYPOINT ["node", "packages/fleet/dist/cli.js"]

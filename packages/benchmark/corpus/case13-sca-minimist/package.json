@@ -1,0 +1,6 @@
+{
+  "name": "case13",
+  "dependencies": {
+    "minimist": "1.2.0"
+  }
+}

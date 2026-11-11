@@ -1,0 +1,6 @@
+{
+  "minPrecision": 0.85,
+  "minRecall": 0.8,
+  "minF1": 0.8,
+  "minSuppressionRecall": 0.9
+}

@@ -1,0 +1,8 @@
+{
+  "id": "30-two-workspace-monorepo",
+  "category": "SCA",
+  "package": "axios",
+  "expectedVerdict": "REACHABLE_IMPORT",
+  "expectedKind": "PACKAGE_IMPORTED",
+  "expectedConfidence": "HIGH"
+}

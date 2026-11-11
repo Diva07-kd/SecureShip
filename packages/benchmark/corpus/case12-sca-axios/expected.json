@@ -1,0 +1,12 @@
+{
+  "id": "case12-sca-axios",
+  "description": "True positive Axios SSRF vulnerability in lockfile",
+  "category": "SCA",
+  "expectedFindings": [
+    {
+      "file": "package-lock.json",
+      "ruleId": "CVE-2020-28168",
+      "label": "TRUE_POSITIVE"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "id": "45-dataset-incomplete-entrypoints",
+  "package": "incomppkg",
+  "ecosystem": "npm",
+  "ruleId": "CUSTOM-CVE-INCOMPLETE-ENTRYPOINTS",
+  "expectedVerdict": "REACHABLE_IMPORT",
+  "expectedKind": "PACKAGE_IMPORTED",
+  "expectedConfidence": "HIGH",
+  "expectedBlockedBy": "ENTRYPOINTS_INCOMPLETE",
+  "groundTruthUsed": false,
+  "customDataset": {
+    "version": "1.0.0",
+    "datasetId": "test-incomplete-entrypoints",
+    "entries": [
+      {
+        "id": "CUSTOM-CVE-INCOMPLETE-ENTRYPOINTS",
+        "aliases": [],
+        "ecosystem": "npm",
+        "package": "incomppkg",
+        "entryPoints": [
+          {
+            "module": ".",
+            "export": "vulnerable",
+            "kind": "FUNCTION"
+          }
+        ],
+        "triggeredOn": "CALL",
+        "entryPointsComplete": false,
+        "sourceUrls": [
+          "https://example.com/advisory"
+        ],
+        "fixCommitUrls": [
+          "https://example.com/fix"
+        ],
+        "verifiedAt": "2026-10-25",
+        "verifiedBy": "Test Runner",
+        "notes": "Test incomplete entry points"
+      }
+    ]
+  }
+}

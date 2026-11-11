@@ -1,0 +1,105 @@
+name: Container Sandbox Verification (F-SAN-001 Gate 12)
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'packages/sandbox/**'
+      - 'docs/phase5/SANDBOX.md'
+      - '.github/workflows/container-sandbox-verification.yml'
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'packages/sandbox/**'
+      - 'docs/phase5/SANDBOX.md'
+      - '.github/workflows/container-sandbox-verification.yml'
+  workflow_dispatch:
+    inputs:
+      enable_live_docker:
+        description: 'Run Layer F Live Docker tests on Windows runner'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  container-path-multi-os:
+    name: Container Path Verify Node ${{ matrix.node-version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node-version: [18, 20, 22]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.14.0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build contracts & sandbox
+        run: pnpm --filter "@secureship/contracts" --filter "@secureship/sandbox" run build
+
+      - name: Run Test Integrity Auditor (Anti-Fake-Test Law)
+        run: node --experimental-strip-types scripts/verify-test-integrity.ts
+
+      - name: Run Container Sandbox Path Verification Suite (Layers A - E)
+        env:
+          CI: 'true'
+        run: npx vitest run packages/sandbox/test/container-path.translate.test.ts packages/sandbox/test/container-path.oracle.test.ts packages/sandbox/test/container-path.fs.test.ts packages/sandbox/test/container-path.mount.test.ts
+
+  live-docker-windows:
+    name: Layer F Live Docker Desktop Verification (Self-Hosted Windows)
+    runs-on: [self-hosted, windows, x64]
+    if: ${{ github.event.inputs.enable_live_docker == 'true' }}
+    needs: container-path-multi-os
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.14.0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build contracts & sandbox
+        run: pnpm --filter "@secureship/contracts" --filter "@secureship/sandbox" run build
+
+      - name: Verify Docker Desktop Preconditions
+        shell: pwsh
+        run: |
+          docker version
+          $osType = docker info --format '{{.OSType}}'
+          if ($osType -ne "linux") {
+            Write-Error "Docker Desktop must be running in Linux containers mode (current: $osType)"
+            exit 1
+          }
+          docker pull node:20-alpine@sha256:4f04642c676d95da5753ec91ac64a590623a31c51a7b45fcf3a137adcb3989c6
+
+      - name: Run Layer F Live Docker Test Suite
+        shell: pwsh
+        env:
+          SECURESHIP_LIVE_DOCKER: '1'
+        run: npx vitest run packages/sandbox/test/container-path.live-docker.test.ts

@@ -1,0 +1,17 @@
+{
+  "id": "29-tf-s3-private-fp",
+  "category": "IAC",
+  "ruleId": "CKV_AWS_20",
+  "severity": "LOW",
+  "cweIds": [
+    "CWE-200"
+  ],
+  "groundTruth": "LIKELY_FALSE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "real",
+  "description": "Private S3 bucket falsely flagged",
+  "file": "s3.tf",
+  "startLine": 3,
+  "endLine": 3
+}

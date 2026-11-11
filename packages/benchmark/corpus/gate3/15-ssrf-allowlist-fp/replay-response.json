@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_FALSE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "Strict hostname validation to api.trusted.com blocks internal loopback and metadata requests.",
+  "citations": [
+    {
+      "startLine": 3,
+      "endLine": 3,
+      "quote": "if (parsed.hostname !== 'api.trusted.com') throw new Error('Forbidden');"
+    }
+  ]
+}

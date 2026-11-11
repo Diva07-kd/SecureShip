@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_FALSE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "json.loads parses pure data without executing object instantiations.",
+  "citations": [
+    {
+      "startLine": 3,
+      "endLine": 3,
+      "quote": "return json.loads(raw)"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "name": "@secureship/fleet",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "secureship-fleet": "./dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node -e \"const fs = require('fs'); fs.mkdirSync('dist/ui', { recursive: true }); fs.copyFileSync('src/ui/ciso-dashboard.html', 'dist/ui/ciso-dashboard.html');\"",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "clean": "rimraf dist",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@secureship/contracts": "workspace:*",
+    "@secureship/core-engine": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.7.3"
+  }
+}

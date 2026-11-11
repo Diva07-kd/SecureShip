@@ -1,0 +1,393 @@
+{
+  "version": "1.0.0",
+  "datasetId": "secureship-curated-vulnerable-symbols-v1",
+  "description": "Cryptographically attested vulnerable symbol dataset for SecureShip function-level reachability analysis.",
+  "entries": [
+    {
+      "id": "CVE-2021-23337",
+      "aliases": ["GHSA-35jh-r3h4-6jhm"],
+      "ecosystem": "npm",
+      "package": "lodash",
+      "entryPoints": [
+        { "module": ".", "export": "template", "kind": "FUNCTION" },
+        { "module": "lodash.template", "export": "default", "kind": "FUNCTION" }
+      ],
+      "triggeredOn": "CALL",
+      "entryPointsComplete": true,
+      "sourceUrls": [
+        "https://github.com/advisories/GHSA-35jh-r3h4-6jhm",
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-23337"
+      ],
+      "fixCommitUrls": [
+        "https://github.com/lodash/lodash/commit/3469357cff928a588382d1c44f76075ec82fba66"
+      ],
+      "verifiedAt": "2026-10-25",
+      "verifiedBy": "SecureShip Security Engineering",
+      "notes": "Command injection in template function via templateSettings.imports"
+    },
+    {
+      "id": "CVE-2019-10744",
+      "aliases": ["GHSA-p6mc-m468-83gw"],
+      "ecosystem": "npm",
+      "package": "lodash",
+      "entryPoints": [{ "module": ".", "export": "defaultsDeep", "kind": "FUNCTION" }],
+      "triggeredOn": "CALL",
+      "entryPointsComplete": true,
+      "sourceUrls": [
+        "https://github.com/advisories/GHSA-p6mc-m468-83gw",
+        "https://nvd.nist.gov/vuln/detail/CVE-2019-10744"
+      ],
+      "fixCommitUrls": [
+        "https://github.com/lodash/lodash/commit/d8e069cc3410082e44bd18f18412643735734795"
+      ],
+      "verifiedAt": "2026-10-25",
+      "verifiedBy": "SecureShip Security Engineering",
+      "notes": "Prototype pollution via defaultsDeep function"
+    },
+    {
+      "id": "CVE-2020-8203",
+      "aliases": ["GHSA-p6mr-hd5r-43w5"],
+      "ecosystem": "npm",
+      "package": "lodash",
+      "entryPoints": [
+        { "module": ".", "export": "zipObjectDeep", "kind": "FUNCTION" },
+        { "module": ".", "export": "set", "kind": "FUNCTION" },
+        { "module": ".", "export": "setWith", "kind": "FUNCTION" }
+      ],
+      "triggeredOn": "CALL",
+      "entryPointsComplete": true,
+      "sourceUrls": [
+        "https://github.com/advisories/GHSA-p6mr-hd5r-43w5",
+        "https://nvd.nist.gov/vuln/detail/CVE-2020-8203"
+      ],
+      "fixCommitUrls": [
+        "https://github.com/lodash/lodash/commit/c2a07917e5f67945d7426aa05634b71192e4be87"
+      ],
+      "verifiedAt": "2026-10-25",
+      "verifiedBy": "SecureShip Security Engineering",
+      "notes": "Prototype pollution in zipObjectDeep, set, setWith"
+    },
+    {
+      "id": "CVE-2018-16487",
+      "aliases": ["GHSA-jf85-cpcp-j695"],
+      "ecosystem": "npm",
+      "package": "lodash",
+      "entryPoints": [
+        { "module": ".", "export": "merge", "kind": "FUNCTION" },
+        { "module": ".", "export": "mergeWith", "kind": "FUNCTION" },
+        { "module": ".", "export": "defaultsDeep", "kind": "FUNCTION" }
+      ],
+      "triggeredOn": "CALL",
+      "entryPointsComplete": true,
+      "sourceUrls": [
+        "https://github.com/advisories/GHSA-jf85-cpcp-j695",
+        "https://nvd.nist.gov/vuln/detail/CVE-2018-16487"
+      ],
+      "fixCommitUrls": [
+        "https://github.com/lodash/lodash/commit/e2a781845eb52207b82504944806a644837eccbc"
+      ],
+      "verifiedAt": "2026-10-25",
+      "verifiedBy": "SecureShip Security Engineering",
+      "notes": "Prototype pollution in merge, mergeWith, defaultsDeep"
+    },
+    {
+      "id": "CVE-2021-23358",
+      "aliases": ["GHSA-cf4h-3jhx-xvhq"],
+      "ecosystem": "npm",
+      "package": "underscore",
+      "entryPoints": [{ "module": ".", "export": "template", "kind": "FUNCTION" }],
+      "triggeredOn": "CALL",
+      "entryPointsComplete": true,
+      "sourceUrls": [
+        "https://github.com/advisories/GHSA-cf4h-3jhx-xvhq",
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-23358"
+      ],
+      "fixCommitUrls": [
+        "https://github.com/jashkenas/underscore/commit/4c7e2b7a06b5a6ee536f44d4442b3f157c9180f8"
+      ],
+      "verifiedAt": "2026-10-25",
+      "verifiedBy": "SecureShip Security Engineering",
+      "notes": "Arbitrary code execution via template function"
+    },
+    {
+      "id": "CVE-2020-7662",
+      "aliases": ["GHSA-2g68-ch7w-xx57"],
+      "ecosystem": "npm",
+      "package": "websocket-extensions",
+      "entryPoints": [{ "module": ".", "export": "parseHeader", "kind": "FUNCTION" }],
+      "triggeredOn": "CALL",
+      "entryPointsComplete": true,
+      "sourceUrls": [
+        "https://github.com/advisories/GHSA-2g68-ch7w-xx57",
+        "https://nvd.nist.gov/vuln/detail/CVE-2020-7662"
+      ],
+      "fixCommitUrls": [
+        "https://github.com/faye/websocket-extensions-node/commit/2ef2e597c5ab066d859a7ea275d31590483161c5"
+      ],
+      "verifiedAt": "2026-10-25",
+      "verifiedBy": "SecureShip Security Engineering",
+      "notes": "ReDoS in parseHeader function"
+    },
+    {
+      "id": "CVE-2021-3749",
+      "aliases": ["GHSA-mrqc-2c62-88r3"],
+      "ecosystem": "npm",
+      "package": "axios",
+      "entryPoints": [{ "module": ".", "export": "trim", "kind": "FUNCTION" }],
+      "triggeredOn": "CALL",
+      "entryPointsComplete": true,
+      "sourceUrls": [
+        "https://github.com/advisories/GHSA-mrqc-2c62-88r3",
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-3749"
+      ],
+      "fixCommitUrls": [
+        "https://github.com/axios/axios/commit/5b4571158654471544a477de2909405d43be9852"
+      ],
+      "verifiedAt": "2026-10-25",
+      "verifiedBy": "SecureShip Security Engineering",
+      "notes": "ReDoS vulnerability in trim function"
+    },
+    {
+      "id": "CVE-2023-45133",
+      "aliases": ["GHSA-7958-37x2-rxpf"],
+      "ecosystem": "npm",
+      "package": "@babel/traverse",
+      "entryPoints": [
+        { "module": ".", "export": "evaluate", "kind": "METHOD", "via": ["traverse", "default"] },
+        {
+          "module": ".",
+          "export": "evaluateTruthy",
+          "kind": "METHOD",
+          "via": ["traverse", "default"]
+        }
+      ],
+      "triggeredOn": "CALL",
+      "entryPointsComplete": true,
+      "sourceUrls": [
+        "https://github.com/advisories/GHSA-7958-37x2-rxpf",
+        "https://nvd.nist.gov/vuln/detail/CVE-2023-45133"
+      ],
+      "fixCommitUrls": [
+        "https://github.com/babel/babel/commit/b13376b34694736371b694a9ae938eb57e2d9eb3"
+      ],
+      "verifiedAt": "2026-10-25",
+      "verifiedBy": "SecureShip Security Engineering",
+      "notes": "Arbitrary code execution when evaluating expressions via traverse path.evaluate"
+    },
+    {
+      "id": "CVE-2020-28500",
+      "aliases": ["GHSA-2p57-rm9w-gvfp"],
+      "ecosystem": "npm",
+      "package": "lodash",
+      "entryPoints": [
+        { "module": ".", "export": "toNumber", "kind": "FUNCTION" },
+        { "module": ".", "export": "trim", "kind": "FUNCTION" },
+        { "module": ".", "export": "trimEnd", "kind": "FUNCTION" }
+      ],
+      "triggeredOn": "CALL",
+      "entryPointsComplete": true,
+      "sourceUrls": [
+        "https://github.com/advisories/GHSA-2p57-rm9w-gvfp",
+        "https://nvd.nist.gov/vuln/detail/CVE-2020-28500"
+      ],
+      "fixCommitUrls": [
+        "https://github.com/lodash/lodash/commit/c751e77c0cf1f728484196da5e48682a20b9e830"
+      ],
+      "verifiedAt": "2026-10-25",
+      "verifiedBy": "SecureShip Security Engineering",
+      "notes": "ReDoS via toNumber, trim, and trimEnd with large string whitespace"
+    },
+    {
+      "id": "CVE-2022-25883",
+      "aliases": ["GHSA-vc7j-rvfj-23pm"],
+      "ecosystem": "npm",
+      "package": "semver",
+      "entryPoints": [
+        { "module": ".", "export": "subset", "kind": "FUNCTION" },
+        { "module": ".", "export": "Range", "kind": "CLASS" }
+      ],
+      "triggeredOn": "CALL",
+      "entryPointsComplete": true,
+      "sourceUrls": [
+        "https://github.com/advisories/GHSA-vc7j-rvfj-23pm",
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-25883"
+      ],
+      "fixCommitUrls": [
+        "https://github.com/npm/node-semver/commit/6448a972e737c35697366c568cb5155553288ec7"
+      ],
+      "verifiedAt": "2026-10-25",
+      "verifiedBy": "SecureShip Security Engineering",
+      "notes": "ReDoS in Range parsing and subset comparisons"
+    },
+    {
+      "id": "CVE-2022-25858",
+      "aliases": ["GHSA-w44r-fc5x-g5f9"],
+      "ecosystem": "npm",
+      "package": "terser",
+      "entryPoints": [{ "module": ".", "export": "minify", "kind": "FUNCTION" }],
+      "triggeredOn": "CALL",
+      "entryPointsComplete": true,
+      "sourceUrls": [
+        "https://github.com/advisories/GHSA-w44r-fc5x-g5f9",
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-25858"
+      ],
+      "fixCommitUrls": [
+        "https://github.com/terser/terser/commit/26bebe1a613583c8477ff9cc2ef951bb7e2d46e3"
+      ],
+      "verifiedAt": "2026-10-25",
+      "verifiedBy": "SecureShip Security Engineering",
+      "notes": "ReDoS via minify with craft regex options"
+    },
+    {
+      "id": "CVE-2021-3807",
+      "aliases": ["GHSA-87hh-q2gc-v54f"],
+      "ecosystem": "npm",
+      "package": "ansi-regex",
+      "entryPoints": [{ "module": ".", "export": "default", "kind": "FUNCTION" }],
+      "triggeredOn": "CALL",
+      "entryPointsComplete": true,
+      "sourceUrls": [
+        "https://github.com/advisories/GHSA-87hh-q2gc-v54f",
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-3807"
+      ],
+      "fixCommitUrls": [
+        "https://github.com/chalk/ansi-regex/commit/814120ec689849206584c3114d5e27a988d447f5"
+      ],
+      "verifiedAt": "2026-10-25",
+      "verifiedBy": "SecureShip Security Engineering",
+      "notes": "ReDoS via ansiRegex invocation"
+    },
+    {
+      "id": "CVE-2021-23369",
+      "aliases": ["GHSA-h5c2-v489-3h9h"],
+      "ecosystem": "npm",
+      "package": "handlebars",
+      "entryPoints": [
+        { "module": ".", "export": "compile", "kind": "FUNCTION" },
+        { "module": ".", "export": "template", "kind": "FUNCTION" }
+      ],
+      "triggeredOn": "CALL",
+      "entryPointsComplete": true,
+      "sourceUrls": [
+        "https://github.com/advisories/GHSA-h5c2-v489-3h9h",
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-23369"
+      ],
+      "fixCommitUrls": [
+        "https://github.com/handlebars-lang/handlebars.js/commit/f0589701698268578199be25285b2feb8472fca1"
+      ],
+      "verifiedAt": "2026-10-25",
+      "verifiedBy": "SecureShip Security Engineering",
+      "notes": "Arbitrary code execution through compile and template"
+    },
+    {
+      "id": "CVE-2022-3517",
+      "aliases": ["GHSA-79g4-2w54-mvhh"],
+      "ecosystem": "npm",
+      "package": "minimatch",
+      "entryPoints": [
+        { "module": ".", "export": "braceExpand", "kind": "FUNCTION" },
+        { "module": ".", "export": "default", "kind": "FUNCTION" },
+        { "module": ".", "export": "minimatch", "kind": "FUNCTION" }
+      ],
+      "triggeredOn": "CALL",
+      "entryPointsComplete": true,
+      "sourceUrls": [
+        "https://github.com/advisories/GHSA-79g4-2w54-mvhh",
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-3517"
+      ],
+      "fixCommitUrls": [
+        "https://github.com/isaacs/minimatch/commit/a8763f43884dfbe52ee452db0ecd80685e7db078"
+      ],
+      "verifiedAt": "2026-10-25",
+      "verifiedBy": "SecureShip Security Engineering",
+      "notes": "ReDoS in braceExpand and minimatch functions"
+    },
+    {
+      "id": "CVE-2023-32681",
+      "aliases": ["GHSA-j8r2-6x86-q33q"],
+      "ecosystem": "pypi",
+      "package": "requests",
+      "entryPoints": [
+        { "module": ".", "export": "Session", "kind": "CLASS" },
+        { "module": ".", "export": "get", "kind": "FUNCTION" },
+        { "module": ".", "export": "post", "kind": "FUNCTION" }
+      ],
+      "triggeredOn": "CALL",
+      "entryPointsComplete": true,
+      "sourceUrls": [
+        "https://github.com/advisories/GHSA-j8r2-6x86-q33q",
+        "https://nvd.nist.gov/vuln/detail/CVE-2023-32681"
+      ],
+      "fixCommitUrls": [
+        "https://github.com/psf/requests/commit/74ea7cf7a6b27a4eab2ae24e162b2c9ce5e91354"
+      ],
+      "verifiedAt": "2026-10-25",
+      "verifiedBy": "SecureShip Security Engineering",
+      "notes": "Leaking Proxy-Authorization headers to destination server across redirects in requests sessions"
+    },
+    {
+      "id": "CVE-2022-40897",
+      "aliases": ["GHSA-r9hx-vwmv-q579"],
+      "ecosystem": "pypi",
+      "package": "setuptools",
+      "entryPoints": [{ "module": "package_index", "export": "PackageIndex", "kind": "CLASS" }],
+      "triggeredOn": "CALL",
+      "entryPointsComplete": true,
+      "sourceUrls": [
+        "https://github.com/advisories/GHSA-r9hx-vwmv-q579",
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-40897"
+      ],
+      "fixCommitUrls": [
+        "https://github.com/pypa/setuptools/commit/005e83be62283a0058b8f20ad7db2a048705ae84"
+      ],
+      "verifiedAt": "2026-10-25",
+      "verifiedBy": "SecureShip Security Engineering",
+      "notes": "ReDoS in PackageIndex download handling"
+    },
+    {
+      "id": "CVE-2022-34265",
+      "aliases": ["GHSA-p99v-5835-5w5v"],
+      "ecosystem": "pypi",
+      "package": "django",
+      "entryPoints": [
+        { "module": "db.models.functions", "export": "Trunc", "kind": "CLASS" },
+        { "module": "db.models.functions", "export": "Extract", "kind": "CLASS" }
+      ],
+      "triggeredOn": "CALL",
+      "entryPointsComplete": true,
+      "sourceUrls": [
+        "https://github.com/advisories/GHSA-p99v-5835-5w5v",
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-34265"
+      ],
+      "fixCommitUrls": [
+        "https://github.com/django/django/commit/06517a268a79857d42cf3b0d4b97d021f1816f1a"
+      ],
+      "verifiedAt": "2026-10-25",
+      "verifiedBy": "SecureShip Security Engineering",
+      "notes": "SQL injection via Trunc and Extract database functions"
+    },
+    {
+      "id": "CVE-2020-14343",
+      "aliases": ["GHSA-8q59-q68h-6hv4"],
+      "ecosystem": "pypi",
+      "package": "pyyaml",
+      "entryPoints": [
+        { "module": ".", "export": "full_load", "kind": "FUNCTION" },
+        { "module": ".", "export": "full_load_all", "kind": "FUNCTION" },
+        { "module": ".", "export": "load", "kind": "FUNCTION" }
+      ],
+      "triggeredOn": "CALL",
+      "entryPointsComplete": true,
+      "sourceUrls": [
+        "https://github.com/advisories/GHSA-8q59-q68h-6hv4",
+        "https://nvd.nist.gov/vuln/detail/CVE-2020-14343"
+      ],
+      "fixCommitUrls": [
+        "https://github.com/yaml/pyyaml/commit/a001f2782540e94042c13038a8e1e779a1da872a"
+      ],
+      "verifiedAt": "2026-10-25",
+      "verifiedBy": "SecureShip Security Engineering",
+      "notes": "Arbitrary code execution through FullLoader in full_load and load without safe Loader"
+    }
+  ]
+}

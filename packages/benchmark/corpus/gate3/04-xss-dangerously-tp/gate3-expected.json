@@ -1,0 +1,17 @@
+{
+  "id": "04-xss-dangerously-tp",
+  "category": "SAST",
+  "ruleId": "rules.xss.react",
+  "severity": "HIGH",
+  "cweIds": [
+    "CWE-79"
+  ],
+  "groundTruth": "LIKELY_TRUE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "replay-only",
+  "description": "dangerouslySetInnerHTML rendering unsanitized user HTML",
+  "file": "component.jsx",
+  "startLine": 2,
+  "endLine": 2
+}

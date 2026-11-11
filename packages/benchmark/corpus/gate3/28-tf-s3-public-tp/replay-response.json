@@ -1,0 +1,12 @@
+{
+  "verdict": "LIKELY_TRUE_POSITIVE",
+  "confidence": "HIGH",
+  "rationale": "acl is set to public-read exposing bucket objects publicly.",
+  "citations": [
+    {
+      "startLine": 3,
+      "endLine": 3,
+      "quote": "acl = \"public-read\""
+    }
+  ]
+}

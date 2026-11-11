@@ -1,0 +1,42 @@
+{
+  "id": "43-method-without-via-chain",
+  "package": "customlib",
+  "ecosystem": "npm",
+  "ruleId": "CUSTOM-CVE-METHOD-NO-VIA",
+  "expectedVerdict": "REACHABLE_IMPORT",
+  "expectedKind": "PACKAGE_IMPORTED",
+  "expectedConfidence": "HIGH",
+  "expectedBlockedBy": "ENTRYPOINTS_INCOMPLETE",
+  "groundTruthUsed": false,
+  "customDataset": {
+    "version": "1.0.0",
+    "datasetId": "test-method-no-via",
+    "entries": [
+      {
+        "id": "CUSTOM-CVE-METHOD-NO-VIA",
+        "aliases": [],
+        "ecosystem": "npm",
+        "package": "customlib",
+        "entryPoints": [
+          {
+            "module": ".",
+            "export": "vulnerableMethod",
+            "kind": "METHOD",
+            "via": []
+          }
+        ],
+        "triggeredOn": "CALL",
+        "entryPointsComplete": true,
+        "sourceUrls": [
+          "https://example.com/advisory"
+        ],
+        "fixCommitUrls": [
+          "https://example.com/fix"
+        ],
+        "verifiedAt": "2026-10-25",
+        "verifiedBy": "Test Runner",
+        "notes": "Test method without via"
+      }
+    ]
+  }
+}

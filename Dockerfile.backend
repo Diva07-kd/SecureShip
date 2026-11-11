@@ -1,0 +1,167 @@
+# syntax=docker/dockerfile:1.4
+# ==============================================================================
+# SECURESCAN PRODUCTION BACKEND DOCKERFILE
+# Self-contained, multi-engine security scanning platform with pre-baked tools
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Stage 1: Build & bundle standalone SecureShip CLI distribution
+# ------------------------------------------------------------------------------
+FROM node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d AS builder
+WORKDIR /workspace
+
+# Activate corepack with pinned pnpm matching root packageManager
+RUN corepack enable && corepack prepare pnpm@12.14.0 --activate
+
+# Copy root manifest and workspace specifications
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.base.json tsconfig.json tools.lock.json ./
+COPY packages/contracts/package.json ./packages/contracts/
+COPY packages/reachability/package.json ./packages/reachability/
+COPY packages/context-slicer/package.json ./packages/context-slicer/
+COPY packages/patch-engine/package.json ./packages/patch-engine/
+COPY packages/sandbox/package.json ./packages/sandbox/
+COPY packages/ai/package.json ./packages/ai/
+COPY packages/core-engine/package.json ./packages/core-engine/
+COPY packages/scanner-adapters/package.json ./packages/scanner-adapters/
+COPY packages/fleet/package.json ./packages/fleet/
+COPY packages/cli/package.json ./packages/cli/
+COPY packages/benchmark/package.json ./packages/benchmark/
+
+# Install frozen dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy full source trees
+COPY scripts/ ./scripts/
+COPY packages/ ./packages/
+COPY rules/ ./rules/
+
+# Build all monorepo packages (tsup bundles @secureship/* workspaces into CLI standalone dist)
+RUN pnpm build
+
+# Assemble clean deployable bundle with production dependencies
+RUN pnpm --filter @secureship/cli deploy --prod /out/cli && \
+    chmod +x /out/cli/dist/index.js
+
+# ------------------------------------------------------------------------------
+# Stage 2: Provision verified external scanner binaries via SecureShip SSoT
+# ------------------------------------------------------------------------------
+FROM node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d AS tools
+ARG TARGETARCH=amd64
+WORKDIR /workspace
+
+COPY --from=builder /out/cli /opt/secureship/cli
+RUN ln -s /opt/secureship/cli/dist/index.js /usr/local/bin/secureship
+
+# Install opengrep, gitleaks, trivy, and osv-scanner using authoritative lockfile pins
+RUN mkdir -p /out/bin && \
+    secureship install-tools --dir /out/bin --target-platform linux-${TARGETARCH} --force && \
+    chmod 0555 /out/bin/*
+
+# ------------------------------------------------------------------------------
+# Stage 3: Build hash-locked Python virtualenv for Checkov (IaC Scanner)
+# ------------------------------------------------------------------------------
+FROM python:3.12-slim-bookworm AS checkov
+WORKDIR /opt
+
+RUN python3 -m venv /opt/checkov-venv && \
+    /opt/checkov-venv/bin/pip install --no-cache-dir checkov==3.3.29 && \
+    mkdir -p /opt/checkov-bin && \
+    printf '#!/bin/sh\nexec /opt/checkov-venv/bin/checkov "$@"\n' > /opt/checkov-bin/checkov && \
+    chmod 0555 /opt/checkov-bin/checkov
+
+# ------------------------------------------------------------------------------
+# Stage 4: Python Backend Dependencies Builder
+# ------------------------------------------------------------------------------
+FROM python:3.12-slim-bookworm AS pybuilder
+WORKDIR /build
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends build-essential libffi-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY backend/requirements.txt ./
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+
+# ------------------------------------------------------------------------------
+# Stage 5: Final Production Backend Runtime Image
+# ------------------------------------------------------------------------------
+FROM python:3.12-slim-bookworm AS runner
+
+LABEL org.opencontainers.image.title="SecureScan Backend" \
+      org.opencontainers.image.description="FastAPI security scanning service powered by SecureShip multi-scanner engine" \
+      org.opencontainers.image.licenses="Apache-2.0" \
+      org.opencontainers.image.vendor="SecureShip"
+
+# Install Node.js 22 runtime, git, curl, tini, and pango/cairo libraries for WeasyPrint PDF generation
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+      curl \
+      ca-certificates \
+      gnupg \
+      git \
+      tini \
+      libpango-1.0-0 \
+      libharfbuzz0b \
+      libpangoft2-1.0-0 \
+      libpangocairo-1.0-0 && \
+    mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" > /etc/apt/sources.list.d/nodesource.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends nodejs && \
+    apt-get purge -y gnupg && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
+
+# Fixed non-root UID/GID 10001
+RUN groupadd -g 10001 secureship && \
+    useradd -u 10001 -g secureship -m -s /bin/sh securescan
+
+# Copy Python packages
+COPY --from=pybuilder /install /usr/local
+
+# Setup CLI distribution directory at /secureship and /opt/secureship/cli
+RUN mkdir -p /secureship /opt/secureship/cli /opt/secureship/bin
+COPY --from=builder /out/cli /opt/secureship/cli
+COPY --from=builder /out/cli /secureship
+RUN ln -s /secureship/dist/index.js /usr/local/bin/secureship
+
+# Copy pre-installed scanner binaries
+COPY --from=tools /out/bin/ /opt/secureship/bin/
+
+# Copy Checkov venv and wrapper
+COPY --from=checkov /opt/checkov-venv /opt/checkov-venv
+COPY --from=checkov /opt/checkov-bin/checkov /opt/secureship/bin/checkov
+
+# Immutable root-owned binaries permissions
+RUN chown -R root:root /opt/secureship/bin && \
+    chmod 0555 /opt/secureship/bin && \
+    chmod 0555 /opt/secureship/bin/*
+
+# Copy backend application source
+WORKDIR /app
+COPY backend/app /app/app
+COPY backend/pytest.ini /app/pytest.ini
+
+# Create writable home and temporary scratch directories
+RUN mkdir -p /home/securescan/.secureship /tmp/securescan && \
+    chown -R securescan:secureship /home/securescan /tmp/securescan /app && \
+    chmod 0700 /home/securescan/.secureship
+
+# Environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app \
+    PATH="/opt/secureship/bin:${PATH}" \
+    SECURESHIP_BIN_DIR="/opt/secureship/bin" \
+    SECURESHIP_CLI_PATH="/secureship/dist/index.js" \
+    NODE_ENV=production \
+    NODE_PATH="/usr/bin/node"
+
+USER securescan
+EXPOSE 8000
+
+HEALTHCHECK --interval=10s --timeout=5s --retries=5 \
+  CMD curl -f http://localhost:8000/api/health || exit 1
+
+ENTRYPOINT ["tini", "--"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

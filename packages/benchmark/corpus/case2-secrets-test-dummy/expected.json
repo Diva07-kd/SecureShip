@@ -1,0 +1,12 @@
+{
+  "id": "case2-secrets-test-dummy",
+  "description": "False positive trap: dummy credentials in test directory",
+  "category": "SECRET",
+  "expectedFindings": [
+    {
+      "file": "tests/auth.test.ts",
+      "ruleId": "aws-access-key-id",
+      "label": "FALSE_POSITIVE_TRAP"
+    }
+  ]
+}

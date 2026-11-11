@@ -1,0 +1,17 @@
+{
+  "id": "06-cmd-execfile-fixed-fp",
+  "category": "SAST",
+  "ruleId": "rules.rce.childprocess",
+  "severity": "LOW",
+  "cweIds": [
+    "CWE-78"
+  ],
+  "groundTruth": "LIKELY_FALSE_POSITIVE",
+  "isInjectionVariant": false,
+  "injectionPayload": null,
+  "source": "replay-only",
+  "description": "execFileSync with hardcoded arguments and no user input",
+  "file": "exec.js",
+  "startLine": 3,
+  "endLine": 3
+}

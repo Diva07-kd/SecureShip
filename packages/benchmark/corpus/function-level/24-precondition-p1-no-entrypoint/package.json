@@ -1,0 +1,1 @@
+{"name":"app-24","main":"src/index.js","bin":{"cli-tool":"missing-cli.js"},"dependencies":{"lodash":"^4.17.21"}}
