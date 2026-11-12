@@ -108,7 +108,7 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
         onDrop={handleDrop}
         onClick={() => !isUploading && fileInputRef.current?.click()}
         className={`relative rounded-2xl p-12 text-center transition-all duration-300 cursor-pointer select-none border ${isDragging
-            ? 'border-[#4285f4] bg-[#4285f4]/10 shadow-[0_0_40px_rgba(66,133,244,0.25)] scale-[1.01]'
+            ? 'border-[#557b37] bg-[#557b37]/10 shadow-[0_0_40px_rgba(85,123,55,0.16)] scale-[1.01]'
             : 'border-white/[0.1] bg-white/[0.02] hover:border-white/[0.2] hover:bg-white/[0.04] shadow-agy-card'
           } ${isUploading ? 'pointer-events-none opacity-85' : ''}`}
       >
@@ -122,11 +122,11 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
 
         <div className="flex flex-col items-center justify-center space-y-5">
           {/* Antigravity Upload Icon Squircle */}
-          <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-[#4285f4]/20 via-[#a142f4]/15 to-transparent border border-white/[0.12] flex items-center justify-center text-[#8ab4f8] shadow-inner">
+          <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-[#557b37]/20 via-[#82956f]/15 to-transparent border border-white/[0.12] flex items-center justify-center text-[#557b37] shadow-inner">
             {isUploading ? (
-              <FileArchive className="w-7 h-7 animate-pulse text-[#8ab4f8]" />
+              <FileArchive className="w-7 h-7 animate-pulse text-[#557b37]" />
             ) : (
-              <UploadCloud className="w-7 h-7 text-[#8ab4f8]" />
+              <UploadCloud className="w-7 h-7 text-[#557b37]" />
             )}
           </div>
 
@@ -134,15 +134,15 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
             <h3 className="text-xl font-semibold text-white tracking-tight">
               {isUploading ? 'Uploading Security Scan Target...' : 'Drag and drop your project archive here'}
             </h3>
-            <p className="text-xs sm:text-sm text-[#9aa0a6]">
-              Supports <span className="font-mono text-[#8ab4f8] font-semibold bg-[#4285f4]/10 px-1.5 py-0.5 rounded border border-[#4285f4]/20">.zip</span> archives up to 600 MB
+            <p className="text-xs sm:text-sm text-[#69746b]">
+              Supports <span className="font-mono text-[#557b37] font-semibold bg-[#557b37]/10 px-1.5 py-0.5 rounded border border-[#557b37]/20">.zip</span> archives up to 600 MB
             </p>
           </div>
 
           {!isUploading && (
             <button
               type="button"
-              className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#1a73e8] to-[#4285f4] hover:shadow-[0_0_20px_rgba(66,133,244,0.4)] text-white text-xs font-semibold transition-all shadow-md active:scale-95"
+              className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#405f2b] to-[#557b37] hover:shadow-[0_0_20px_rgba(85,123,55,0.22)] text-white text-xs font-semibold transition-all shadow-md active:scale-95"
             >
               Browse Zip Archive
             </button>
@@ -152,22 +152,22 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
             <div className="w-full max-w-md mt-4 space-y-2">
               <div className="h-2 w-full bg-white/[0.06] rounded-full overflow-hidden border border-white/[0.08]">
                 <div
-                  className="h-full bg-gradient-to-r from-[#4285f4] via-[#a142f4] to-[#24c1e0] transition-all duration-300 rounded-full"
+                  className="h-full bg-gradient-to-r from-[#557b37] via-[#82956f] to-[#b4c2a6] transition-all duration-300 rounded-full"
                   style={{ width: `${uploadProgress}%` }}
                 />
               </div>
-              <p className="text-xs text-[#9aa0a6] font-mono">Uploading: {uploadProgress}%</p>
+              <p className="text-xs text-[#69746b] font-mono">Uploading: {uploadProgress}%</p>
             </div>
           )}
         </div>
       </div>
 
       {errorMessage && (
-        <div className="p-4 rounded-xl bg-[#ea4335]/10 border border-[#ea4335]/30 text-[#fad2cf] text-sm flex items-start gap-3 shadow-md">
+        <div className="p-4 rounded-xl bg-[#ea4335]/10 border border-[#ea4335]/30 text-[#a63a2f] text-sm flex items-start gap-3 shadow-md">
           <AlertCircle className="w-5 h-5 text-[#ea4335] flex-shrink-0 mt-0.5" />
           <div>
             <div className="font-semibold text-white">Archive Upload Rejected</div>
-            <div className="mt-0.5 text-xs text-[#fad2cf]">{errorMessage}</div>
+            <div className="mt-0.5 text-xs text-[#a63a2f]">{errorMessage}</div>
           </div>
         </div>
       )}
@@ -175,30 +175,30 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
       {/* Safety & Hardening Features Highlights with Antigravity Card Styling */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-2">
         <div className="agy-glass-card rounded-xl p-4 text-left flex items-start gap-3 border border-white/[0.08]">
-          <div className="w-7 h-7 rounded-lg bg-[#34a853]/10 border border-[#34a853]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-            <ShieldAlert className="w-3.5 h-3.5 text-[#34a853]" />
+          <div className="w-7 h-7 rounded-lg bg-[#718c4f]/10 border border-[#718c4f]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <ShieldAlert className="w-3.5 h-3.5 text-[#718c4f]" />
           </div>
           <div className="text-xs">
-            <span className="font-semibold text-[#e8eaed] block tracking-tight">Zip-Slip Traversal Guard</span>
-            <span className="text-[#9aa0a6] text-[11px] leading-relaxed">Rejects traversal sequences & canonical path escapes</span>
+            <span className="font-semibold text-[#252d27] block tracking-tight">Zip-Slip Traversal Guard</span>
+            <span className="text-[#69746b] text-[11px] leading-relaxed">Rejects traversal sequences & canonical path escapes</span>
           </div>
         </div>
         <div className="agy-glass-card rounded-xl p-4 text-left flex items-start gap-3 border border-white/[0.08]">
-          <div className="w-7 h-7 rounded-lg bg-[#34a853]/10 border border-[#34a853]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-            <ShieldAlert className="w-3.5 h-3.5 text-[#34a853]" />
+          <div className="w-7 h-7 rounded-lg bg-[#718c4f]/10 border border-[#718c4f]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <ShieldAlert className="w-3.5 h-3.5 text-[#718c4f]" />
           </div>
           <div className="text-xs">
-            <span className="font-semibold text-[#e8eaed] block tracking-tight">Zip-Bomb Ratio Shield</span>
-            <span className="text-[#9aa0a6] text-[11px] leading-relaxed">Enforces &le; 100x uncompressed-to-compressed limit</span>
+            <span className="font-semibold text-[#252d27] block tracking-tight">Zip-Bomb Ratio Shield</span>
+            <span className="text-[#69746b] text-[11px] leading-relaxed">Enforces &le; 100x uncompressed-to-compressed limit</span>
           </div>
         </div>
         <div className="agy-glass-card rounded-xl p-4 text-left flex items-start gap-3 border border-white/[0.08]">
-          <div className="w-7 h-7 rounded-lg bg-[#34a853]/10 border border-[#34a853]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-            <ShieldAlert className="w-3.5 h-3.5 text-[#34a853]" />
+          <div className="w-7 h-7 rounded-lg bg-[#718c4f]/10 border border-[#718c4f]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <ShieldAlert className="w-3.5 h-3.5 text-[#718c4f]" />
           </div>
           <div className="text-xs">
-            <span className="font-semibold text-[#e8eaed] block tracking-tight">Symlink 0xA1ED Defense</span>
-            <span className="text-[#9aa0a6] text-[11px] leading-relaxed">Rejects POSIX links targeting sensitive system files</span>
+            <span className="font-semibold text-[#252d27] block tracking-tight">Symlink 0xA1ED Defense</span>
+            <span className="text-[#69746b] text-[11px] leading-relaxed">Rejects POSIX links targeting sensitive system files</span>
           </div>
         </div>
       </div>

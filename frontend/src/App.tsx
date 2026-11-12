@@ -8,11 +8,7 @@ import { ReportPage } from './pages/ReportPage';
 export const App: React.FC = () => {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-[#0d0e12] text-[#e8eaed] flex flex-col font-sans relative overflow-x-hidden">
-        {/* Subtle Ambient Antigravity Glow Orbs */}
-        <div className="pointer-events-none fixed -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-b from-[#4285f4]/15 via-[#a142f4]/10 to-transparent blur-3xl rounded-full -z-10" />
-        <div className="pointer-events-none fixed top-1/3 -right-40 w-[450px] h-[450px] bg-[#24c1e0]/5 blur-[120px] rounded-full -z-10" />
-
+      <div className="min-h-screen bg-[#f6f6f1] text-[#252d27] flex flex-col font-sans relative overflow-x-hidden">
         <Navbar />
         <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
           <Routes>

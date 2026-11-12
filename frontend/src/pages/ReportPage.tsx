@@ -121,8 +121,8 @@ export const ReportPage: React.FC = () => {
   if (isLoading) {
     return (
       <div className="py-24 text-center space-y-4">
-        <Loader2 className="w-10 h-10 animate-spin text-[#8ab4f8] mx-auto" />
-        <p className="text-sm text-[#9aa0a6]">Loading scan report for job <span className="font-mono text-[#e8eaed]">{effectiveJobId}</span>...</p>
+        <Loader2 className="w-10 h-10 animate-spin text-[#557b37] mx-auto" />
+        <p className="text-sm text-[#69746b]">Loading scan report for job <span className="font-mono text-[#252d27]">{effectiveJobId}</span>...</p>
       </div>
     );
   }
@@ -135,12 +135,12 @@ export const ReportPage: React.FC = () => {
           <AlertTriangle className="w-8 h-8" />
         </div>
         <h3 className="text-xl font-bold text-white">Report Not Found</h3>
-        <div className="p-4 rounded-xl bg-[#ea4335]/10 border border-[#ea4335]/20 text-[#fad2cf] text-xs text-left font-mono">
+        <div className="p-4 rounded-xl bg-[#ea4335]/10 border border-[#ea4335]/20 text-[#a63a2f] text-xs text-left font-mono">
           {errorMessage}
         </div>
         <Link
           to="/scan"
-          className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-full bg-gradient-to-r from-[#1a73e8] to-[#4285f4] hover:shadow-[0_0_20px_rgba(66,133,244,0.4)] text-white text-xs font-semibold transition-all shadow-md"
+          className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-full bg-gradient-to-r from-[#405f2b] to-[#557b37] hover:shadow-[0_0_20px_rgba(85,123,55,0.22)] text-white text-xs font-semibold transition-all shadow-md"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           Start New Scan
@@ -155,15 +155,15 @@ export const ReportPage: React.FC = () => {
       <div className="max-w-2xl mx-auto py-16 text-center space-y-8 agy-glass-card rounded-2xl p-8 border border-white/[0.1]">
         <div className="relative w-28 h-28 mx-auto flex items-center justify-center">
           <div className="absolute inset-0 rounded-full border-2 border-white/[0.08]" />
-          <div className="absolute inset-0 rounded-full border-2 border-[#4285f4]/20 border-t-[#4285f4] animate-spin" />
-          <div className="absolute inset-3 rounded-full border-2 border-[#a142f4]/20 border-b-[#a142f4] animate-spin [animation-duration:1.5s] [animation-direction:reverse]" />
-          <Shield className="w-9 h-9 text-[#8ab4f8] animate-pulse" />
+          <div className="absolute inset-0 rounded-full border-2 border-[#557b37]/20 border-t-[#557b37] animate-spin" />
+          <div className="absolute inset-3 rounded-full border-2 border-[#82956f]/20 border-b-[#82956f] animate-spin [animation-duration:1.5s] [animation-direction:reverse]" />
+          <Shield className="w-9 h-9 text-[#557b37] animate-pulse" />
         </div>
 
         <div className="space-y-2">
           <h3 className="text-2xl font-bold text-white tracking-tight">Security Scan in Progress</h3>
-          <p className="text-xs text-[#9aa0a6] font-mono">
-            Target: <span className="text-[#e8eaed]">{jobStatus.targetName || 'Codebase'}</span> &bull; Job ID: {effectiveJobId}
+          <p className="text-xs text-[#69746b] font-mono">
+            Target: <span className="text-[#252d27]">{jobStatus.targetName || 'Codebase'}</span> &bull; Job ID: {effectiveJobId}
           </p>
         </div>
 
@@ -171,13 +171,13 @@ export const ReportPage: React.FC = () => {
         <div className="w-full max-w-md mx-auto space-y-2">
           <div className="h-2 w-full bg-white/[0.05] rounded-full overflow-hidden border border-white/[0.08]">
             <div
-              className="h-full bg-gradient-to-r from-[#4285f4] via-[#a142f4] to-[#24c1e0] transition-all duration-500 rounded-full"
+              className="h-full bg-gradient-to-r from-[#557b37] via-[#82956f] to-[#b4c2a6] transition-all duration-500 rounded-full"
               style={{ width: `${Math.max(jobStatus.progress || 10, 15)}%` }}
             />
           </div>
-          <div className="flex justify-between text-[11px] font-mono text-[#9aa0a6]">
+          <div className="flex justify-between text-[11px] font-mono text-[#69746b]">
             <span>Stage: {jobStatus.stage || 'scanning'} &bull; Polling every 2s</span>
-            <span className="text-[#e8eaed] font-semibold">{jobStatus.progress || 10}%</span>
+            <span className="text-[#252d27] font-semibold">{jobStatus.progress || 10}%</span>
           </div>
         </div>
       </div>
@@ -195,24 +195,24 @@ export const ReportPage: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 p-6 rounded-2xl agy-glass border border-white/[0.08] shadow-agy-card">
         <div className="space-y-2">
           <div className="flex items-center flex-wrap gap-3">
-            <div className="w-9 h-9 rounded-xl bg-[#4285f4]/10 border border-[#4285f4]/20 flex items-center justify-center text-[#8ab4f8] shadow-inner">
+            <div className="w-9 h-9 rounded-xl bg-[#557b37]/10 border border-[#557b37]/20 flex items-center justify-center text-[#557b37] shadow-inner">
               <FileArchive className="w-4 h-4" />
             </div>
             <span className="font-bold text-white text-xl tracking-tight">
               {report.targetName || 'Target Codebase'}
             </span>
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-[#34a853]/15 text-[#81c995] border border-[#34a853]/30">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-[#718c4f]/15 text-[#536f3f] border border-[#718c4f]/30">
               SCAN COMPLETE
             </span>
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-[#4285f4]/15 text-[#8ab4f8] border border-[#4285f4]/30">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-[#557b37]/15 text-[#557b37] border border-[#557b37]/30">
               {totalFindingsCount} {totalFindingsCount === 1 ? 'Finding' : 'Findings'}
             </span>
           </div>
-          <div className="flex items-center flex-wrap gap-4 text-xs text-[#9aa0a6] font-mono">
+          <div className="flex items-center flex-wrap gap-4 text-xs text-[#69746b] font-mono">
             <span>Job ID: {effectiveJobId || report.id}</span>
             {scanDate && (
-              <span className="flex items-center gap-1.5 text-[#9aa0a6]">
-                <Calendar className="w-3.5 h-3.5 text-[#5f6368]" />
+              <span className="flex items-center gap-1.5 text-[#69746b]">
+                <Calendar className="w-3.5 h-3.5 text-[#7c877e]" />
                 {scanDate}
               </span>
             )}
@@ -234,7 +234,7 @@ export const ReportPage: React.FC = () => {
       <div className="space-y-3 pt-2">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-bold text-white flex items-center gap-2 tracking-tight">
-            <Layers className="w-4 h-4 text-[#8ab4f8]" />
+            <Layers className="w-4 h-4 text-[#557b37]" />
             Security Audit Findings
           </h3>
         </div>

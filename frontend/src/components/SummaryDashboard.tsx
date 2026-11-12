@@ -22,9 +22,9 @@ interface SummaryDashboardProps {
 const SEVERITY_COLORS: Record<string, string> = {
   CRITICAL: '#ea4335', // Google Red
   HIGH: '#fa7b17',     // Google Orange
-  MEDIUM: '#fbbc04',   // Google Yellow
-  LOW: '#4285f4',      // Google Blue
-  INFO: '#9aa0a6',     // Google Gray
+  MEDIUM: '#d29b2e',   // Google Yellow
+  LOW: '#557b37',      // Google Blue
+  INFO: '#69746b',     // Google Gray
 };
 
 export const SummaryDashboard: React.FC<SummaryDashboardProps> = ({
@@ -118,7 +118,7 @@ export const SummaryDashboard: React.FC<SummaryDashboardProps> = ({
         {/* Card 1: Total Findings */}
         <div className="agy-glass-card rounded-2xl p-5 relative overflow-hidden border border-white/[0.08] shadow-agy-card">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#9aa0a6]">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#69746b]">
               Total Findings
             </span>
             <div className="w-8 h-8 rounded-lg bg-[#ea4335]/15 border border-[#ea4335]/30 flex items-center justify-center text-[#ea4335]">
@@ -127,9 +127,9 @@ export const SummaryDashboard: React.FC<SummaryDashboardProps> = ({
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-3xl font-bold text-white tracking-tight">{totalFindings}</span>
-            <span className="text-xs text-[#9aa0a6]">across codebase</span>
+            <span className="text-xs text-[#69746b]">across codebase</span>
           </div>
-          <div className="mt-3 text-xs text-[#9aa0a6] flex items-center gap-2">
+          <div className="mt-3 text-xs text-[#69746b] flex items-center gap-2">
             <span className="inline-block w-2 h-2 rounded-full bg-[#ea4335]"></span>
             Multi-engine consolidated
           </div>
@@ -138,19 +138,19 @@ export const SummaryDashboard: React.FC<SummaryDashboardProps> = ({
         {/* Card 2: Files Affected */}
         <div className="agy-glass-card rounded-2xl p-5 relative overflow-hidden border border-white/[0.08] shadow-agy-card">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#9aa0a6]">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#69746b]">
               Files Affected
             </span>
-            <div className="w-8 h-8 rounded-lg bg-[#4285f4]/15 border border-[#4285f4]/30 flex items-center justify-center text-[#8ab4f8]">
+            <div className="w-8 h-8 rounded-lg bg-[#557b37]/15 border border-[#557b37]/30 flex items-center justify-center text-[#557b37]">
               <FileText className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-3xl font-bold text-white tracking-tight">{filesAffected}</span>
-            <span className="text-xs text-[#9aa0a6]">unique target files</span>
+            <span className="text-xs text-[#69746b]">unique target files</span>
           </div>
-          <div className="mt-3 text-xs text-[#9aa0a6] flex items-center gap-2">
-            <span className="inline-block w-2 h-2 rounded-full bg-[#4285f4]"></span>
+          <div className="mt-3 text-xs text-[#69746b] flex items-center gap-2">
+            <span className="inline-block w-2 h-2 rounded-full bg-[#557b37]"></span>
             Vulnerable source surfaces
           </div>
         </div>
@@ -158,18 +158,18 @@ export const SummaryDashboard: React.FC<SummaryDashboardProps> = ({
         {/* Card 3: Scanners Run */}
         <div className="agy-glass-card rounded-2xl p-5 relative overflow-hidden border border-white/[0.08] shadow-agy-card">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#9aa0a6]">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#69746b]">
               Scanners Run
             </span>
-            <div className="w-8 h-8 rounded-lg bg-[#34a853]/15 border border-[#34a853]/30 flex items-center justify-center text-[#81c995]">
+            <div className="w-8 h-8 rounded-lg bg-[#718c4f]/15 border border-[#718c4f]/30 flex items-center justify-center text-[#536f3f]">
               <Cpu className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-3xl font-bold text-white tracking-tight">{scannersRun}</span>
-            <span className="text-xs text-[#9aa0a6]">SAST &bull; SCA &bull; Secrets &bull; IaC</span>
+            <span className="text-xs text-[#69746b]">SAST &bull; SCA &bull; Secrets &bull; IaC</span>
           </div>
-          <div className="mt-3 text-xs text-[#81c995] flex items-center gap-1.5 font-medium">
+          <div className="mt-3 text-xs text-[#536f3f] flex items-center gap-1.5 font-medium">
             <ShieldCheck className="w-3.5 h-3.5" />
             100% Pre-baked in container
           </div>
@@ -178,19 +178,19 @@ export const SummaryDashboard: React.FC<SummaryDashboardProps> = ({
         {/* Card 4: Scan Duration */}
         <div className="agy-glass-card rounded-2xl p-5 relative overflow-hidden border border-white/[0.08] shadow-agy-card">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#9aa0a6]">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#69746b]">
               Scan Duration
             </span>
-            <div className="w-8 h-8 rounded-lg bg-[#24c1e0]/15 border border-[#24c1e0]/30 flex items-center justify-center text-[#24c1e0]">
+            <div className="w-8 h-8 rounded-lg bg-[#b4c2a6]/15 border border-[#b4c2a6]/30 flex items-center justify-center text-[#b4c2a6]">
               <Clock className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-3xl font-bold text-white tracking-tight">{durationSec}</span>
-            <span className="text-xs text-[#9aa0a6]">execution time</span>
+            <span className="text-xs text-[#69746b]">execution time</span>
           </div>
-          <div className="mt-3 text-xs text-[#9aa0a6] flex items-center gap-2">
-            <span className="inline-block w-2 h-2 rounded-full bg-[#24c1e0]"></span>
+          <div className="mt-3 text-xs text-[#69746b] flex items-center gap-2">
+            <span className="inline-block w-2 h-2 rounded-full bg-[#b4c2a6]"></span>
             Asynchronous single-queue
           </div>
         </div>
@@ -202,8 +202,8 @@ export const SummaryDashboard: React.FC<SummaryDashboardProps> = ({
         <div className="agy-glass-card rounded-2xl p-6 border border-white/[0.08] flex flex-col items-center">
           <h4 className="text-sm font-semibold text-white tracking-tight self-start mb-2">Severity Breakdown</h4>
           {severityData.length === 0 ? (
-            <div className="h-56 flex flex-col items-center justify-center text-[#9aa0a6] text-sm">
-              <ShieldCheck className="w-12 h-12 text-[#34a853] mb-2" />
+            <div className="h-56 flex flex-col items-center justify-center text-[#69746b] text-sm">
+              <ShieldCheck className="w-12 h-12 text-[#718c4f] mb-2" />
               Clean Scan &bull; Zero Findings
             </div>
           ) : (
@@ -220,18 +220,18 @@ export const SummaryDashboard: React.FC<SummaryDashboardProps> = ({
                     dataKey="value"
                   >
                     {severityData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} stroke="#0d0e12" strokeWidth={2} />
+                      <Cell key={`cell-${index}`} fill={entry.color} stroke="#f6f6f1" strokeWidth={2} />
                     ))}
                   </Pie>
                   <Tooltip
-                    contentStyle={{ backgroundColor: '#18191f', borderColor: 'rgba(255,255,255,0.12)', borderRadius: '12px', boxShadow: '0 8px 24px rgba(0,0,0,0.5)' }}
-                    itemStyle={{ color: '#e8eaed' }}
+                    contentStyle={{ backgroundColor: '#ffffff', borderColor: 'rgba(37,45,39,0.12)', borderRadius: '12px', boxShadow: '0 8px 24px rgba(31,43,35,0.12)' }}
+                    itemStyle={{ color: '#252d27' }}
                   />
                 </PieChart>
               </ResponsiveContainer>
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <span className="text-2xl font-bold text-white tracking-tight">{totalFindings}</span>
-                <span className="text-[10px] uppercase tracking-wider text-[#9aa0a6]">Total</span>
+                <span className="text-[10px] uppercase tracking-wider text-[#69746b]">Total</span>
               </div>
             </div>
           )}
@@ -240,7 +240,7 @@ export const SummaryDashboard: React.FC<SummaryDashboardProps> = ({
             {Object.entries(SEVERITY_COLORS).map(([sev, color]) => (
               <div key={sev} className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: color }}></span>
-                <span className="text-[#9aa0a6]">{sev}:</span>
+                <span className="text-[#69746b]">{sev}:</span>
                 <span className="font-semibold text-white">{bySev[sev] || 0}</span>
               </div>
             ))}
@@ -253,17 +253,17 @@ export const SummaryDashboard: React.FC<SummaryDashboardProps> = ({
           <div className="w-full h-56 mt-2">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={scannerData} margin={{ top: 10, right: 10, left: -20, bottom: 20 }}>
-                <XAxis dataKey="name" stroke="#9aa0a6" fontSize={11} angle={-25} textAnchor="end" />
-                <YAxis stroke="#9aa0a6" fontSize={11} allowDecimals={false} />
+                <XAxis dataKey="name" stroke="#69746b" fontSize={11} angle={-25} textAnchor="end" />
+                <YAxis stroke="#69746b" fontSize={11} allowDecimals={false} />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#18191f', borderColor: 'rgba(255,255,255,0.12)', borderRadius: '12px', boxShadow: '0 8px 24px rgba(0,0,0,0.5)' }}
-                  itemStyle={{ color: '#e8eaed' }}
+                  contentStyle={{ backgroundColor: '#ffffff', borderColor: 'rgba(37,45,39,0.12)', borderRadius: '12px', boxShadow: '0 8px 24px rgba(31,43,35,0.12)' }}
+                  itemStyle={{ color: '#252d27' }}
                 />
-                <Bar dataKey="count" fill="#4285f4" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="count" fill="#557b37" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
-          <div className="text-[11px] text-[#9aa0a6] text-center mt-auto font-mono">
+          <div className="text-[11px] text-[#69746b] text-center mt-auto font-mono">
             Parallel multi-scanner coverage with deduplication
           </div>
         </div>
@@ -273,14 +273,14 @@ export const SummaryDashboard: React.FC<SummaryDashboardProps> = ({
           <div className="flex items-center justify-between mb-2">
             <h4 className="text-sm font-semibold text-white tracking-tight">OWASP Top 10 (2021) Distribution</h4>
             {selectedOwasp && (
-              <span className="text-[10.5px] text-[#c58af9] font-medium bg-[#a142f4]/15 px-2 py-0.5 rounded-full border border-[#a142f4]/30">
+              <span className="text-[10.5px] text-[#62794a] font-medium bg-[#82956f]/15 px-2 py-0.5 rounded-full border border-[#82956f]/30">
                 Filtered
               </span>
             )}
           </div>
           {owaspData.length === 0 ? (
-            <div className="h-56 flex flex-col items-center justify-center text-[#9aa0a6] text-sm">
-              <ShieldCheck className="w-10 h-10 text-[#34a853] mb-2" />
+            <div className="h-56 flex flex-col items-center justify-center text-[#69746b] text-sm">
+              <ShieldCheck className="w-10 h-10 text-[#718c4f] mb-2" />
               No OWASP Violations
             </div>
           ) : (
@@ -291,11 +291,11 @@ export const SummaryDashboard: React.FC<SummaryDashboardProps> = ({
                   layout="vertical"
                   margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
                 >
-                  <XAxis type="number" stroke="#9aa0a6" fontSize={11} allowDecimals={false} />
-                  <YAxis type="category" dataKey="name" stroke="#9aa0a6" fontSize={10} width={90} />
+                  <XAxis type="number" stroke="#69746b" fontSize={11} allowDecimals={false} />
+                  <YAxis type="category" dataKey="name" stroke="#69746b" fontSize={10} width={90} />
                   <Tooltip
-                    contentStyle={{ backgroundColor: '#18191f', borderColor: 'rgba(255,255,255,0.12)', borderRadius: '12px', boxShadow: '0 8px 24px rgba(0,0,0,0.5)' }}
-                    itemStyle={{ color: '#e8eaed' }}
+                    contentStyle={{ backgroundColor: '#ffffff', borderColor: 'rgba(37,45,39,0.12)', borderRadius: '12px', boxShadow: '0 8px 24px rgba(31,43,35,0.12)' }}
+                    itemStyle={{ color: '#252d27' }}
                     formatter={(_val: any, _name: any, item: any) => [item.payload.count, item.payload.fullName]}
                   />
                   <Bar
@@ -312,7 +312,7 @@ export const SummaryDashboard: React.FC<SummaryDashboardProps> = ({
                     {owaspData.map((entry, index) => (
                       <Cell
                         key={`cell-owasp-${index}`}
-                        fill={selectedOwasp === entry.fullName ? '#c58af9' : '#a142f4'}
+                        fill={selectedOwasp === entry.fullName ? '#62794a' : '#82956f'}
                       />
                     ))}
                   </Bar>
@@ -320,7 +320,7 @@ export const SummaryDashboard: React.FC<SummaryDashboardProps> = ({
               </ResponsiveContainer>
             </div>
           )}
-          <div className="text-[11px] text-[#9aa0a6] text-center mt-auto font-mono">
+          <div className="text-[11px] text-[#69746b] text-center mt-auto font-mono">
             Click any bar to filter findings by OWASP category
           </div>
         </div>

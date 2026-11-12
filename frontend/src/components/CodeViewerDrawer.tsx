@@ -30,12 +30,12 @@ export const CodeViewerDrawer: React.FC<CodeViewerDrawerProps> = ({ finding, onC
   const getReachabilityTextClass = (verdict: string) => {
     switch (verdict) {
       case 'REACHABLE':
-        return 'text-[#81c995]';
+        return 'text-[#536f3f]';
       case 'UNREACHABLE':
-        return 'text-[#9aa0a6]';
+        return 'text-[#69746b]';
       case 'UNKNOWN':
       default:
-        return 'text-[#fbbc04]';
+        return 'text-[#d29b2e]';
     }
   };
 
@@ -48,9 +48,9 @@ export const CodeViewerDrawer: React.FC<CodeViewerDrawerProps> = ({ finding, onC
       />
 
       <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-2xl bg-[#131419] border-l border-white/[0.08] shadow-2xl flex flex-col">
+        <div className="w-screen max-w-2xl bg-[#ffffff] border-l border-white/[0.08] shadow-2xl flex flex-col">
           {/* Header */}
-          <div className="p-5 border-b border-white/[0.08] flex items-start justify-between bg-[#0d0e12]/90 backdrop-blur-md">
+          <div className="p-5 border-b border-white/[0.08] flex items-start justify-between bg-[#f6f6f1]/90 backdrop-blur-md">
             <div className="space-y-1.5 pr-4">
               <div className="flex items-center gap-2">
                 <span
@@ -59,25 +59,25 @@ export const CodeViewerDrawer: React.FC<CodeViewerDrawerProps> = ({ finding, onC
                       : finding.severity === 'HIGH'
                         ? 'bg-[#fa7b17]/15 text-[#fa7b17] border-[#fa7b17]/30'
                         : finding.severity === 'MEDIUM'
-                          ? 'bg-[#fbbc04]/15 text-[#fbbc04] border-[#fbbc04]/30'
+                          ? 'bg-[#d29b2e]/15 text-[#d29b2e] border-[#d29b2e]/30'
                           : finding.severity === 'LOW'
-                            ? 'bg-[#4285f4]/15 text-[#8ab4f8] border-[#4285f4]/30'
-                            : 'bg-white/[0.08] text-[#9aa0a6] border-white/15'
+                            ? 'bg-[#557b37]/15 text-[#557b37] border-[#557b37]/30'
+                            : 'bg-white/[0.08] text-[#69746b] border-white/15'
                     }`}
                 >
                   {finding.severity}
                 </span>
-                <span className="text-xs font-mono text-[#9aa0a6]">{finding.scannerName}</span>
-                <span className="text-xs text-[#5f6368]">&bull;</span>
-                <span className="text-xs font-semibold text-[#c58af9]">{finding.category}</span>
+                <span className="text-xs font-mono text-[#69746b]">{finding.scannerName}</span>
+                <span className="text-xs text-[#7c877e]">&bull;</span>
+                <span className="text-xs font-semibold text-[#62794a]">{finding.category}</span>
               </div>
               <h3 className="text-base font-bold text-white tracking-tight">{finding.title}</h3>
-              <p className="text-xs font-mono text-[#8ab4f8]">{finding.ruleId}</p>
+              <p className="text-xs font-mono text-[#557b37]">{finding.ruleId}</p>
             </div>
 
             <button
               onClick={onClose}
-              className="p-1.5 rounded-full text-[#9aa0a6] hover:text-white hover:bg-white/[0.08] transition"
+              className="p-1.5 rounded-full text-[#69746b] hover:text-white hover:bg-white/[0.08] transition"
               title="Close panel (Esc)"
             >
               <X className="w-5 h-5" />
@@ -89,7 +89,7 @@ export const CodeViewerDrawer: React.FC<CodeViewerDrawerProps> = ({ finding, onC
             {/* Metadata Pills */}
             <div className="grid grid-cols-2 gap-3 p-4 rounded-xl bg-white/[0.02] border border-white/[0.08] text-xs">
               <div>
-                <span className="text-[#9aa0a6] block text-[10px] uppercase font-semibold">Location</span>
+                <span className="text-[#69746b] block text-[10px] uppercase font-semibold">Location</span>
                 {/* Segmented Breadcrumb for File Path */}
                 <div className="flex items-center flex-wrap gap-1 font-mono text-xs mt-0.5">
                   {pathParts.map((part, i) => (
@@ -97,33 +97,33 @@ export const CodeViewerDrawer: React.FC<CodeViewerDrawerProps> = ({ finding, onC
                       <span
                         className={
                           i === pathParts.length - 1
-                            ? 'text-[#8ab4f8] font-semibold'
-                            : 'text-[#9aa0a6]'
+                            ? 'text-[#557b37] font-semibold'
+                            : 'text-[#69746b]'
                         }
                       >
                         {part}
                       </span>
                       {i < pathParts.length - 1 && (
-                        <ChevronRight className="w-3 h-3 text-[#5f6368] inline" />
+                        <ChevronRight className="w-3 h-3 text-[#7c877e] inline" />
                       )}
                     </React.Fragment>
                   ))}
-                  <span className="text-[#5f6368]">:{loc.startLine}</span>
+                  <span className="text-[#7c877e]">:{loc.startLine}</span>
                 </div>
               </div>
               <div>
-                <span className="text-[#9aa0a6] block text-[10px] uppercase font-semibold">Reachability</span>
+                <span className="text-[#69746b] block text-[10px] uppercase font-semibold">Reachability</span>
                 <span className={`font-semibold ${getReachabilityTextClass(finding.reachability || 'UNKNOWN')}`}>
                   {finding.reachability || 'UNKNOWN'}
                 </span>
               </div>
               <div>
-                <span className="text-[#9aa0a6] block text-[10px] uppercase font-semibold">OWASP Category</span>
-                <span className="text-[#e8eaed]">{finding.owaspCategory || 'None assigned'}</span>
+                <span className="text-[#69746b] block text-[10px] uppercase font-semibold">OWASP Category</span>
+                <span className="text-[#252d27]">{finding.owaspCategory || 'None assigned'}</span>
               </div>
               <div>
-                <span className="text-[#9aa0a6] block text-[10px] uppercase font-semibold">CWE Identifiers</span>
-                <span className="font-mono text-[#8ab4f8]">
+                <span className="text-[#69746b] block text-[10px] uppercase font-semibold">CWE Identifiers</span>
+                <span className="font-mono text-[#557b37]">
                   {finding.cweIds && finding.cweIds.length > 0 ? finding.cweIds.join(', ') : 'None'}
                 </span>
               </div>
@@ -131,11 +131,11 @@ export const CodeViewerDrawer: React.FC<CodeViewerDrawerProps> = ({ finding, onC
 
             {/* Description */}
             <div className="space-y-1.5">
-              <h4 className="text-xs font-semibold text-[#e8eaed] uppercase tracking-wider flex items-center gap-1.5">
-                <AlertCircle className="w-3.5 h-3.5 text-[#8ab4f8]" />
+              <h4 className="text-xs font-semibold text-[#252d27] uppercase tracking-wider flex items-center gap-1.5">
+                <AlertCircle className="w-3.5 h-3.5 text-[#557b37]" />
                 Vulnerability Details
               </h4>
-              <p className="text-xs text-[#e8eaed] leading-relaxed bg-white/[0.02] p-3.5 rounded-xl border border-white/[0.08]">
+              <p className="text-xs text-[#252d27] leading-relaxed bg-white/[0.02] p-3.5 rounded-xl border border-white/[0.08]">
                 {finding.description || 'No detailed description available.'}
               </p>
             </div>
@@ -143,40 +143,40 @@ export const CodeViewerDrawer: React.FC<CodeViewerDrawerProps> = ({ finding, onC
             {/* Code Snippet Box */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <h4 className="text-xs font-semibold text-[#e8eaed] uppercase tracking-wider flex items-center gap-1.5">
-                  <FileCode className="w-3.5 h-3.5 text-[#8ab4f8]" />
+                <h4 className="text-xs font-semibold text-[#252d27] uppercase tracking-wider flex items-center gap-1.5">
+                  <FileCode className="w-3.5 h-3.5 text-[#557b37]" />
                   Code Context Window (&plusmn;5 lines)
                 </h4>
                 {snippet && (
-                  <span className="text-[11px] font-mono text-[#9aa0a6]">
+                  <span className="text-[11px] font-mono text-[#69746b]">
                     Lines {snippet.startLine} &ndash; {snippet.endLine}
                   </span>
                 )}
               </div>
 
               {lines.length > 0 ? (
-                <div className="rounded-xl border border-white/[0.08] bg-[#0d0e12] overflow-hidden font-mono text-xs">
+                <div className="rounded-xl border border-white/[0.08] bg-[#f6f6f1] overflow-hidden font-mono text-xs">
                   {/* Segmented Breadcrumb in Snippet Header */}
-                  <div className="px-3.5 py-2.5 bg-white/[0.03] border-b border-white/[0.08] text-[11px] text-[#9aa0a6] flex items-center justify-between">
+                  <div className="px-3.5 py-2.5 bg-white/[0.03] border-b border-white/[0.08] text-[11px] text-[#69746b] flex items-center justify-between">
                     <div className="flex items-center flex-wrap gap-1 font-mono">
                       {pathParts.map((part, i) => (
                         <React.Fragment key={i}>
                           <span
                             className={
                               i === pathParts.length - 1
-                                ? 'text-[#8ab4f8] font-semibold'
-                                : 'text-[#9aa0a6]'
+                                ? 'text-[#557b37] font-semibold'
+                                : 'text-[#69746b]'
                             }
                           >
                             {part}
                           </span>
                           {i < pathParts.length - 1 && (
-                            <span className="text-[#5f6368]">/</span>
+                            <span className="text-[#7c877e]">/</span>
                           )}
                         </React.Fragment>
                       ))}
                     </div>
-                    <span className="text-[10px] text-[#9aa0a6] font-mono">Target Line: {loc.startLine}</span>
+                    <span className="text-[10px] text-[#69746b] font-mono">Target Line: {loc.startLine}</span>
                   </div>
 
                   <div className="overflow-x-auto py-2">
@@ -186,18 +186,18 @@ export const CodeViewerDrawer: React.FC<CodeViewerDrawerProps> = ({ finding, onC
                         <div
                           key={ln.lineNumber}
                           className={`flex items-start px-3.5 py-0.5 leading-5 transition-colors ${isVulnerable
-                              ? 'bg-[#ea4335]/15 text-[#fad2cf] border-l-4 border-[#ea4335] font-semibold'
-                              : 'text-[#e8eaed] hover:bg-white/[0.02]'
+                              ? 'bg-[#ea4335]/15 text-[#a63a2f] border-l-4 border-[#ea4335] font-semibold'
+                              : 'text-[#252d27] hover:bg-white/[0.02]'
                             }`}
                         >
                           <span
-                            className={`w-12 select-none flex-shrink-0 text-right pr-4 ${isVulnerable ? 'text-[#ea4335] font-bold' : 'text-[#5f6368]'
+                            className={`w-12 select-none flex-shrink-0 text-right pr-4 ${isVulnerable ? 'text-[#ea4335] font-bold' : 'text-[#7c877e]'
                               }`}
                           >
                             {ln.lineNumber}
                           </span>
                           <span
-                            className={`w-6 select-none flex-shrink-0 ${isVulnerable ? 'text-[#ea4335] font-bold' : 'text-[#5f6368]'
+                            className={`w-6 select-none flex-shrink-0 ${isVulnerable ? 'text-[#ea4335] font-bold' : 'text-[#7c877e]'
                               }`}
                           >
                             {isVulnerable ? '>>' : '  '}
@@ -209,23 +209,23 @@ export const CodeViewerDrawer: React.FC<CodeViewerDrawerProps> = ({ finding, onC
                   </div>
                 </div>
               ) : snippet?.rawContent ? (
-                <div className="rounded-xl border border-white/[0.08] bg-[#0d0e12] p-4 font-mono text-xs text-[#e8eaed] overflow-x-auto">
+                <div className="rounded-xl border border-white/[0.08] bg-[#f6f6f1] p-4 font-mono text-xs text-[#252d27] overflow-x-auto">
                   <pre>{snippet.rawContent}</pre>
                 </div>
               ) : (
-                <div className="rounded-xl border border-dashed border-white/[0.1] p-8 text-center text-xs text-[#5f6368]">
+                <div className="rounded-xl border border-dashed border-white/[0.1] p-8 text-center text-xs text-[#7c877e]">
                   Source code snippet not available or file is external binary.
                 </div>
               )}
             </div>
 
             {/* Hardened Remediation Guidance */}
-            <div className="space-y-1.5 p-4 rounded-xl bg-[#4285f4]/10 border border-[#4285f4]/25 text-xs">
-              <div className="flex items-center gap-1.5 font-semibold text-[#8ab4f8]">
-                <Shield className="w-4 h-4 text-[#8ab4f8]" />
+            <div className="space-y-1.5 p-4 rounded-xl bg-[#557b37]/10 border border-[#557b37]/25 text-xs">
+              <div className="flex items-center gap-1.5 font-semibold text-[#557b37]">
+                <Shield className="w-4 h-4 text-[#557b37]" />
                 Defensive Remediation Advice
               </div>
-              <p className="text-[#e8eaed] text-xs mt-1 leading-relaxed">
+              <p className="text-[#252d27] text-xs mt-1 leading-relaxed">
                 Refactor input handling to prevent untrusted inputs from reaching internal sinks. Consult OWASP cheat sheets
                 and MITRE CWE guidance for authoritative defense patterns.
               </p>
@@ -239,7 +239,7 @@ export const CodeViewerDrawer: React.FC<CodeViewerDrawerProps> = ({ finding, onC
                         href={`https://cwe.mitre.org/data/definitions/${cweNum}.html`}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1 text-[11px] text-[#8ab4f8] hover:text-[#aecbfa] underline font-mono"
+                        className="inline-flex items-center gap-1 text-[11px] text-[#557b37] hover:text-[#aecbfa] underline font-mono"
                       >
                         {cwe} Reference
                         <ExternalLink className="w-3 h-3" />

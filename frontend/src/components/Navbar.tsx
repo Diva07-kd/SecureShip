@@ -29,25 +29,25 @@ export const Navbar: React.FC = () => {
   const engineCount = health?.scanners ? Object.keys(health.scanners).length : 5;
 
   return (
-    <header className="border-b border-white/[0.08] bg-[#0d0e12]/80 backdrop-blur-xl sticky top-0 z-50 transition-all">
+    <header className="border-b border-white/[0.08] bg-[#f6f6f1]/80 backdrop-blur-xl sticky top-0 z-50 transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <Link to="/scan" className="flex items-center gap-3.5 group">
           {/* Antigravity Gradient Orb Icon */}
-          <div className="relative w-9 h-9 rounded-xl bg-gradient-to-tr from-[#1a73e8] via-[#4285f4] to-[#a142f4] p-[1px] shadow-lg shadow-[#4285f4]/20 group-hover:shadow-[#4285f4]/35 transition-all duration-300">
-            <div className="w-full h-full rounded-[11px] bg-[#0d0e12] flex items-center justify-center">
-              <Shield className="w-4 h-4 text-[#8ab4f8] group-hover:scale-110 transition-transform" />
+          <div className="relative w-9 h-9 rounded-xl bg-gradient-to-tr from-[#405f2b] via-[#557b37] to-[#82956f] p-[1px] shadow-lg shadow-[#557b37]/20 group-hover:shadow-[#557b37]/35 transition-all duration-300">
+            <div className="w-full h-full rounded-[11px] bg-[#f6f6f1] flex items-center justify-center">
+              <Shield className="w-4 h-4 text-[#557b37] group-hover:scale-110 transition-transform" />
             </div>
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-base font-semibold text-white tracking-tight group-hover:text-[#8ab4f8] transition-colors">
+              <span className="text-base font-semibold text-white tracking-tight group-hover:text-[#557b37] transition-colors">
                 SecureScan
               </span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-[#4285f4]/10 text-[#8ab4f8] border border-[#4285f4]/25">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-[#557b37]/10 text-[#557b37] border border-[#557b37]/25">
                 AGENT-SEC
               </span>
             </div>
-            <p className="text-[11px] text-[#9aa0a6] hidden sm:block">
+            <p className="text-[11px] text-[#69746b] hidden sm:block">
               Defensive Application Security Platform &bull; Powered by SecureShip
             </p>
           </div>
@@ -57,11 +57,11 @@ export const Navbar: React.FC = () => {
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.08] text-xs shadow-sm backdrop-blur-md hover:border-white/20 transition-colors">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34a853] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#34a853]"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#718c4f] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#718c4f]"></span>
             </span>
-            <span className="text-[#e8eaed] font-medium text-[11.5px]">{engineCount} Engines Active</span>
-            <span className="text-[#9aa0a6] text-[10.5px] font-mono hidden md:inline border-l border-white/10 pl-2">
+            <span className="text-[#252d27] font-medium text-[11.5px]">{engineCount} Engines Active</span>
+            <span className="text-[#69746b] text-[10.5px] font-mono hidden md:inline border-l border-white/10 pl-2">
               SAST &bull; SCA &bull; Secrets &bull; IaC
             </span>
           </div>
@@ -69,9 +69,9 @@ export const Navbar: React.FC = () => {
           {isReportPage && (
             <Link
               to="/scan"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.05] hover:bg-[#4285f4]/15 text-[#e8eaed] hover:text-[#8ab4f8] text-xs font-medium border border-white/[0.12] hover:border-[#4285f4]/40 transition-all duration-200 shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.05] hover:bg-[#557b37]/15 text-[#252d27] hover:text-[#557b37] text-xs font-medium border border-white/[0.12] hover:border-[#557b37]/40 transition-all duration-200 shadow-sm"
             >
-              <RotateCcw className="w-3.5 h-3.5 text-[#8ab4f8]" />
+              <RotateCcw className="w-3.5 h-3.5 text-[#557b37]" />
               New Scan
             </Link>
           )}
